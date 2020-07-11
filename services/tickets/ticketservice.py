@@ -1,10 +1,11 @@
-from api import *
+from startup import *
 from flask_restplus import  Resource, marshal_with
 from models.ticket import ticket_model
-from logic import *
+from logic.logic import *
 
 
 ticket = api.model('Ticket', ticket_model)
+
 
 @api.route("/")
 @api.expect(ticket)
@@ -12,15 +13,16 @@ class TicketClass(Resource):
 	
 	@api.marshal_with(ticket)
 	def post(self):
+		logic.update(api.payload)
 		return { "status": "Posted new Data"}
 
 	
 	@api.marshal_with(ticket)
 	def put(self):
-		create(api.payload)
-		pass
+		logic.create(api.payload)
 
-	@api.marshal_with(ticket)
-	def delete(self):
-		pass
+@api.route("/<int:ticketID>")
+class TicketID(Resource):
+	def delete(self, ticketID):
+		logic.delete(ticketID)
 

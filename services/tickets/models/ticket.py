@@ -1,5 +1,5 @@
 from flask_restplus import fields
-from api import *
+from startup import api
 
 ticket_model = api.model('Ticket',  {
 	'id': fields.Integer,

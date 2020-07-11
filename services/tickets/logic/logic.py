@@ -1,0 +1,20 @@
+from db.mongo import *
+from logic.ilogic import ILogic
+from interface import implements
+
+
+class Logic(implements(ILogic)):
+
+	def __init__(self, db):
+		self.db = db
+
+	def delete(self, ticketID):
+		self.db.delete(ticketID)
+
+
+	def update(self, ticket):
+		self.db.update({'id' : ticket['id']}, ticket)
+
+
+	def create(self, ticket):
+		self.db.create(ticket)
