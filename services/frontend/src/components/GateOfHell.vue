@@ -1,5 +1,5 @@
 <template>
-	<div class="Minos">
+	<div class="Entry">
 		<h1>{{ msg }}</h1>
 		<router-link to="/Home">{{ btnmsg }}</router-link> 
 	</div>

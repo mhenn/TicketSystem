@@ -21,6 +21,12 @@ export default {
 .Footer{
 	display:flex;
 	background-color: rgb(72,5,0);
+	height: 60px;
+	left: 0;
+	width: 100%;
+	position: fixed;
+	align-items:center;
+	justify-content:center;
 }
 
 a{
@@ -33,6 +39,7 @@ a{
 	text-decoration: none;
 	-webkit-transition: all 0.2s ease-in-out;
 	transition: all 0.2s ease-in-out;
+	margin-left:2em;
 }
 
 a:after{
