@@ -1,10 +1,11 @@
 <template>
-	<div class="Inferno">
+	<v-app class="Inferno">
 		<Navbar/>
-		<h1>{{ msg }}</h1>
+		<div class="content">
 		<slot></slot>
+		</div>
 		<Footer/>
-	</div>
+	</v-app>
 
 </template>
 
@@ -24,3 +25,11 @@
 
 
 </script>
+
+<style>
+
+.content{
+	margin-top:60px;
+
+}
+</style>

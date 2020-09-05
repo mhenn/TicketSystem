@@ -1,17 +1,17 @@
 <template>
-	<div class="gate">
-		<GateOfHell msg="Abandon all hope, ye who enter here" btnmsg="Venture deeper"/>
-	</div>
+	<Inferno>
+		Settings
+	</Inferno>
 </template>
 
 <script>
 
-import GateOfHell from '@/components/GateOfHell.vue'
+import Inferno from '@/components/Inferno'
 
 export default {
-	name: 'EnterHell',
+	name: 'Settings',
 	components: {
-		GateOfHell
+		Inferno
 	}
 }
 </script>

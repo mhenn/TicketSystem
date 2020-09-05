@@ -1,7 +1,21 @@
 <template>
 	<div class="modal">
-	<div v-on:click="close" class="close" ></div>
-	<div class="form"></div>
+		<div v-on:click="close" class="close" ></div>
+		<div class="form">
+			<form>
+				<v-select 
+					:items="items"
+					label="Subject"
+					dense
+					solo
+					/>
+    <v-textarea
+      label="Message"
+    ></v-textarea>
+			</form>
+		
+		
+		</div>
 	</div>
 	
 
@@ -10,19 +24,20 @@
 
 <script>
 
-
-
 export default {
 	name: 'TicketForm',
 	data() {
 		return {
-			show: 0
+			show: 0,
+			items : [{name:'Foo', text:'Foo'}, {name:'Bar', text:'Bar'}],
 		}
 	},
 	methods:{
 		close(){
 			this.$emit('showTicket', 0)
 		},
+	},
+	components:{
 	}
 }
 

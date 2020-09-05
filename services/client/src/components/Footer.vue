@@ -1,8 +1,8 @@
 <template>
 	<div class="Footer">
 		<div class="flex">
-			<router-link class="ferryman" to="/" >Impressum</router-link> 
-			<router-link class="ferryman" to="/" >Datenschutz</router-link> 
+			<router-link class="ferryman" to="/legal" >Impressum</router-link> 
+			<router-link class="ferryman" to="/privacy" >Datenschutz</router-link> 
 		</div>
 	
 	</div>

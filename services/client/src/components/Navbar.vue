@@ -1,7 +1,7 @@
 <template>
 	<div class="nav">
-		<router-link class="ferryman" to="/about" >About</router-link>
 		<router-link class="ferryman" to="/" >Home</router-link> 
+		<router-link class="ferryman" to="/settings" >Settings</router-link>
 	</div>
 </template>
 
