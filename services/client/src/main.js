@@ -5,7 +5,7 @@ import vuetify from './plugins/vuetify';
 import * as Keycloak from 'keycloak-js'
 
 let initOptions = {
-  url: 'http://127.0.0.1:8000/auth', realm: 'TicketSystem', clientId: 'TicketClient', onLoad:'login-required'
+  url: 'http://127.0.0.1:8000/auth', realm: 'Odonata', clientId: 'ticket-client', onLoad:'login-required'
 }
 
 Vue.config.productionTip = false
