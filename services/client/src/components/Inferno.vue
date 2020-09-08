@@ -6,10 +6,18 @@
 			clipped
 		>
       <v-list dense>
-			<NavbarItem linkto="/" title="Dashboard"/>
-			<NavbarItem linkto="/settings" title="Settings"/>
-			<NavbarItem linkto="/legal" title="Impressum"/>
-			<NavbarItem linkto="/privacy" title="Datenschutz"/>
+			<NavbarItem linkto="/" title="Dashboard">
+            <v-icon>mdi-view-dashboard</v-icon>
+			</NavbarItem>
+			<NavbarItem linkto="/settings" title="Settings">
+            <v-icon>mdi-tools</v-icon>
+			</NavbarItem>
+			<NavbarItem linkto="/legal" title="Impressum">
+            <v-icon>mdi-briefcase</v-icon>
+			</NavbarItem>
+			<NavbarItem linkto="/privacy" title="Datenschutz">
+            <v-icon>mdi-security</v-icon>
+			</NavbarItem>
       </v-list>
 		</v-navigation-drawer>
 

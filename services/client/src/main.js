@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify';
 import * as Keycloak from 'keycloak-js'
+import store from './store'
 
 let initOptions = {
   url: 'http://127.0.0.1:8000/auth', realm: 'Odonata', clientId: 'ticket-client', onLoad:'login-required'
@@ -19,10 +20,11 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
     }
 
 	new Vue({
-		router,
-		vuetify,
-		render: h => h(App)
-	}).$mount('#app')
+      router,
+      vuetify,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
 
 	localStorage.setItem("vue-token", keycloak.token);
 	localStorage.setItem("vue-refresh-token", keycloak.refreshToken);

@@ -1,22 +1,21 @@
 <template>
-	<div class="modal">
+	<v-container fluid class="modal">
 		<div v-on:click="close" class="close" ></div>
-		<div class="form">
-			<form>
-				<v-select 
-					:items="items"
-					label="Subject"
-					dense
-					solo
-					/>
-    <v-textarea
+		<v-sheet class="form pa-12">
+		<v-row>
+		<v-col
+			cols="12"	
+			md="4"
+			>
+			<v-form>
+		    <v-textarea
       label="Message"
     ></v-textarea>
-			</form>
-		
-		
-		</div>
-	</div>
+		</v-form>
+		</v-col>
+		</v-row>
+		</v-sheet>
+	</v-container>
 	
 
 
@@ -24,22 +23,23 @@
 
 <script>
 
+	import { required, max } from 'vee-validate/dist/rules'
+	import { extend,  ValidationProvider  } from 'vee-validate'
+	import FileDrop from '@/components/FileDrop'	
+	
+	extend('required', {
+		...required,
+		message: '{_field_} can not be empty',
+	})
+  extend('max', {
+    ...max,
+    message: '{_field_} may not be greater than {length} characters',
+  })
+
 export default {
 	name: 'TicketForm',
-	data() {
-		return {
-			show: 0,
-			items : [{name:'Foo', text:'Foo'}, {name:'Bar', text:'Bar'}],
-		}
-	},
-	methods:{
-		close(){
-			this.$emit('showTicket', 0)
-		},
-	},
-	components:{
-	}
-}
+	data: () => ({
+
 
 </script>
 
@@ -126,17 +126,9 @@ position: absolute;
 
 .form{
 	width: 60vw;
-	height: 75vh;
 	margin: 80px;
 	margin: 5rem;
 	background-color: #fff;
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	-ms-flex-direction: column;
-	flex-direction: column;
 	padding: 48px 64px;
 	padding: 3rem 4rem;
 }

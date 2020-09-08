@@ -1,7 +1,7 @@
 <template>
 <v-list-item link :to='linkto'>
           <v-list-item-action>
-            <v-icon>mdi-view-dashboard</v-icon>
+				<slot></slot>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>{{ title }}</v-list-item-title> 

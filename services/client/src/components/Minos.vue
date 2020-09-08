@@ -5,18 +5,16 @@
 		:headers="headers"
       :items="items"
       >
-		
-			<template v-slot:item.id="">
-				<v-btn class="ma-2" outlined small fab  key="item.id" v-on:click="showForm">
+			<template v-slot:item.id >
+				<v-btn class="ma-2" outlined small fab  key="item.id" @click="switchDialog">
 					<v-icon>mdi-pencil</v-icon>
-				</v-btn> 
-      </template>
+				</v-btn> 		
+			</template>
       
       </v-data-table>
 
 	
-	
-		<TicketForm v-if="show == 1" @showTicket="updateData"/>
+		<Modal/>
 	</div>
 	
 
@@ -25,16 +23,17 @@
 
 <script>
 
-import TicketForm from '@/components/TicketForm'
+import Modal from './Modal.vue'
+import store from '@/store'
 
 export default {
+
 	name: 'Minos',
 	components: {
-		TicketForm
+		Modal
 	},
 	data() {
 		return {
-			show: 0,
 		items: [
 			{ id:'1', contact: 'Admin', subject: 'Toast', status: 'Open'},
 			{ id:'2', contact: 'Admin', subject: 'Toast', status: 'Open'},
@@ -56,13 +55,20 @@ export default {
 		}
 	},
 	methods:{
+		showDialog (){
+			console.log(this)
+		},
 		showForm (){
 			this.show = this.show ? 0 : 1
 		},
 
 		updateData (val){
 			this.show = val
+		},
+		switchDialog(){
+			store.commit('switch')
 		}
+		
 	}
 }
 
