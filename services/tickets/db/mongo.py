@@ -20,4 +20,14 @@ class MongoDatabase(implements(ITicketDatabase)):
 		self.db.ticket.delete_one({'id': ticketID})
 
 	def create(self, ticket):
+		print(ticket)
 		self.db.ticket.insert(ticket)
+
+	def get(self):
+		cursor = self.db.ticket.find()
+		tickets =  [ t for t in cursor]
+		for t in tickets:
+			del t['_id']
+		return tickets
+		
+	

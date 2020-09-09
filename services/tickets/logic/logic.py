@@ -18,3 +18,7 @@ class Logic(implements(ILogic)):
 
 	def create(self, ticket):
 		self.db.create(ticket)
+	
+	
+	def get(self):
+		return self.db.get()

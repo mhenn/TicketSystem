@@ -24,4 +24,6 @@ class ITicketDatabase(Interface):
 	def delete(self, ticketID):
 		pass
 
-
+	
+	def get(self):
+		pass

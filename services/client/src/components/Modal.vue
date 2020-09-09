@@ -69,8 +69,8 @@
 		message: '{_field_} can not be empty',
 	})
   extend('max', {
-    ...max,
-    message: '{_field_} may not be greater than {length} characters',
+		...max,
+		message: '{_field_} may not be greater than {length} characters',
   })
 
   export default {
@@ -81,6 +81,7 @@
 			}
 		},
 		data: () => ({
+			message: '',
 			subject: '',
 			show: 0,
 			items : [{name:'Foo', text:'Foo'}, {name:'Bar', text:'Bar'}],

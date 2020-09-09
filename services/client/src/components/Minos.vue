@@ -32,15 +32,13 @@ export default {
 	components: {
 		Modal
 	},
+	computed: {
+			items() {
+			return store.state.tickets
+		}
+	},
 	data() {
 		return {
-		items: [
-			{ id:'1', contact: 'Admin', subject: 'Toast', status: 'Open'},
-			{ id:'2', contact: 'Admin', subject: 'Toast', status: 'Open'},
-			{ id:'3', contact: 'Admin', subject: 'Toast', status: 'Open'},
-			{ id:'4', contact: 'Admin', subject: 'Toast', status: 'Open'},
-			{ id:'5', contact: 'Admin', subject: 'Toast', status: 'Open'},
-			],
 		headers:[
           {
             text: 'Edit',
@@ -48,7 +46,7 @@ export default {
             sortable: false,
             value: 'id',
           },
-          { text: 'Contact', value: 'contact' },
+          { text: 'To', value: 'to' },
           { text: 'Subject', value: 'subject' },
           { text: 'Status', value: 'status' },
         ],	
