@@ -13,6 +13,7 @@ class TicketClass(Resource):
 	
 	@api.marshal_with(ticket)
 	@api.expect(ticket)
+	@jwt.requires_auth
 	def post(self):
 		logic.update(api.payload)
 		return { "status": "Posted new Data"}
@@ -23,7 +24,10 @@ class TicketClass(Resource):
 	def put(self):
 		logic.create(api.payload)
 		return {"status": "Put stuff"}
-
+	
+	@cross_origin(headers=["Access-Control-Allow-Origin", "*"])	
+	@cross_origin(headers=["Content-Type", "Authorization"])
+	@jwt.requires_auth
 	def get(self):
 		tickets = logic.get()
 		print(tickets)
