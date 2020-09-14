@@ -8,12 +8,14 @@ from logic.logic import *
 ticket = api.model('Ticket', ticket_model)
 
 
+
+jwt.init_app(flask_app)
+
 @api.route("/")
 class TicketClass(Resource):
 	
 	@api.marshal_with(ticket)
 	@api.expect(ticket)
-	@jwt.requires_auth
 	def post(self):
 		logic.update(api.payload)
 		return { "status": "Posted new Data"}
@@ -22,12 +24,12 @@ class TicketClass(Resource):
 	@api.marshal_with(ticket)
 	@api.expect(ticket)
 	def put(self):
+		print(api)
 		logic.create(api.payload)
 		return {"status": "Put stuff"}
-	
-	@cross_origin(headers=["Access-Control-Allow-Origin", "*"])	
-	@cross_origin(headers=["Content-Type", "Authorization"])
-	@jwt.requires_auth
+
+
+	@jwt.requires_auth	
 	def get(self):
 		tickets = logic.get()
 		print(tickets)
