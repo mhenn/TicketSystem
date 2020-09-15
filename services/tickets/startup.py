@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restplus import Api
 from flask_cors import CORS
 from flask_jwt_oidc import AuthError, JwtManager
+from flask_jwt_extended import JWTManager
 #from flask_oidc import OpenIDConnect
 
 from config import Config
@@ -22,29 +23,27 @@ authorizations = {
 
 
 flask_app = Flask(__name__)
-flask_app.config.update({
-    # JWT_OIDC Settings
-    'JWT_OIDC_WELL_KNOWN_CONFIG' : 'http://localhost:8000/auth/realms/Odonata/.well-known/openid-configuration',
-    'JWT_OIDC_ALGORITHMS' : 'RS256',
-    'JWT_OIDC_JWKS_URI' : 'http://localhost:8000/auth/realms/Odonata/protocol/openid-connect/certs' ,
-    'JWT_OIDC_ISSUER' : 'http://127.0.0.1:8000/auth/realms/Odonata',
-    'JWT_OIDC_AUDIENCE' : 'account',
-	 'JWT_OIDC_CLIENT_SECRET' : '39e54d6d-be7e-4820-918a-61b9aa35525e',
 
-    # Flask settings
-    'DEBUG' : False,
-    'TESTING' : False,
-}) 
+flask_app.config['JWT_ALGORITHM'] = 'RS256'
+flask_app.config['JWT_IDENTITY_CLAIM'] = 'sub'
+flask_app.config['JWT_PUBLIC_KEY'] =  """-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAslHDNkPEF4Xmjz8yd16l
+UG15Bhr2YLkh8v6D9OCEvCNRsDq2JFqbAcxCfRnXIKjs/7n2Dv6jaU0X8FP6noEf
+GHPyhlLJb/mIk/rTSEatZy0Mf/cbBkF90sJX5dilh/yCn5ygICqJ0egyQJhnrF7w
+lp4JnJ2sCXySUaPmX0DyJPfhPuDMT17HktGD+F8e5SbDK8yGeoxqfkdhw5GnSzvI
+poCMoSX4h8JUWUevZvKikFI377uuBDkjsuI4D6Mj5BKU7Up6cW/fsKHAWt71s1c0
+B2U9tf7FIlN4r5xXSRlk0IKZ9NIvEAr3k3JIFrZQeThu9ITM66Rne9Ndh1HoIOEY
+6QIDAQAB
+-----END PUBLIC KEY-----"""
 
-#oidc = OpenIDConnect(flask_app)
+flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
+
+jwt = JWTManager(flask_app)
+
 
 CORS(flask_app)
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
-#app = Api(flask_app)
 api = app.namespace(name, description=description)
-
-jwt = JwtManager(flask_app)
-
 
 
 
