@@ -1,5 +1,8 @@
 <template>
 	<div class="content Minos">
+
+
+	<v-btn @click="getter">click</v-btn>
 	<v-data-table
 		class="table"
 		:headers="headers"
@@ -25,6 +28,8 @@
 
 import Modal from './Modal.vue'
 import store from '@/store'
+import axios from 'axios'
+
 
 export default {
 
@@ -62,6 +67,16 @@ export default {
 
 		updateData (val){
 			this.show = val
+		},
+		getter(){
+			let token = window.localStorage['vue-token']	
+			axios.get('http://localhost:5000/ticket/',
+			{headers:{
+				Authorization: "Bearer " + token,
+				}}
+			).then(function (response){
+				console.log(response)
+			})
 		},
 		switchDialog(){
 			store.commit('switch')
