@@ -7,11 +7,6 @@ from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 ticket = api.model('Ticket', ticket_model)
 
-client_secret = '39e54d6d-be7e-4820-918a-61b9aa35525e'
-
-#jwt.init_app(flask_app)
-
-
 
 @api.route("/")
 class TicketClass(Resource):
@@ -30,7 +25,6 @@ class TicketClass(Resource):
 		logic.create(api.payload)
 		return {"status": "Put stuff"}
 
-	@jwt_required
 	def get(self):
 		tickets = logic.get()
 		print(tickets)

@@ -1,8 +1,6 @@
 <template>
 	<div class="content Minos">
 
-
-	<v-btn @click="getter">click</v-btn>
 	<v-data-table
 		class="table"
 		:headers="headers"
