@@ -11,14 +11,12 @@ ticket = api.model('Ticket', ticket_model)
 @api.route("/")
 class TicketClass(Resource):
 	
-	@cross_origin(origin='/*')
 	@api.expect(ticket)
 	def post(self):
 		logic.create(api.payload)
-		return {'status', 200 }
+		return {'status': 200 }
 
 	
-	@cross_origin(origin='*')
 	@api.expect(ticket)
 	def put(self):
 		logic.update(api.payload)
@@ -33,7 +31,6 @@ class TicketClass(Resource):
 @api.route("/<string:ticketID>")
 class TicketID(Resource):
 	@jwt_required
-	@cross_origin(origin='*')
 	def delete(self, ticketID):
 		logic.delete(ticketID)
 		return {'status':200}

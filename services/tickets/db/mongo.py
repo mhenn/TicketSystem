@@ -15,14 +15,14 @@ class MongoDatabase(implements(ITicketDatabase)):
 		
 	def update(self, ticket):
 		id = ticket.id
-		del ticket.id
+		del ticket['id']
 		self.db.ticket.update_one({'_id': ObjectId(id)}, { '$set' : ticket})
 
 	def delete(self, ticketID):
 		self.db.ticket.delete_one({'_id': ObjectId(ticketID)})
 
 	def create(self, ticket):
-		del ticket.id
+		del ticket['id']
 		self.db.ticket.insert(ticket)
 
 	def get(self):

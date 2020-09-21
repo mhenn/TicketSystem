@@ -24,6 +24,7 @@ authorizations = {
 
 flask_app = Flask(__name__)
 
+
 flask_app.config['JWT_ALGORITHM'] = 'RS256'
 flask_app.config['JWT_IDENTITY_CLAIM'] = 'sub'
 flask_app.config['JWT_PUBLIC_KEY'] =  """-----BEGIN PUBLIC KEY-----
@@ -41,6 +42,9 @@ flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
 
 CORS(flask_app)
+
+
+
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
 api = app.namespace(name, description=description)
 

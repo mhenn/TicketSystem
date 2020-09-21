@@ -45,23 +45,27 @@ export default new Vuex.Store({
 		postSelected(context){
 			let token = window.localStorage['vue-token']	
 			axios
-			.post('http://localhost:5000/ticket', {headers:{
+			.post('http://localhost:5000/ticket/', {headers:{
 				Authorization: "Bearer " + token,
+				'Content-type': 'application/json'
 				}}, context.state.selectedTicket)
 			.then( () => {
 				context.dispatch('getTickets')
 			})			
 		},
 		deleteSelected(context){
+			let token = window.localStorage['vue-token']	
 			axios
-			.delete('http://localhost:5000/ticket/' + context.state.selectedTicket.id)
+			.delete('http://localhost:5000/ticket/' + context.state.selectedTicket.id,{headers:{
+				Authorization: "Bearer " + token,
+				}}, )
 			.then(() =>{
 				context.dispatch('getTickets')
 			})
 		},
 		putSelected(context){
 			axios
-			.put('http://localhost:5000/ticket', context.state.selectedTicket)
+			.put('http://localhost:5000/ticket/', context.state.selectedTicket)
 			.then(() =>{
 					context.dispatch('getTickets')
 			})	
