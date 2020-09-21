@@ -43,8 +43,11 @@ export default new Vuex.Store({
 			})
 		},
 		postSelected(context){
+			let token = window.localStorage['vue-token']	
 			axios
-			.post('http://localhost:5000/ticket', context.state.selectedTicket)
+			.post('http://localhost:5000/ticket', {headers:{
+				Authorization: "Bearer " + token,
+				}}, context.state.selectedTicket)
 			.then( () => {
 				context.dispatch('getTickets')
 			})			

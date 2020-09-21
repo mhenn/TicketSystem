@@ -7,28 +7,22 @@ from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 ticket = api.model('Ticket', ticket_model)
 
-client_secret = '39e54d6d-be7e-4820-918a-61b9aa35525e'
-
-#jwt.init_app(flask_app)
-
-
 
 @api.route("/")
 class TicketClass(Resource):
 	
-	@api.marshal_with(ticket)
+	@cross_origin(origin='/*')
 	@api.expect(ticket)
 	def post(self):
-		logic.update(api.payload)
-		return 200 
+		logic.create(api.payload)
+		return {'status', 200 }
 
 	
-	@api.marshal_with(ticket)
+	@cross_origin(origin='*')
 	@api.expect(ticket)
 	def put(self):
-		print(api)
-		logic.create(api.payload)
-		return 200
+		logic.update(api.payload)
+		return {'status' :200}
 
 	@jwt_required
 	def get(self):
@@ -36,10 +30,12 @@ class TicketClass(Resource):
 		print(tickets)
 		return {'status': 200, 'tickets': tickets}
 
-@api.route("/<int:ticketID>")
+@api.route("/<string:ticketID>")
 class TicketID(Resource):
+	@jwt_required
+	@cross_origin(origin='*')
 	def delete(self, ticketID):
 		logic.delete(ticketID)
-		return 200
+		return {'status':200}
 
 

@@ -38,13 +38,13 @@ B2U9tf7FIlN4r5xXSRlk0IKZ9NIvEAr3k3JIFrZQeThu9ITM66Rne9Ndh1HoIOEY
 
 flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
-jwt = JWTManager(flask_app)
 
 
 CORS(flask_app)
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
 api = app.namespace(name, description=description)
 
+jwt = JWTManager(flask_app)
 
 
 def setupLogic(db):

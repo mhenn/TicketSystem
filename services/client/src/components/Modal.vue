@@ -32,7 +32,7 @@
 			<ValidationProvider v-slot="{ errors }" name="Message" rules="required">
 					<v-textarea
       label="Message"
-		v-model="message"
+		v-model="content"
 		:auto-grow="true"
 		:solo="true"
 		:error-messages="errors"
@@ -48,7 +48,8 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="grey darken-1" text @click="switchDialog">Close</v-btn>
-          <v-btn color="grey darken-1" text @click="switchDialog">Send</v-btn>
+          <v-btn  color="grey darken-1" text @click="addTicket">Send</v-btn>
+          <v-btn v-if='!newTicket' color="grey darken-1" text @click="updateTicket">Update</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -76,31 +77,31 @@
   export default {
 		name: "Modal",
 		computed: {
+			newTicket(){
+				return store.state.selectedTicket.id
+			},
 			dialog(){
 				return store.state.dialog
 			},
 
 		to:{
 				get(){
-					console.log(store.state)
-					return store.state.selectedTicket.title
+					return store.state.selectedTicket.to
 				},
-				set(value){ store.commit('updateTicketData', 'title', value)}
+				set(value){ store.commit('updateTicketData', 'to', value)}
 			},
 		subject:{
 				get(){
-					console.log(store.state)
-					return store.state.selectedTicket.title
+					return store.state.selectedTicket.subject
 				},
-				set(value){ store.commit('updateTicketData', 'title', value)}
+				set(value){ store.commit('updateTicketData', 'subject', value)}
 			},
 
 		content:{
 				get(){
-					console.log(store.state)
-					return store.state.selectedTicket.title
+					return store.state.selectedTicket.content
 				},
-				set(value){ store.commit('updateTicketData', 'title', value)}
+				set(value){ store.commit('updateTicketData', 'content', value)}
 			},
 
 		},
@@ -115,6 +116,14 @@
 			this.$emit('showTicket', 0)
 		},
 		switchDialog(){
+			store.commit('switch')
+		},
+		addTicket(){
+			store.dispatch('postSelected')
+			store.commit('switch')
+		},
+		updateTicket(){
+			store.dispatch('putSelected')
 			store.commit('switch')
 		}
 	},

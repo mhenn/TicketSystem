@@ -12,7 +12,7 @@
 				<v-btn class="ma-2" outlined small fab  key="item.id" @click="switchDialog(item.id)">
 					<v-icon>mdi-pencil</v-icon>
 				</v-btn> 		
-				<v-btn class="ma-2" outlined small fab  key="item.id" @click="deleteDialog(item.id)">
+				<v-btn class="ma-2" outlined small fab  key="item.id + 1" @click="deleteDialog(item.id)">
 					<v-icon>mdi-trash-can-outline</v-icon>
 				</v-btn> 		
 
@@ -96,6 +96,7 @@ export default {
 		},
 		deleteTicket(){
 			store.dispatch('deleteSelected')
+			this.delDialog = false
 		},
 		switchDialog(id){
 			store.commit('switch')
