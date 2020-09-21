@@ -2,22 +2,53 @@
 	<div class="content Minos">
 
 
-	<v-btn @click="getter">click</v-btn>
+	<v-btn @click="switchDialog(null)">New Entry</v-btn>
 	<v-data-table
 		class="table"
 		:headers="headers"
       :items="items"
       >
-			<template v-slot:item.id >
-				<v-btn class="ma-2" outlined small fab  key="item.id" @click="switchDialog">
+			<template v-slot:item.id="{item}" >
+				<v-btn class="ma-2" outlined small fab  key="item.id" @click="switchDialog(item.id)">
 					<v-icon>mdi-pencil</v-icon>
 				</v-btn> 		
+				<v-btn class="ma-2" outlined small fab  key="item.id" @click="deleteDialog(item.id)">
+					<v-icon>mdi-trash-can-outline</v-icon>
+				</v-btn> 		
+
 			</template>
       
-      </v-data-table>
-
-	
+      </v-data-table>	
 		<Modal/>
+
+		<v-dialog
+      v-model="delDialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">Eintrag entfernen?</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="delDialog = false"
+          >
+            Nein
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteTicket"
+          >
+            Ja
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
 	</div>
 	
 
@@ -28,7 +59,6 @@
 
 import Modal from './Modal.vue'
 import store from '@/store'
-import axios from 'axios'
 
 
 export default {
@@ -44,16 +74,12 @@ export default {
 	},
 	data() {
 		return {
+		delDialog: false,
 		headers:[
-          {
-            text: 'Edit',
-            align: 'start',
-            sortable: false,
-            value: 'id',
-          },
           { text: 'To', value: 'to' },
           { text: 'Subject', value: 'subject' },
           { text: 'Status', value: 'status' },
+          {text: 'Edit', align: 'center',sortable: false,value: 'id'}
         ],	
 		}
 	},
@@ -61,25 +87,19 @@ export default {
 		showDialog (){
 			console.log(this)
 		},
-		showForm (){
-			this.show = this.show ? 0 : 1
-		},
-
 		updateData (val){
 			this.show = val
 		},
-		getter(){
-			let token = window.localStorage['vue-token']	
-			axios.get('http://localhost:5000/ticket/',
-			{headers:{
-				Authorization: "Bearer " + token,
-				}}
-			).then(function (response){
-				console.log(response)
-			})
+		deleteDialog(id){
+			this.delDialog = true
+			store.commit('changeSelectedTicket',  id)
 		},
-		switchDialog(){
+		deleteTicket(){
+			store.dispatch('deleteSelected')
+		},
+		switchDialog(id){
 			store.commit('switch')
+			store.commit('changeSelectedTicket',id)
 		}
 		
 	}

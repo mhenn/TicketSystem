@@ -17,7 +17,7 @@ class ITicketDatabase(Interface):
 		pass
 
 
-	def update(self, criteria, ticket):
+	def update(self, ticket):
 		pass
 
 		

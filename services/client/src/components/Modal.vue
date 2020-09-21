@@ -78,11 +78,34 @@
 		computed: {
 			dialog(){
 				return store.state.dialog
-			}
+			},
+
+		to:{
+				get(){
+					console.log(store.state)
+					return store.state.selectedTicket.title
+				},
+				set(value){ store.commit('updateTicketData', 'title', value)}
+			},
+		subject:{
+				get(){
+					console.log(store.state)
+					return store.state.selectedTicket.title
+				},
+				set(value){ store.commit('updateTicketData', 'title', value)}
+			},
+
+		content:{
+				get(){
+					console.log(store.state)
+					return store.state.selectedTicket.title
+				},
+				set(value){ store.commit('updateTicketData', 'title', value)}
+			},
+
 		},
 		data: () => ({
 			message: '',
-			subject: '',
 			show: 0,
 			items : [{name:'Foo', text:'Foo'}, {name:'Bar', text:'Bar'}],
 		}),

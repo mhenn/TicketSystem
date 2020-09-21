@@ -20,7 +20,7 @@ class TicketClass(Resource):
 	@api.expect(ticket)
 	def post(self):
 		logic.update(api.payload)
-		return { "status": "Posted new Data"}
+		return 200 
 
 	
 	@api.marshal_with(ticket)
@@ -28,17 +28,18 @@ class TicketClass(Resource):
 	def put(self):
 		print(api)
 		logic.create(api.payload)
-		return {"status": "Put stuff"}
+		return 200
 
 	@jwt_required
 	def get(self):
 		tickets = logic.get()
 		print(tickets)
-		return {"status": 200, "tickets": tickets}
+		return {'status': 200, 'tickets': tickets}
 
 @api.route("/<int:ticketID>")
 class TicketID(Resource):
 	def delete(self, ticketID):
 		logic.delete(ticketID)
+		return 200
 
 

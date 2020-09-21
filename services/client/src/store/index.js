@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
 		dialog: false,
-		tickets: []
+		tickets: [],
+		selectedTicket: {},
 	},
 	mutations: {
 		switch(state){
@@ -16,20 +17,51 @@ export default new Vuex.Store({
 		update(state, tickets){
 			state.tickets = tickets
 		},
-		updateSingle(state,ticket){
-			let i = state.tickets.findIndex((el) => {return el.id == ticket.id})
-			if(i >= 0){
-				state.tickets[i] = ticket	
-			}
+		changeSelectedTicket(state, id){
+			if(id != null){	
+				state.selectedTicket = state.tickets.find( el => {return el.id == id}) 
+				state.update = true
+			} else{
+				state.update = false
+				state.selectedTicket = {}
+			}	
+		},
+		updateTicketData(state, field, data){
+			state.selectedTicket[field] = data
 		}
 	},
 	actions: {
 		getTickets({commit}){
+			let token = window.localStorage['vue-token']	
+			axios.get('http://localhost:5000/ticket/',
+			{headers:{
+				Authorization: "Bearer " + token,
+				}}
+			).then(function (response){
+				console.log(response)
+				commit('update', response.data.tickets)
+			})
+		},
+		postSelected(context){
 			axios
-			.get('http://localhost:5000/ticket')
-			.then( response => (
-				commit("update", response.data.tickets)
-			))	
+			.post('http://localhost:5000/ticket', context.state.selectedTicket)
+			.then( () => {
+				context.dispatch('getTickets')
+			})			
+		},
+		deleteSelected(context){
+			axios
+			.delete('http://localhost:5000/ticket/' + context.state.selectedTicket.id)
+			.then(() =>{
+				context.dispatch('getTickets')
+			})
+		},
+		putSelected(context){
+			axios
+			.put('http://localhost:5000/ticket', context.state.selectedTicket)
+			.then(() =>{
+					context.dispatch('getTickets')
+			})	
 		}
 	},
 	modules: {

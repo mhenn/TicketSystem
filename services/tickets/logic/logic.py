@@ -13,7 +13,7 @@ class Logic(implements(ILogic)):
 
 
 	def update(self, ticket):
-		self.db.update({'id' : ticket['id']}, ticket)
+		self.db.update( ticket)
 
 
 	def create(self, ticket):

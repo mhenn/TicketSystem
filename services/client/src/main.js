@@ -28,4 +28,21 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 
 	localStorage.setItem("vue-token", keycloak.token);
 	localStorage.setItem("vue-refresh-token", keycloak.refreshToken);
-})
+
+
+setInterval(() => {
+    keycloak.updateToken(70).then((refreshed) => {
+      if (refreshed) {
+        console.log('Token refreshed' + refreshed);
+      } else {
+        console.log('Token not refreshed, valid for '
+          + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
+      }
+    }).catch(() => {
+      console.log('Failed to refresh token');
+    });
+  }, 6000)
+
+}).catch(() => {
+  console.log("Authenticated Failed");
+});
