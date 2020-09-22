@@ -10,6 +10,7 @@
             <v-row>
               <v-col cols="12"  md="4">
 							<v-select 
+					v-model="to"
 					:items="items"
 					label="Contact"
 					dense
@@ -48,8 +49,8 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="grey darken-1" text @click="switchDialog">Close</v-btn>
-          <v-btn  color="grey darken-1" text @click="addTicket">Send</v-btn>
-          <v-btn v-if='!newTicket' color="grey darken-1" text @click="updateTicket">Update</v-btn>
+          <v-btn v-if='!newTicket' color="grey darken-1" text @click="addTicket">Send</v-btn>
+          <v-btn v-if='newTicket' color="grey darken-1" text @click="updateTicket">Update</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -88,20 +89,21 @@
 				get(){
 					return store.state.selectedTicket.to
 				},
-				set(value){ store.commit('updateTicketData', 'to', value)}
+				set(value){ 
+				store.commit('updateTicketData', ['to', value])}
 			},
 		subject:{
 				get(){
 					return store.state.selectedTicket.subject
 				},
-				set(value){ store.commit('updateTicketData', 'subject', value)}
+				set(value){ store.commit('updateTicketData', ['subject', value])}
 			},
 
 		content:{
 				get(){
 					return store.state.selectedTicket.content
 				},
-				set(value){ store.commit('updateTicketData', 'content', value)}
+				set(value){store.commit('updateTicketData', ['content', value])}
 			},
 
 		},

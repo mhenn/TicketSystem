@@ -9,7 +9,7 @@ class ILogic(Interface):
 	def delete(self, ticketID):
 		pass
 
-	def update(self, ticket):
+	def update(self, ticket, ticketID):
 		pass
 
 	def create(self, ticket):

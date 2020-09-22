@@ -69,6 +69,7 @@ export default {
 	},
 	computed: {
 			items() {
+			console.log(store.state.tickets)
 			return store.state.tickets
 		}
 	},

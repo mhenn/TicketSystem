@@ -12,11 +12,12 @@ class Logic(implements(ILogic)):
 		self.db.delete(ticketID)
 
 
-	def update(self, ticket):
-		self.db.update( ticket)
+	def update(self, ticket, ticketID):
+		self.db.update(ticket, ticketId)
 
 
 	def create(self, ticket):
+		ticket['status'] = 'open'
 		self.db.create(ticket)
 	
 	

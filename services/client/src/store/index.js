@@ -26,8 +26,10 @@ export default new Vuex.Store({
 				state.selectedTicket = {}
 			}	
 		},
-		updateTicketData(state, field, data){
-			state.selectedTicket[field] = data
+		updateTicketData(state, data){
+			let field = data[0]
+			let value = data[1]
+			state.selectedTicket[field] = value
 		}
 	},
 	actions: {
@@ -43,12 +45,13 @@ export default new Vuex.Store({
 			})
 		},
 		postSelected(context){
-			let token = window.localStorage['vue-token']	
+			let token = window.localStorage['vue-token']
+			console.log(context.state.selectedTicket)	
 			axios
 			.post('http://localhost:5000/ticket/', {headers:{
 				Authorization: "Bearer " + token,
 				'Content-type': 'application/json'
-				}}, context.state.selectedTicket)
+				}, 'body': context.state.selectedTicket })
 			.then( () => {
 				context.dispatch('getTickets')
 			})			

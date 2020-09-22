@@ -13,16 +13,15 @@ class MongoDatabase(implements(ITicketDatabase)):
 	def __init__(self):
 		ITicketDatabase.__init__(self)
 		
-	def update(self, ticket):
-		id = ticket.id
-		del ticket['id']
+	def update(self, ticket, id):
 		self.db.ticket.update_one({'_id': ObjectId(id)}, { '$set' : ticket})
 
 	def delete(self, ticketID):
 		self.db.ticket.delete_one({'_id': ObjectId(ticketID)})
 
 	def create(self, ticket):
-		del ticket['id']
+		if 'id' in ticket:
+			del ticket['id']
 		self.db.ticket.insert(ticket)
 
 	def get(self):

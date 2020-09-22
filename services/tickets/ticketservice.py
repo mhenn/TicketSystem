@@ -3,6 +3,7 @@ from flask_restplus import  Resource, marshal_with
 from flask_cors import CORS, cross_origin
 from models.ticket import ticket_model
 from logic.logic import *
+from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 
 ticket = api.model('Ticket', ticket_model)
@@ -13,19 +14,14 @@ class TicketClass(Resource):
 	
 	@api.expect(ticket)
 	def post(self):
-		logic.create(api.payload)
+		print(api.payload['body'])
+		logic.create(api.payload['body'])
 		return {'status': 200 }
 
 	
-	@api.expect(ticket)
-	def put(self):
-		logic.update(api.payload)
-		return {'status' :200}
-
 	@jwt_required
 	def get(self):
 		tickets = logic.get()
-		print(tickets)
 		return {'status': 200, 'tickets': tickets}
 
 @api.route("/<string:ticketID>")
@@ -34,5 +30,10 @@ class TicketID(Resource):
 	def delete(self, ticketID):
 		logic.delete(ticketID)
 		return {'status':200}
+
+	@api.expect(ticket)
+	def put(self, ticketID):
+		logic.update(api.payload['body'], ticketId)
+		return {'status' :200}
 
 
