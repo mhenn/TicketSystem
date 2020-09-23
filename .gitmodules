@@ -1,0 +1,3 @@
+[submodule "third-party/cp-all-in-one"]
+	path = third-party/cp-all-in-one
+	url = https://github.com/confluentinc/cp-all-in-one
