@@ -1,21 +1,58 @@
-from logic.ilogic import ILogic
-from interface import implements
+from db.mongo import *
+import requests
+import json 
 
+class PublisherLogic():
 
-class Logic(implements(ILogic)):
+	def __init__(self, db):
+		self.db = db
 
-	def __init__(self):
-		pass
-
-
-	def delete(self, ticketID):
-		pass
-
-	def update(self, ticket, ticketID):
-		pass
-
-	def create(self, ticket):
-		pass
+	def get_publisher(self, publisher):
+		return self.db.get_publisher(publisher)
 	
-	def get(self):
+	def add_subscriber(self, publisher, sub):
+		self.db.add_subscriber(publisher, sub)
+
+	def delete_publisher(self, publisher):
+		self.db.delete_publisher(publisher)
+
+	def send_msg(self, publisher, content):
+		pub = self.db.get_publisher(publisher)
+		for sub in pub['subscribers']:
+			print(json.dumps({'message':content}))
+			requests.post(sub['callback'], data={'message':content})	
+
+
+class PubSubscriberLogic():
+
+	def __init__(self, db):
+		self.db = db
+
+	def get_subscriber(self, publisher, subscriber):
+		return self.db.get_subscriber(publisher,subscriber)
+
+	def delete_subscriber(self, publisher, subscriber):
+		self.db.delete_subscriber(publisher, subscriber)
+
+class SubscriberLogic():
+
+	def __init__(self, db):
+		self.db = db
+
+	def get_subscriber(self, subscriber):
 		pass
+
+	def delete_subscriber(self, subscriber):
+		pass
+
+
+class BaseLogic():
+
+	def __init__(self, db):
+		self.db = db
+
+	def create_publisher(self, publisher):
+		self.db.create(publisher)
+
+	def get_publishers(self):
+		return self.db.get_publishers()

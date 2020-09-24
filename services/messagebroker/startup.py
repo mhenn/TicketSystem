@@ -4,11 +4,12 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 
 from config import Config
-from logic.logic import Logic
+from db.mongo import MongoDatabase
+from logic.logic import *
 
 
 name = 'pubsub'
-description = 'Ticket API'
+description = 'Messaging API'
 
 authorizations = {
     'Bearer Auth': {
@@ -36,11 +37,7 @@ B2U9tf7FIlN4r5xXSRlk0IKZ9NIvEAr3k3JIFrZQeThu9ITM66Rne9Ndh1HoIOEY
 
 flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
-
-
 CORS(flask_app)
-
-
 
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
 api = app.namespace(name, description=description)
@@ -48,4 +45,9 @@ api = app.namespace(name, description=description)
 jwt = JWTManager(flask_app)
 
 
-logic = Logic()
+db = MongoDatabase()	
+base_logic = BaseLogic(db)
+publisher_logic = PublisherLogic(db)
+pubsub_logic =  PubSubscriberLogic(db)
+subscriber_logic = SubscriberLogic(db)
+

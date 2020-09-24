@@ -10,3 +10,8 @@ ticket_model = api.model('Ticket',  {
 	'appendices': fields.String,
 	'status': fields.String
 })
+
+callback_model = api.model('MSG', {
+	'message': fields.String
+})
+
