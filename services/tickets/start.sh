@@ -1,2 +1,2 @@
-export FLASK_APP=ticketservice.py
+export FLASK_APP=main.py
 flask run

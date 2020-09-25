@@ -1,8 +1,8 @@
-class Logic():
+import requests
+
+class Logic:
 
 
-	def create(self, ticket):
-		pass	
+	def forward(self, message):
+		print(message)
 	
-	def get(self):
-		pass

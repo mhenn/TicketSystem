@@ -1,2 +1,2 @@
-export FLASK_APP=gateway.py
+export FLASK_APP=main.py
 flask run --port=5070
