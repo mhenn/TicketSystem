@@ -35,7 +35,7 @@ export default new Vuex.Store({
 	actions: {
 		getTickets({commit}){
 			let token = window.localStorage['vue-token']	
-			axios.get('http://localhost:5000/ticket/',
+			axios.get('http://localhost:5070/gateway/ticket/',
 			{headers:{
 				Authorization: "Bearer " + token,
 				}}
@@ -50,7 +50,7 @@ export default new Vuex.Store({
 			axios
 			.post('http://localhost:5000/ticket/', {headers:{
 				Authorization: "Bearer " + token,
-				'Content-type': 'application/json'
+				'Content-type': 'application/json'z2z1
 				}, 'body': context.state.selectedTicket })
 			.then( () => {
 				context.dispatch('getTickets')

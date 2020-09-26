@@ -11,12 +11,12 @@ class TicketClass(Resource):
 	
 	def post(self):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
-		logic.forward(request)
+		logic.post_ticket(request.data)
 		return {'status': 200 }
 
 	
 	def get(self):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
-		logic.forward(request)
+		logic.get_ticket()
 		return {'status': 200 }
 

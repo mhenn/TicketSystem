@@ -14,7 +14,8 @@ parser.add_argument('message', location='form')
 
 @api.route("/")
 class TicketClass(Resource):
-	
+
+	@jwt_required	
 	@api.expect(ticket)
 	def post(self):
 		print(api.payload['body'])
