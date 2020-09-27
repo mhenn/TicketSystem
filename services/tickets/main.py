@@ -18,7 +18,8 @@ class TicketClass(Resource):
 	@jwt_required	
 	@api.expect(ticket)
 	def post(self):
-		print(api.payload['body'])
+		print(f'req: {request} data: {request.data} header: {request.headers}')
+
 		logic.create(api.payload['body'])
 		return {'status': 200 }
 

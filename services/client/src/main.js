@@ -33,7 +33,9 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 setInterval(() => {
     keycloak.updateToken(70).then((refreshed) => {
       if (refreshed) {
-        console.log('Token refreshed' + refreshed);
+			console.log('Token refreshed' + refreshed);
+			localStorage.setItem("vue-token", keycloak.token);
+			localStorage.setItem("vue-refresh-token", keycloak.refreshToken);
       } else {
         console.log('Token not refreshed, valid for '
           + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');

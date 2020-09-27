@@ -40,21 +40,36 @@ export default new Vuex.Store({
 				Authorization: "Bearer " + token,
 				}}
 			).then(function (response){
-				console.log(response)
 				commit('update', response.data.tickets)
 			})
 		},
 		postSelected(context){
 			let token = window.localStorage['vue-token']
-			console.log(context.state.selectedTicket)	
-			axios
-			.post('http://localhost:5000/ticket/', {headers:{
-				Authorization: "Bearer " + token,
-				'Content-type': 'application/json'z2z1
-				}, 'body': context.state.selectedTicket })
-			.then( () => {
-				context.dispatch('getTickets')
-			})			
+
+			let options  = {
+				url: 'http://localhost:5070/gateway/ticket/',
+				method: 'POST',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+					'Content-Type': 'application/json;charset=UTF-8'
+				},
+				data: {
+					ticket: context.state.selectedTicket
+				}
+			}
+
+			axios(options).then(response =>{
+				console.log(response)
+			})
+//
+//			axios.post('http://localhost:5070/gateway/ticket/', 
+//			{headers:{
+//				Authorization: "Bearer " + token,
+//				'Content-type': 'application/json'
+//				}, 'body': context.state.selectedTicket })
+//			.then( () => {
+//				context.dispatch('getTickets')
+//			})			
 		},
 		deleteSelected(context){
 			let token = window.localStorage['vue-token']	

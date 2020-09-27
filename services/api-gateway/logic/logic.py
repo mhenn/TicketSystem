@@ -13,16 +13,17 @@ class Logic:
 
 	def get_ticket(self):
 		token = self.service_token.get_token()
-
 		header = {'Authorization': 'Bearer ' + token }
 		r = requests.get('http://localhost:5000/ticket/', headers=header)		
 		print(r.json())
 
 	def post_ticket(self, ticket):	
-		ticket = json.load(ticket)['']
-		token = self.service_token.getTocken()
-		header = {'Authorization': 'Bear ' + token}
+		ticket = json.loads(ticket)
+		ticket = ticket['ticket']
+		token = self.service_token.get_token()
+		header = {'Authorization': 'Bearer ' + token}
 		r = requests.post('http://localhost:5000/ticket/', headers=header, data=ticket)
+		
 		print(r.json())
 
 
@@ -37,9 +38,10 @@ class ServiceToken:
 	def get_token(self):
 
 		current_time = time.time() -self.time_received 	
-
-		if not self._access_token or current_time >= self.duration: 
-			url = 'http://localhost:8000/auth/realms/Odonata/protocol/openid-connect/token'
+		j_response = ''
+		url = 'http://localhost:8000/auth/realms/Odonata/protocol/openid-connect/token'
+			
+		if not self._access_token: 
 			data= {'grant_type': 'password', 'client_id':'ticket-client', 'username':'mhenn', 'password':'mhenn'}
 			response = requests.post(url, data=data)
 			if response.status_code != 200:
@@ -48,6 +50,22 @@ class ServiceToken:
 			j_response = response.json() 
 			self.duration = j_response['expires_in']
 			
+		elif current_time >= self.duration:
+			data = {'grant_type': 'refresh_token', 'client_id': 'ticket-client', 'refresh_token': self._refresh_token}
+			r = requests.post(url, data=data)
+			j_response = r.json()
+
+
+		if j_response:	
+			print('response')	
+			print(j_response)	
 			self.time_received = time.time()
 			self._access_token = j_response['access_token']
-			return self._access_token
+			self._refresh_token = j_response['refresh_token']
+
+		
+		return self._access_token
+
+
+		
+
