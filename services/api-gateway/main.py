@@ -18,6 +18,6 @@ class TicketClass(Resource):
 	@jwt_required
 	def get(self):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
-		logic.get_ticket()
-		return {'status': 200 }
+		tickets = logic.get_ticket()
+		return {'status': 200, "tickets": tickets }
 

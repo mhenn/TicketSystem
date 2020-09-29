@@ -15,7 +15,7 @@ class Logic:
 		token = self.service_token.get_token()
 		header = {'Authorization': 'Bearer ' + token }
 		r = requests.get('http://localhost:5000/ticket/', headers=header)		
-		print(r.json())
+		return r.json()['tickets']
 
 	def post_ticket(self, ticket):	
 		ticket = json.loads(ticket)

@@ -1,6 +1,6 @@
 <template>
   <v-row  justify="center">
-    <v-dialog  v-model="dialog" persistent max-width="600px">
+    <v-dialog   v-model="dialog" persistent max-width="600px">
             <v-card >
         <v-card-title>
           <span class="headline">User Profile</span>
@@ -11,12 +11,38 @@
               <v-col cols="12"  md="4">
 							<v-select 
 					v-model="to"
-					:items="items"
+					:items="selection"
 					label="Contact"
 					dense
 					solo
 					/>
-			<ValidationProvider v-slot="{ errors }" name="Subject" rules="required|max:50">
+
+<v-list>
+      <v-list-group
+        v-for="item in items"
+        :key="item.title"
+        v-model="item.active"
+      >
+        <template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+        </template>
+			<v-list-item-content> 
+				<v-textarea
+		readonly
+      label="Message"
+		v-model="content"
+		:auto-grow="true"
+		:solo="true"
+		:error-messages="errors"
+		required
+    ></v-textarea>
+			</v-list-item-content>
+      </v-list-group>
+    </v-list>
+
+		<ValidationProvider v-slot="{ errors }" name="Subject" rules="required|max:50">
         <v-text-field
 			solo
           v-model="subject"
@@ -108,9 +134,16 @@
 
 		},
 		data: () => ({
+			items:[
+				{
+					actions: 'mdi-ticket',
+					content:  'List Item',
+					title: 'Atrats'
+				}
+			],
 			message: '',
 			show: 0,
-			items : [{name:'Foo', text:'Foo'}, {name:'Bar', text:'Bar'}],
+			selection : [{name:'Foo', text:'Foo'}, {name:'Bar', text:'Bar'}],
 		}),
 	
 	methods:{
@@ -138,6 +171,7 @@
 
 
 <style scoped>
+
 
 .swole{
 	max-width:80vw !important;

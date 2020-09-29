@@ -1,3 +1,3 @@
-docker container prune -y
+docker container prune 
 sh startdb.sh
 sh keycloak.sh

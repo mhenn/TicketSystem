@@ -1,5 +1,5 @@
 <template>
-	<v-app>
+	<v-app :dark="this.$vuetify.theme.dark = true">
 		<v-navigation-drawer
 			v-model="drawer"
 			app

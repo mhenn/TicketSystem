@@ -34,13 +34,19 @@ export default new Vuex.Store({
 	},
 	actions: {
 		getTickets({commit}){
+
 			let token = window.localStorage['vue-token']	
-			axios.get('http://localhost:5070/gateway/ticket/',
-			{headers:{
-				Authorization: "Bearer " + token,
-				}}
-			).then(function (response){
-				commit('update', response.data.tickets)
+			
+			let options = {
+				url :'http://localhost:5070/gateway/ticket/',
+				method: 'GET',
+				headers: {
+					'Authorization' : 'Bearer ' + token
+				}
+			}
+
+			axios(options).then(response =>{
+				commit('update', response.data.tickets)	
 			})
 		},
 		postSelected(context){
@@ -61,15 +67,7 @@ export default new Vuex.Store({
 			axios(options).then(response =>{
 				console.log(response)
 			})
-//
-//			axios.post('http://localhost:5070/gateway/ticket/', 
-//			{headers:{
-//				Authorization: "Bearer " + token,
-//				'Content-type': 'application/json'
-//				}, 'body': context.state.selectedTicket })
-//			.then( () => {
-//				context.dispatch('getTickets')
-//			})			
+		
 		},
 		deleteSelected(context){
 			let token = window.localStorage['vue-token']	
