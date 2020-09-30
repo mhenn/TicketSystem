@@ -1,6 +1,6 @@
 <template>
-	<v-app :dark="this.$vuetify.theme.dark = true">
-		<v-navigation-drawer
+	<v-app :dark="this.$vuetify.theme.dark = false">
+		<v-navigation-drawer dark
 			v-model="drawer"
 			app
 			clipped
@@ -21,7 +21,7 @@
       </v-list>
 		</v-navigation-drawer>
 
-		<v-app-bar
+		<v-app-bar dark
 			app
 			clipped-left
 		>
@@ -30,13 +30,13 @@
 		</v-app-bar>
 
 		<v-container class="content" fluid>
-			<v-row dense>
+			<v-row  dense>
 				<v-col
 					v-for="card in cards"
 					:key="card.title"
 					:cols="card.flex"
 				>
-					<v-card class="flex">
+					<v-card   class="flex">
 					<slot></slot>
 
 					</v-card>

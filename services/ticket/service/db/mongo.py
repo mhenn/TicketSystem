@@ -14,6 +14,8 @@ class MongoDatabase(implements(ITicketDatabase)):
 		ITicketDatabase.__init__(self)
 		
 	def update(self, ticket, id):
+
+		print(type(ticket))
 		self.db.ticket.update_one({'_id': ObjectId(id)}, { '$set' : ticket})
 
 	def delete(self, ticketID):

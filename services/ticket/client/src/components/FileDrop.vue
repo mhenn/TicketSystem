@@ -1,5 +1,5 @@
 <template>
-  <div class="example-drag">
+  <div v-if="show" class="example-drag">
     <div class="upload">
       <ul v-if="files.length">
 			<li v-for="file in files" :key="file.id">
@@ -49,6 +49,26 @@
 
   </div>
 </template>
+
+
+
+<script>
+import FileUpload from 'vue-upload-component'
+export default {
+  components: {
+    FileUpload,
+  },
+  props:['show'],
+  data() {
+    return {
+      files: [],
+    }
+  }
+}
+</script>
+
+
+
 <style>
 .example-drag label.btn {
   margin-bottom: 0;
@@ -87,16 +107,3 @@
 }
 </style>
 
-<script>
-import FileUpload from 'vue-upload-component'
-export default {
-  components: {
-    FileUpload,
-  },
-  data() {
-    return {
-      files: [],
-    }
-  }
-}
-</script>

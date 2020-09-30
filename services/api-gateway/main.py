@@ -12,8 +12,8 @@ class TicketClass(Resource):
 	@jwt_required
 	def post(self):
 		print(f'req: {request} data: {json.loads(request.data)} header: {request.headers}')
-		logic.post_ticket(request.data)
-		return {'status': 200 }
+		status = logic.post_ticket(request.data)
+		return {'status': status }
 
 	@jwt_required
 	def get(self):
@@ -21,3 +21,12 @@ class TicketClass(Resource):
 		tickets = logic.get_ticket()
 		return {'status': 200, "tickets": tickets }
 
+@api.route('/ticket/<string:ticketId>')
+class SpecificTicket(Resource):
+
+	@jwt_required
+	def put(self, ticketId):
+		print("PUT")	
+		print(f'req: {request} data: {request.data} header: {request.headers}')
+		status = logic.put_ticket(ticketId, request.data)
+		return {'status': status}

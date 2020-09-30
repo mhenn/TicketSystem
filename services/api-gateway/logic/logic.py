@@ -7,9 +7,8 @@ class Logic:
 	def __init__(self):
 		self.service_token = ServiceToken()	
 
-#content = json.loads(message.data)['body']
-#token = self.service_token.get_token()
-
+	#content = json.loads(message.data)['body']
+	#token = self.service_token.get_token()
 
 	def get_ticket(self):
 		token = self.service_token.get_token()
@@ -19,13 +18,27 @@ class Logic:
 
 	def post_ticket(self, ticket):	
 		ticket = json.loads(ticket)
-		ticket = ticket['ticket']
 		token = self.service_token.get_token()
-		header = {'Authorization': 'Bearer ' + token}
-		r = requests.post('http://localhost:5000/ticket/', headers=header, data=ticket)
-		
-		print(r.json())
+		ticket = ticket['ticket']
+		header = {
+			'Authorization': 'Bearer ' + token,
+			'content-type' : 'application/json'
+		}
+		print(ticket)
+		r = requests.post('http://localhost:5000/ticket/', headers=header, data=json.dumps(ticket))	
+		return r.status_code
 
+	def put_ticket(self, ticketId, ticket):	
+		ticket = json.loads(ticket)
+		token = self.service_token.get_token()
+		ticket = ticket['ticket']
+		header = {
+			'Authorization': 'Bearer ' + token,
+			'content-type' : 'application/json'
+		}
+		print(ticket)
+		r = requests.put(f'http://localhost:5000/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
+		return r.status_code
 
 
 class ServiceToken:

@@ -9,7 +9,7 @@
           <v-container class="swole">
             <v-row>
               <v-col cols="12"  md="4">
-							<v-select 
+							<v-select :readonly="!emptyTicket"
 					v-model="to"
 					:items="selection"
 					label="Contact"
@@ -17,33 +17,8 @@
 					solo
 					/>
 
-<v-list>
-      <v-list-group
-        v-for="item in items"
-        :key="item.title"
-        v-model="item.active"
-      >
-        <template v-slot:activator>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title"></v-list-item-title>
-          </v-list-item-content>
-        </template>
-			<v-list-item-content> 
-				<v-textarea
-		readonly
-      label="Message"
-		v-model="content"
-		:auto-grow="true"
-		:solo="true"
-		:error-messages="errors"
-		required
-    ></v-textarea>
-			</v-list-item-content>
-      </v-list-group>
-    </v-list>
-
 		<ValidationProvider v-slot="{ errors }" name="Subject" rules="required|max:50">
-        <v-text-field
+        <v-text-field  :readonly="!emptyTicket"
 			solo
           v-model="subject"
           :counter="50"
@@ -65,8 +40,33 @@
 		:error-messages="errors"
 		required
     ></v-textarea>
+
+
+<v-list v-if="!emptyTicket" >
+      <v-list-group
+        v-for="item in messages"
+        :key="item.timestamp"
+        v-model="item.active"
+      >
+        <template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.timestamp"></v-list-item-title>
+          </v-list-item-content>
+        </template>
+			<v-list-item-content> 
+				<v-textarea
+		readonly
+      label="Message"
+		:solo="true"
+		:value="item.message"
+    ></v-textarea>
+			</v-list-item-content>
+      </v-list-group>
+    </v-list>
+
+
 		</ValidationProvider>	
-			<FileDrop/>
+			<FileDrop v-bind:show="emptyTicket"/>
               </v-col>
             </v-row>
           </v-container>
@@ -104,6 +104,9 @@
   export default {
 		name: "Modal",
 		computed: {
+			emptyTicket(){
+				return store.state.emptyTicket
+			},
 			newTicket(){
 				return store.state.selectedTicket.id
 			},
@@ -131,6 +134,9 @@
 				},
 				set(value){store.commit('updateTicketData', ['content', value])}
 			},
+		messages(){
+			return store.state.selectedTicket.messages
+		}
 
 		},
 		data: () => ({
@@ -172,6 +178,13 @@
 
 <style scoped>
 
+.v-textarea textarea[readonly="readonly"] {
+    background-color: #f0f0f0;
+    color: gray;
+}
+.v-text-field--solo input[readonly="readonly"] {
+    background-color: yellowgreen
+}
 
 .swole{
 	max-width:80vw !important;

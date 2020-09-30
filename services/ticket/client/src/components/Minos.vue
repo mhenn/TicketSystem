@@ -136,7 +136,7 @@ justify-content: center;
 
 
 thead{
-	background-color: rgb(74,5,0);
+	background-color: #1E1E1E;
 }
 
 th{

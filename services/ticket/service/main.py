@@ -5,9 +5,7 @@ from models.ticket import  content_model, ticket_model, callback_model
 from logic.logic import *
 from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
-
-
-print(api.models)
+import requests
 
 parser = reqparse.RequestParser()
 parser.add_argument('message', location='form')
@@ -19,8 +17,7 @@ class TicketClass(Resource):
 	@api.expect(ticket_model)
 	def post(self):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
-
-		logic.create(api.payload['body'])
+		logic.create(request.data)
 		return {'status': 200 }
 
 	@jwt_required
@@ -37,7 +34,8 @@ class TicketID(Resource):
 
 	@api.expect(ticket_model)
 	def put(self, ticketID):
-		logic.update(api.payload['body'], ticketId)
+		print(f'req: {request} data: {request.data} header: {request.headers}')
+		logic.update(request.data, ticketID)
 		return {'status' :200}
 
 @api.route("/callback/")
@@ -47,11 +45,10 @@ class Callback(Resource):
 	def post(self):
 		
 		args = parser.parse_args()
-		print(args)
 		return {'status': 200, 'message':api.payload}
 
 
-@api.route('/definitions_placeholder')
+@api.route('/unused')
 class Placeholder(Resource):
 	@jwt_required
 	@api.expect(content_model)

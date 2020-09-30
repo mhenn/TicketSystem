@@ -9,6 +9,8 @@ export default new Vuex.Store({
 		dialog: false,
 		tickets: [],
 		selectedTicket: {},
+		
+		emptyTicket: false
 	},
 	mutations: {
 		switch(state){
@@ -20,9 +22,9 @@ export default new Vuex.Store({
 		changeSelectedTicket(state, id){
 			if(id != null){	
 				state.selectedTicket = state.tickets.find( el => {return el.id == id}) 
-				state.update = true
+				state.emptyTicket = false
 			} else{
-				state.update = false
+				state.emptyTicket = true
 				state.selectedTicket = {}
 			}	
 		},
@@ -35,8 +37,7 @@ export default new Vuex.Store({
 	actions: {
 		getTickets({commit}){
 
-			let token = window.localStorage['vue-token']	
-			
+			let token = window.localStorage['vue-token']		
 			let options = {
 				url :'http://localhost:5070/gateway/ticket/',
 				method: 'GET',
@@ -51,7 +52,15 @@ export default new Vuex.Store({
 		},
 		postSelected(context){
 			let token = window.localStorage['vue-token']
-
+			let ticket = context.state.selectedTicket
+			let content = {
+				'timestamp': new Date().toUTCString(),
+				'message':ticket.content,
+				'appendices' : null
+			}
+			delete context.state.selectedTicket.content
+			ticket['messages'] = [content]	
+			
 			let options  = {
 				url: 'http://localhost:5070/gateway/ticket/',
 				method: 'POST',
@@ -60,12 +69,13 @@ export default new Vuex.Store({
 					'Content-Type': 'application/json;charset=UTF-8'
 				},
 				data: {
-					ticket: context.state.selectedTicket
+					ticket: ticket 
 				}
 			}
 
 			axios(options).then(response =>{
 				console.log(response)
+				context.dispatch('getTickets')
 			})
 		
 		},
@@ -80,11 +90,36 @@ export default new Vuex.Store({
 			})
 		},
 		putSelected(context){
-			axios
-			.put('http://localhost:5000/ticket/', context.state.selectedTicket)
-			.then(() =>{
-					context.dispatch('getTickets')
-			})	
+
+			let token = window.localStorage['vue-token']
+			let ticket = context.state.selectedTicket
+			let content = {
+				'timestamp': new Date().toUTCString(),
+				'message':ticket.content,
+				'appendices' : null
+			}
+			let messages_reverse = ticket.messages.reverse()
+			messages_reverse.push(content)
+			ticket.messages = messages_reverse.reverse()
+
+			delete context.state.selectedTicket.content
+			
+			let options  = {
+				url: 'http://localhost:5070/gateway/ticket/'+ ticket.id,
+				method: 'PUT',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+					'Content-Type': 'application/json;charset=UTF-8'
+				},
+				data: {
+					ticket: ticket 
+				}
+			}
+
+			axios(options).then(response =>{
+				console.log(response)
+				context.dispatch('getTickets')
+			})
 		}
 	},
 	modules: {
