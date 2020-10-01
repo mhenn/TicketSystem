@@ -2,8 +2,7 @@
 	<div class="content Minos">
 
 	
-	<v-btn @click="test">Test</v-btn>
-	<v-btn @click="switchDialog(null)">New Entry</v-btn>
+	<v-btn @click="switchDialog(null)">New Ticket</v-btn>
 	<v-data-table
 		class="table"
 		:headers="headers"
@@ -60,7 +59,6 @@
 
 import Modal from './Modal.vue'
 import store from '@/store'
-import axios from 'axios'
 
 export default {
 
@@ -104,14 +102,7 @@ export default {
 			store.commit('switch')
 			store.commit('changeSelectedTicket',id)
 		},
-		test(){
-			let token = window.localStorage['vue-token']
-			axios
-			.post('http://localhost:5070/gateway/ticket/', {headers:{
-				Authorization: "Bearer " + token,
-				'Content-type': 'application/json'
-				}, 'body': 'U FOKIN DONKEY' })
-		}
+		
 		
 	}
 }

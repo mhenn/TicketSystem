@@ -65,8 +65,9 @@
     </v-list>
 
 
-		</ValidationProvider>	
-			<FileDrop v-bind:show="emptyTicket"/>
+		</ValidationProvider>
+		<input @change='onFileChange' type="file"><v-btn @click="up">upload</v-btn>
+			
               </v-col>
             </v-row>
           </v-container>
@@ -88,9 +89,8 @@
 
 	import { required, max } from 'vee-validate/dist/rules'
 	import { extend,  ValidationProvider  } from 'vee-validate'
-	import FileDrop from '@/components/FileDrop'	
 	import store from '@/store'	
-
+	import axios from 'axios'
 
 	extend('required', {
 		...required,
@@ -136,10 +136,11 @@
 			},
 		messages(){
 			return store.state.selectedTicket.messages
-		}
-
+		},
+			picket(){return store.state.selectedTicket}
 		},
 		data: () => ({
+			files: null,
 			items:[
 				{
 					actions: 'mdi-ticket',
@@ -153,6 +154,27 @@
 		}),
 	
 	methods:{
+		up(){
+
+			console.log(store.state.selectedTicket)
+			const form = new FormData()
+			form.append('file', this.files)
+			form.append('rat', 'house')
+			let options = {
+            url: 'http://localhost:5000/ticket/upload/',
+            method: 'POST',
+				headers: {
+					'accept' : 'application/json',
+					'Content-Type': 'multipart/form-data'
+				},
+            data:form
+         }
+
+         axios(options)
+		},
+		onFileChange(event){
+			this.files = event.target.files[0]
+		},
 		close(){
 			this.$emit('showTicket', 0)
 		},
@@ -170,7 +192,6 @@
 	},
 	components:{
 		ValidationProvider,
-		FileDrop
 	}
 }
 </script>
