@@ -8,11 +8,17 @@ export default new Vuex.Store({
 	state: {
 		dialog: false,
 		tickets: [],
-		selectedTicket: {},
-		
+		selectedTicket: {},	
+		files: [],
 		emptyTicket: false
 	},
 	mutations: {
+		updateFiles(state, files){
+			console.log(files)
+			state.files = files
+			console.log('reeee')
+			console.log(state.files)
+		},
 		switch(state){
 			state.dialog = state.dialog ? false : true
 		},
@@ -35,6 +41,26 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
+		
+		withFiles({state}){
+			const form = new FormData()
+			form.append('file', state.files[0])
+			console.log(state.files[0])
+			form.append('rat', 'house')
+			let options = {
+            url: 'http://localhost:5000/ticket/upload/',
+            method: 'POST',
+				headers: {
+					'accept' : 'application/json',
+					'Content-Type': 'multipart/form-data'
+				},
+            form:form
+         }
+
+         axios(options).then(response =>{
+				console.log(response)
+			})
+		}, 
 		getTickets({commit}){
 
 			let token = window.localStorage['vue-token']		

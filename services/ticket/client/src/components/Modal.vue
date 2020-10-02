@@ -67,7 +67,7 @@
 
 		</ValidationProvider>
 		<input @change='onFileChange' type="file"><v-btn @click="up">upload</v-btn>
-			
+		<Upload/>			
               </v-col>
             </v-row>
           </v-container>
@@ -90,8 +90,8 @@
 	import { required, max } from 'vee-validate/dist/rules'
 	import { extend,  ValidationProvider  } from 'vee-validate'
 	import store from '@/store'	
-	import axios from 'axios'
-
+//	import axios from 'axios'
+	import Upload from '@/components/FileUpload'
 	extend('required', {
 		...required,
 		message: '{_field_} can not be empty',
@@ -155,28 +155,11 @@
 	
 	methods:{
 		up(){
-
+			store.dispatch('withFiles')	
 			console.log(store.state.selectedTicket)
-			const form = new FormData()
-			form.append('file', this.files)
-			form.append('rat', 'house')
-			let options = {
-            url: 'http://localhost:5000/ticket/upload/',
-            method: 'POST',
-				headers: {
-					'accept' : 'application/json',
-					'Content-Type': 'multipart/form-data'
-				},
-            data:form
-         }
-
-         axios(options)
 		},
 		onFileChange(event){
 			this.files = event.target.files[0]
-		},
-		close(){
-			this.$emit('showTicket', 0)
 		},
 		switchDialog(){
 			store.commit('switch')
@@ -192,6 +175,7 @@
 	},
 	components:{
 		ValidationProvider,
+		Upload
 	}
 }
 </script>

@@ -18,12 +18,13 @@ upload_parser.add_argument('file', location='files', type=FileStorage, required=
 class Upload(Resource):
 
 	def post(self):
-		args = upload_parser.parse_args()
-		print(args)
-		uploaded_file = args['file']
-		print(uploaded_file.filename)
-		uploaded_file.save(f'./files/{uploaded_file.filename}')
-		return 
+		print(f'req: {request} form: {request.form.get("rat")} files: {request.files.get("file")} data: {request.data} header: {request.headers}')
+		#args = upload_parser.parse_args()
+		#print(args)
+		#uploaded_file = args['file']
+		#print(uploaded_file.filename)
+		#uploaded_file.save(f'./files/{uploaded_file.filename}')
+		return {'status':200}
 
 @api.route("/")
 class TicketClass(Resource):
