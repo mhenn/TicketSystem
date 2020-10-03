@@ -1,8 +1,33 @@
+/* eslint-disable */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-	
+//import {serialize} from 'object-to-formdata'
 Vue.use(Vuex)
+
+
+function defineContent( file_list ,state){
+			var ticket = state.selectedTicket 
+			var file_names = []
+			file_list.forEach(file => file_names.push(file.name))		
+	
+			let content = {
+				'timestamp': new Date().toUTCString(),
+				'message':ticket.content,
+				'appendices' : file_names
+			}
+
+			delete state.selectedTicket.content
+			if ('messages' in ticket){
+				let messages_reverse = ticket.messages.reverse()
+				messages_reverse.push(content)
+				ticket.messages = messages_reverse.reverse()
+			} else{
+				ticket['messages'] = [content]	
+			}
+		return ticket
+}
+
 
 export default new Vuex.Store({
 	state: {
@@ -14,10 +39,7 @@ export default new Vuex.Store({
 	},
 	mutations: {
 		updateFiles(state, files){
-			console.log(files)
 			state.files = files
-			console.log('reeee')
-			console.log(state.files)
 		},
 		switch(state){
 			state.dialog = state.dialog ? false : true
@@ -42,24 +64,51 @@ export default new Vuex.Store({
 	},
 	actions: {
 		
-		withFiles({state}){
-			const form = new FormData()
-			form.append('file', state.files[0])
-			console.log(state.files[0])
-			form.append('rat', 'house')
-			let options = {
-            url: 'http://localhost:5000/ticket/upload/',
-            method: 'POST',
-				headers: {
-					'accept' : 'application/json',
-					'Content-Type': 'multipart/form-data'
-				},
-            form:form
-         }
+		postSelected({state, dispatch}){
+	
+			let form = new FormData()
+			let file_list = []		
+			state.files.forEach(file => file_list.push(file.file))
+			file_list.forEach( file => form.append(file.name, file))
+			
+			
+			let token = window.localStorage['vue-token']		
+			let ticket = defineContent(file_list, state)
 
-         axios(options).then(response =>{
-				console.log(response)
-			})
+			let options_ticket = {
+				url: 'http://localhost:5070/gateway/ticket/',
+				method: 'post',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+					'Content-Type': 'application/json' 
+				},
+				data: ticket
+			}
+			
+			axios(options_ticket).then(response =>{
+				if(response.status == 200 && file_list.length > 0){
+						console.log(response)	
+						form.append('id', response.data.id)
+						let options_files = {
+							url: 'http://localhost:5000/ticket/upload/',
+							method: 'POST',
+							headers: {
+								'accept' : 'application/json',
+								'Content-Type': 'multipart/form-data'
+							},
+							data:form
+						}
+
+				
+         		axios(options_files).then(response =>{
+						console.log(response)
+						dispatch('getTickets')
+					})
+				} else {
+					dispatch('getTickets')
+				}
+			})	
+
 		}, 
 		getTickets({commit}){
 
@@ -76,36 +125,7 @@ export default new Vuex.Store({
 				commit('update', response.data.tickets)	
 			})
 		},
-		postSelected(context){
-			let token = window.localStorage['vue-token']
-			let ticket = context.state.selectedTicket
-			let content = {
-				'timestamp': new Date().toUTCString(),
-				'message':ticket.content,
-				'appendices' : null
-			}
-			delete context.state.selectedTicket.content
-			ticket['messages'] = [content]	
-			
-			let options  = {
-				url: 'http://localhost:5070/gateway/ticket/',
-				method: 'POST',
-				headers: {
-					'Authorization': 'Bearer ' + token,
-					'Content-Type': 'application/json;charset=UTF-8'
-				},
-				data: {
-					ticket: ticket 
-				}
-			}
-
-			axios(options).then(response =>{
-				console.log(response)
-				context.dispatch('getTickets')
-			})
-		
-		},
-		deleteSelected(context){
+			deleteSelected(context){
 			let token = window.localStorage['vue-token']	
 			axios
 			.delete('http://localhost:5000/ticket/' + context.state.selectedTicket.id,{headers:{

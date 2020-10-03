@@ -16,10 +16,7 @@
         <file-upload
           class="btn btn-primary"
           post-action="/upload/post"
-          extensions="gif,jpg,jpeg,png,webp"
-          accept="image/png,image/gif,image/jpeg,image/webp"
           :multiple="true"
-          :size="1024 * 1024 * 10"
           :value="files"
           @input="inputUpdate"
           ref="upload">

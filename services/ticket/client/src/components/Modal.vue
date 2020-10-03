@@ -66,7 +66,6 @@
 
 
 		</ValidationProvider>
-		<input @change='onFileChange' type="file"><v-btn @click="up">upload</v-btn>
 		<Upload/>			
               </v-col>
             </v-row>
@@ -154,12 +153,9 @@
 		}),
 	
 	methods:{
-		up(){
-			store.dispatch('withFiles')	
-			console.log(store.state.selectedTicket)
-		},
 		onFileChange(event){
 			this.files = event.target.files[0]
+			console.log(this.files)
 		},
 		switchDialog(){
 			store.commit('switch')

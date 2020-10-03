@@ -11,6 +11,7 @@
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "keycloak-js": "^11.0.2",
+    "object-to-formdata": "^4.1.0",
     "vee-validate": "^3.3.9",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

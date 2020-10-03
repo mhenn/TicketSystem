@@ -14,6 +14,9 @@ class ILogic(Interface):
 
 	def create(self, ticket):
 		pass
+
+	def createFiles(self, files, form):
+		pass
 	
 	def get(self):
 		pass

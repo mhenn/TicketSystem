@@ -5,23 +5,18 @@ from models.ticket import  content_model, ticket_model, callback_model
 from logic.logic import *
 from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
-from werkzeug.datastructures import FileStorage
 import requests
 import json
 
-upload_parser = api.parser()
-upload_parser.add_argument('rat')
-upload_parser.add_argument('file', location='files', type=FileStorage, required=False)
 
 @api.route('/upload/')
-@api.expect(upload_parser)
 class Upload(Resource):
 
 	def post(self):
-		print(f'req: {request} form: {request.form.get("rat")} files: {request.files.get("file")} data: {request.data} header: {request.headers}')
-		#args = upload_parser.parse_args()
-		#print(args)
-		#uploaded_file = args['file']
+		print(f'req: {request} form: {request.form.to_dict()} files: {request.files.to_dict()} header: {request.headers}')
+		files = request.files.to_dict()
+		form = request.form.to_dict()
+		logic.createFiles(files, form)
 		#print(uploaded_file.filename)
 		#uploaded_file.save(f'./files/{uploaded_file.filename}')
 		return {'status':200}
@@ -33,8 +28,8 @@ class TicketClass(Resource):
 	@api.expect(ticket_model)
 	def post(self):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
-		logic.create(request.data)
-		return {'status': 200 }
+		id = logic.create(json.loads(request.data))
+		return {'status': 200, 'id': str(id)}
 
 	@jwt_required
 	def get(self):

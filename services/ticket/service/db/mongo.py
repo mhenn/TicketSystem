@@ -24,7 +24,7 @@ class MongoDatabase(implements(ITicketDatabase)):
 	def create(self, ticket):
 		if 'id' in ticket:
 			del ticket['id']
-		self.db.ticket.insert(ticket)
+		return self.db.ticket.insert(ticket)
 
 	def get(self):
 		cursor = self.db.ticket.find()
