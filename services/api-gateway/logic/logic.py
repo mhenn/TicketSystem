@@ -37,16 +37,16 @@ class Logic:
 		return r.status_code
 
 
-	def post_files(self, ticketId, uid, files):
+	def post_files(self, ticketId, uid,  files):
 		token = self.service_token.get()
 		
 		headers = {
 			'Authorization': 'Bearer ' + token,
 			'content-type' : 'multipart/form-data' 
 		}	
-		r = requests.post(f'http://localhost:5000/user/{uid}/files/{ticketId}/message/0', headers=headers, files=files)
+		r = requests.post(f'http://localhost:5000/user/{uid}/ticket/{ticketId}/message/0', headers=headers, files=files)
 		print(r)
-			
+		return r.status_code			
 
 
 class ServiceToken:

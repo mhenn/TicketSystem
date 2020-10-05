@@ -88,11 +88,12 @@ export default new Vuex.Store({
 			axios(options_ticket).then(response =>{
 				if(response.status == 200 && file_list.length > 0){
 						console.log(response)	
-						id = response.data.id
+						let id = response.data.id
 						let options_files = {
-							url: 'http://localhost:5000/ticket/' + id + '/files/',
+							url: 'http://localhost:5070/gateway/ticket/' + id + '/files/',
 							method: 'POST',
 							headers: {
+								'Authorization': 'Bearer ' + token,
 								'accept' : 'application/json',
 								'Content-Type': 'multipart/form-data'
 							},

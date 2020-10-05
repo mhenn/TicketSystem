@@ -9,7 +9,7 @@ import requests
 import json
 
 
-@api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>/')
+@api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>')
 class UserFileUpload(Resource):
 
 	def post(self, uid, ticketId, messageId):

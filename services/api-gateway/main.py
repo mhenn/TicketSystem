@@ -46,11 +46,11 @@ class SpecificTicket(Resource):
 class SpecificTicket(Resource):
 
 	@jwt_required
-	def put(self, ticketId):
+	def post(self, ticketId):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
 		files = request.files.to_dict()	
 		uid = get_jwt_identity()
-		logic.post_files(ticketId, uid, files)	
+		status = logic.post_files(ticketId, uid, files)	
 		return {'status': status}
 	
 	
