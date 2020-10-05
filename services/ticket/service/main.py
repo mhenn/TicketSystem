@@ -9,14 +9,13 @@ import requests
 import json
 
 
-@api.route('/upload/')
-class Upload(Resource):
+@api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>/')
+class UserFileUpload(Resource):
 
-	def post(self):
+	def post(self, uid, ticketId, messageId):
 		print(f'req: {request} form: {request.form.to_dict()} files: {request.files.to_dict()} header: {request.headers}')
 		files = request.files.to_dict()
-		form = request.form.to_dict()
-		logic.createFiles(files, form)
+		logic.createFiles(files, uid, ticketId, messageId)
 		#print(uploaded_file.filename)
 		#uploaded_file.save(f'./files/{uploaded_file.filename}')
 		return {'status':200}

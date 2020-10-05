@@ -8,13 +8,13 @@ class Logic:
 		self.service_token = ServiceToken()	
 
 	def get_ticket(self):
-		token = self.service_token.get_token()
+		token = self.service_token.get()
 		header = {'Authorization': 'Bearer ' + token }
 		r = requests.get('http://localhost:5000/ticket/', headers=header)		
 		return r.json()['tickets']
 
 	def post_ticket(self, ticket):	
-		token = self.service_token.get_token()
+		token = self.service_token.get()
 		header = {
 			'Authorization': 'Bearer ' + token,
 			'content-type' : 'application/json'
@@ -26,7 +26,7 @@ class Logic:
 
 	def put_ticket(self, ticketId, ticket):	
 		ticket = json.loads(ticket)
-		token = self.service_token.get_token()
+		token = self.service_token.get()
 		ticket = ticket['ticket']
 		header = {
 			'Authorization': 'Bearer ' + token,
@@ -37,6 +37,18 @@ class Logic:
 		return r.status_code
 
 
+	def post_files(self, ticketId, uid, files):
+		token = self.service_token.get()
+		
+		headers = {
+			'Authorization': 'Bearer ' + token,
+			'content-type' : 'multipart/form-data' 
+		}	
+		r = requests.post(f'http://localhost:5000/user/{uid}/files/{ticketId}/message/0', headers=headers, files=files)
+		print(r)
+			
+
+
 class ServiceToken:
 
 	def __init__(self):
@@ -44,7 +56,7 @@ class ServiceToken:
 		self.time_received = 0
 		self._access_token = ''	
 
-	def get_token(self):
+	def get(self):
 
 		current_time = time.time() -self.time_received 	
 		j_response = ''

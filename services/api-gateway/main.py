@@ -1,9 +1,10 @@
 from startup import *
-from flask_restplus import  Resource, marshal_with, reqparse
+from flask_restplus import  Resource
 from flask_cors import CORS, cross_origin
 from models.ticket import ticket_model, callback_model
 from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
+import requests
 import json
 
 @api.route("/ticket/")
@@ -39,3 +40,17 @@ class SpecificTicket(Resource):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
 		status = logic.put_ticket(ticketId, request.data)
 		return {'status': status}
+	
+	
+@api.route('/ticket/<string:ticketId>/files/')
+class SpecificTicket(Resource):
+
+	@jwt_required
+	def put(self, ticketId):
+		print(f'req: {request} data: {request.data} header: {request.headers}')
+		files = request.files.to_dict()	
+		uid = get_jwt_identity()
+		logic.post_files(ticketId, uid, files)	
+		return {'status': status}
+	
+	

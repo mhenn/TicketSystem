@@ -88,9 +88,9 @@ export default new Vuex.Store({
 			axios(options_ticket).then(response =>{
 				if(response.status == 200 && file_list.length > 0){
 						console.log(response)	
-						form.append('id', response.data.id)
+						id = response.data.id
 						let options_files = {
-							url: 'http://localhost:5000/ticket/upload/',
+							url: 'http://localhost:5000/ticket/' + id + '/files/',
 							method: 'POST',
 							headers: {
 								'accept' : 'application/json',

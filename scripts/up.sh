@@ -1,3 +1,3 @@
 docker container prune 
-sh startdb.sh
-sh keycloak.sh
+sh ~/Projects/BA/Bachelor_Thesis/scripts/startdb.sh
+sh ~/Projects/BA/Bachelor_Thesis/scripts/keycloak.sh

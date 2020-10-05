@@ -12,10 +12,7 @@ class Logic(implements(ILogic)):
 	def delete(self, ticketID):
 		self.db.delete(ticketID)
 
-	def createFiles(self, files, form):
-		uid = form['uid']
-		ticketId = form['ticketId']
-		messageId = form['messageId']
+	def createFiles(self, files, uid, ticketId, messageId):
 
 		path = f'./files/{uid}/{ticketId}/{messageId}'
 		
