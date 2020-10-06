@@ -60,13 +60,30 @@
 		:solo="true"
 		:value="item.message"
     ></v-textarea>
+
+	<v-list>
+		<v-list-group  
+		v-for="file in item['appendices']"
+		:key='file'>
+			<template v-slot:activator>
+          <v-list-item-content>
+            <v-list-item-title >Appendices</v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+			<v-btn @click='download(file, item.timestamp)'>{{ file }}</v-btn>
+		</v-list-group>
+	
+	</v-list>
+
+
 			</v-list-item-content>
       </v-list-group>
     </v-list>
 
 
 		</ValidationProvider>
-		<Upload/>			
+		<Upload v-if="!newTicket"/>			
               </v-col>
             </v-row>
           </v-container>
@@ -153,6 +170,12 @@
 		}),
 	
 	methods:{
+		download(file, messageId){
+			console.log(file)
+			console.log(messageId)
+			store.dispatch('downloadFile', [file, messageId])
+
+		},
 		onFileChange(event){
 			this.files = event.target.files[0]
 			console.log(this.files)

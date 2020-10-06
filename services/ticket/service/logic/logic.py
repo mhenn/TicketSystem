@@ -11,13 +11,13 @@ class Logic():
 		self.db.delete(ticketID)
 
 	def createFiles(self, files, uid, ticketId, messageId):
-		path = f'./files/{uid}/{ticketId}/{messageId}'
-		
+		path = f'./files/{uid}/{ticketId}/{messageId}/'
+				
 		if not os.path.isdir(path):
 			os.makedirs(path)
 
 		for f in files:
-			f.save(path)
+			files[f].save(path+ f)
 		
 
 	def update(self, ticket, ticketID):

@@ -42,15 +42,15 @@ class SpecificTicket(Resource):
 		return {'status': status}
 	
 	
-@api.route('/ticket/<string:ticketId>/files/')
+@api.route('/ticket/<string:ticketId>/message/<string:messageId>/files/')
 class SpecificTicket(Resource):
 
 	@jwt_required
-	def post(self, ticketId):
+	def post(self, ticketId, messageId):
 		print(f'req: {request} data: {request.data} header: {request.headers}')
 		files = request.files.to_dict()	
 		uid = get_jwt_identity()
-		status = logic.post_files(ticketId, uid, files)	
+		status = logic.post_files(ticketId, uid, messageId, files)	
 		return {'status': status}
 	
 	

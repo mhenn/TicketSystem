@@ -6,6 +6,32 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 
+function showFile(blob){
+  // It is necessary to create a new blob object with mime-type explicitly set
+  // otherwise only Chrome works like it should
+  var newBlob = new Blob([blob], {type: "application/pdf"})
+
+  // IE doesn't allow using a blob object directly as link href
+  // instead it is necessary to use msSaveOrOpenBlob
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    window.navigator.msSaveOrOpenBlob(newBlob);
+    return;
+  } 
+
+  // For other browsers: 
+  // Create a link pointing to the ObjectURL containing the blob.
+  const data = window.URL.createObjectURL(newBlob);
+  var link = document.createElement('a');
+  link.href = data;
+  link.download="file.pdf";
+  link.click();
+  setTimeout(function(){
+    // For Firefox it is necessary to delay revoking the ObjectURL
+    window.URL.revokeObjectURL(data);
+  }, 100);
+}
+
+
 function defineContent( file_list ,state){
 			var ticket = state.selectedTicket 
 			var file_names = []
@@ -25,7 +51,7 @@ function defineContent( file_list ,state){
 			} else{
 				ticket['messages'] = [content]	
 			}
-		return ticket
+		return [ticket, content['timestamp']]
 }
 
 
@@ -63,7 +89,26 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
-		
+	
+
+		downloadFile({state}, [filename, messageId]){
+				
+			let token = window.localStorage['vue-token']		
+			let id = state.selectedTicket.id
+			let form = new FormData()
+			form.append('uid', 'd2717165-4f26-477b-a992-bc31b2b085cd')
+			messageId = messageId.replace(/\s/g,'')
+			let options_ticket = {
+				url: 'http://localhost:5000/ticket/5f7ca3260dc776f0b5031413/message/'+messageId +'/file/'+filename,
+				method: 'post',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+				},
+				data: form
+			}
+			
+			axios(options_ticket).then(r => console.log(r)).then(showFile)
+		},
 		postSelected({state, dispatch}){
 	
 			let form = new FormData()
@@ -73,8 +118,8 @@ export default new Vuex.Store({
 			
 			
 			let token = window.localStorage['vue-token']		
-			let ticket = defineContent(file_list, state)
-
+			let [ticket, messageId]  = defineContent(file_list, state)
+			messageId = messageId.replace(/\s/g, '')
 			let options_ticket = {
 				url: 'http://localhost:5070/gateway/ticket/',
 				method: 'post',
@@ -90,7 +135,7 @@ export default new Vuex.Store({
 						console.log(response)	
 						let id = response.data.id
 						let options_files = {
-							url: 'http://localhost:5070/gateway/ticket/' + id + '/files/',
+							url: 'http://localhost:5070/gateway/ticket/' + id + '/message/' + messageId  +'/files/',
 							method: 'POST',
 							headers: {
 								'Authorization': 'Bearer ' + token,

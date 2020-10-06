@@ -3,22 +3,37 @@ from flask_restplus import  Resource, marshal_with
 from flask_cors import CORS, cross_origin
 from models.ticket import  content_model, ticket_model, callback_model
 from logic.logic import *
-from flask import request
+from flask import request, send_from_directory
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 import requests
 import json
+import os
 
-
-@api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>')
+@api.route('/<string:ticketId>/message/<string:messageId>')
 class UserFileUpload(Resource):
 
-	def post(self, uid, ticketId, messageId):
+	def post(self,  ticketId, messageId):
 		print(f'req: {request} form: {request.form.to_dict()} files: {request.files.to_dict()} header: {request.headers}')
 		files = request.files.to_dict()
-		logic.createFiles(files, uid, ticketId, messageId)
+		form = request.form.to_dict()
+		logic.createFiles(files, form['uid'], ticketId, messageId)
 		#print(uploaded_file.filename)
 		#uploaded_file.save(f'./files/{uploaded_file.filename}')
 		return {'status':200}
+
+
+@api.route('/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
+class FileDownload(Resource):
+
+	def post(self, ticketId, messageId, filename):
+		form = request.form.to_dict()
+		#uid = form['uid'] 
+		uid = 'd2717165-4f26-477b-a992-bc31b2b085cd'
+		print(f'./files/{uid}/{ticketId}/{messageId}/{filename}')
+		os.system(f'dir ./files/{uid}/{ticketId}/{messageId}/')	
+
+		return send_from_directory(f'./files/{uid}/{ticketId}/{messageId}', filename, as_attachment=True)
+
 
 @api.route("/")
 class TicketClass(Resource):

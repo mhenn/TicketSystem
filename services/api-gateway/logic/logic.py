@@ -1,6 +1,7 @@
 import requests
 import json 
 import time 
+import os
 
 class Logic:
 
@@ -37,16 +38,16 @@ class Logic:
 		return r.status_code
 
 
-	def post_files(self, ticketId, uid,  files):
+	def post_files(self, ticketId, uid, messageId, files):
 		token = self.service_token.get()
-		
+		data = {'uid': uid}
+
 		headers = {
 			'Authorization': 'Bearer ' + token,
-			'content-type' : 'multipart/form-data' 
 		}	
-		r = requests.post(f'http://localhost:5000/user/{uid}/ticket/{ticketId}/message/0', headers=headers, files=files)
+		r = requests.post(f'http://localhost:5000/ticket/{ticketId}/message/{messageId}', headers=headers,data=data, files=files)
 		print(r)
-		return r.status_code			
+		return r.status_code	
 
 
 class ServiceToken:
@@ -78,8 +79,6 @@ class ServiceToken:
 
 
 		if j_response:	
-			print('response')	
-			print(j_response)	
 			self.time_received = time.time()
 			self._access_token = j_response['access_token']
 			self._refresh_token = j_response['refresh_token']
