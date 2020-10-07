@@ -21,18 +21,13 @@ class UserFileUpload(Resource):
 		#uploaded_file.save(f'./files/{uploaded_file.filename}')
 		return {'status':200}
 
-
-@api.route('/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
+#TODO change endpoint, user dhould be in front
+@api.route('/<string:ticketId>/user/<string:uid>/message/<string:messageId>/file/<string:filename>')
 class FileDownload(Resource):
 
-	def post(self, ticketId, messageId, filename):
-		form = request.form.to_dict()
-		#uid = form['uid'] 
+	def get(self, ticketId, uid, messageId, filename):
 		uid = 'd2717165-4f26-477b-a992-bc31b2b085cd'
-		print(f'./files/{uid}/{ticketId}/{messageId}/{filename}')
-		os.system(f'dir ./files/{uid}/{ticketId}/{messageId}/')	
-
-		return send_from_directory(f'./files/{uid}/{ticketId}/{messageId}', filename, as_attachment=True)
+		return send_from_directory(f'./files/{uid}/{ticketId}/{messageId}', filename,mimetype='application/pdf', as_attachment=True)
 
 
 @api.route("/")

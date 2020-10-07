@@ -2,34 +2,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import fileDownload from 'js-file-download'
 //import {serialize} from 'object-to-formdata'
 Vue.use(Vuex)
-
-
-function showFile(blob){
-  // It is necessary to create a new blob object with mime-type explicitly set
-  // otherwise only Chrome works like it should
-  var newBlob = new Blob([blob], {type: "application/pdf"})
-
-  // IE doesn't allow using a blob object directly as link href
-  // instead it is necessary to use msSaveOrOpenBlob
-  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-    window.navigator.msSaveOrOpenBlob(newBlob);
-    return;
-  } 
-
-  // For other browsers: 
-  // Create a link pointing to the ObjectURL containing the blob.
-  const data = window.URL.createObjectURL(newBlob);
-  var link = document.createElement('a');
-  link.href = data;
-  link.download="file.pdf";
-  link.click();
-  setTimeout(function(){
-    // For Firefox it is necessary to delay revoking the ObjectURL
-    window.URL.revokeObjectURL(data);
-  }, 100);
-}
 
 
 function defineContent( file_list ,state){
@@ -99,15 +74,17 @@ export default new Vuex.Store({
 			form.append('uid', 'd2717165-4f26-477b-a992-bc31b2b085cd')
 			messageId = messageId.replace(/\s/g,'')
 			let options_ticket = {
-				url: 'http://localhost:5000/ticket/5f7ca3260dc776f0b5031413/message/'+messageId +'/file/'+filename,
-				method: 'post',
+				url: 'http://localhost:5000/ticket/5f7ca3260dc776f0b5031413/user/d2717165-4f26-477b-a992-bc31b2b085cd/message/'+messageId +'/file/'+filename,
+				method: 'get',
 				headers: {
 					'Authorization': 'Bearer ' + token,
+					'responseType': 'blob'
 				},
 				data: form
 			}
 			
-			axios(options_ticket).then(r => console.log(r)).then(showFile)
+			axios(options_ticket).then(r => {console.log(r) 
+fileDownload(r.data, 'munky.pdf')})
 		},
 		postSelected({state, dispatch}){
 	
@@ -181,7 +158,55 @@ export default new Vuex.Store({
 				context.dispatch('getTickets')
 			})
 		},
-		putSelected(context){
+		putSelected({state, dispatch}){
+	
+			let form = new FormData()
+			let file_list = []		
+			state.files.forEach(file => file_list.push(file.file))
+			file_list.forEach( file => form.append(file.name, file))
+			
+			
+			let token = window.localStorage['vue-token']		
+			let [ticket, messageId]  = defineContent(file_list, state)
+			messageId = messageId.replace(/\s/g, '')
+			let options_ticket = {
+				url: 'http://localhost:5070/gateway/ticket/'+ ticket.id,
+				method: 'put',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+				},
+				data:{
+					ticket:ticket
+				}
+			}
+			
+			axios(options_ticket).then(response =>{
+				if(response.status == 200 && file_list.length > 0){
+						console.log(response)	
+						let id = response.data.id
+						let options_files = {
+							url: 'http://localhost:5070/gateway/ticket/' + id + '/message/' + messageId  +'/files/',
+							method: 'POST',
+							headers: {
+								'Authorization': 'Bearer ' + token,
+								'accept' : 'application/json',
+								'Content-Type': 'multipart/form-data'
+							},
+							data:form
+						}
+
+				
+         		axios(options_files).then(response =>{
+						console.log(response)
+						dispatch('getTickets')
+					})
+				} else {
+					dispatch('getTickets')
+				}
+			})	
+
+		},
+		pufSelected(context){
 
 			let token = window.localStorage['vue-token']
 			let ticket = context.state.selectedTicket

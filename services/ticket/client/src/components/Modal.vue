@@ -41,6 +41,7 @@
 		required
     ></v-textarea>
 
+		<Upload />			
 
 <v-list v-if="!emptyTicket" >
       <v-list-group
@@ -83,7 +84,6 @@
 
 
 		</ValidationProvider>
-		<Upload v-if="!newTicket"/>			
               </v-col>
             </v-row>
           </v-container>
