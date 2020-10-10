@@ -27,7 +27,7 @@ class FileDownload(Resource):
 
 	def get(self, ticketId, uid, messageId, filename):
 		uid = 'd2717165-4f26-477b-a992-bc31b2b085cd'
-		return send_from_directory(f'./files/{uid}/{ticketId}/{messageId}', filename,mimetype='application/pdf', as_attachment=True)
+		return send_from_directory(f'./files/{uid}/{ticketId}/{messageId}', filename, as_attachment=True)
 
 
 @api.route("/")

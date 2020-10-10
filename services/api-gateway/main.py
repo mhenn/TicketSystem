@@ -7,6 +7,16 @@ from flask_jwt_extended import (jwt_required, get_jwt_identity)
 import requests
 import json
 
+
+@api.route("/logout/")
+class Logout(Resource):
+
+	@jwt_required
+	def post(self):
+		uid = get_jwt_identity()
+		requests.post
+
+
 @api.route("/ticket/")
 class TicketClass(Resource):
 
@@ -24,12 +34,12 @@ class TicketClass(Resource):
 		return {'status': 200, "tickets": tickets }
 
 
-@api.route("/ticket/files")
-class TicketFiles(Resource):
+@api.route('/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
+class SpecificFile(Resource):
 
-	@jwt_required
-	def post(self):
-		pass
+	def get(self, ticketId, messageId, filename):
+		uid = get_jwt_identity()
+		return logic.get_file(ticketId, messageId, filename, uid)
 
 @api.route('/ticket/<string:ticketId>')
 class SpecificTicket(Resource):

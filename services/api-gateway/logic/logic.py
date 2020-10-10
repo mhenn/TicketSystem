@@ -3,6 +3,9 @@ import json
 import time 
 import os
 
+from flask import Response
+from flask import stream_with_context
+
 class Logic:
 
 	def __init__(self):
@@ -49,6 +52,16 @@ class Logic:
 		print(r)
 		return r.status_code	
 
+	def get_file(self, ticketId, messageId, filename, uid):
+		token = self.service_token.get()
+		headers = {
+			"Authorization" : 'Bearer ' + token
+		}
+		r = requests.get(f'http://localhost:5000/ticket/{ticketId}/user/{uid}/message/{messageId}/file/{filename}', headers=headers)
+		print(r.headers)	
+		return Response(r, content_type=r.headers['Content-Type']) 
+		
+
 
 class ServiceToken:
 
@@ -82,8 +95,6 @@ class ServiceToken:
 			self.time_received = time.time()
 			self._access_token = j_response['access_token']
 			self._refresh_token = j_response['refresh_token']
-
-		
 		return self._access_token
 
 

@@ -6,6 +6,13 @@ import fileDownload from 'js-file-download'
 //import {serialize} from 'object-to-formdata'
 Vue.use(Vuex)
 
+function saveBlob(blob, fileName) {
+    var a = document.createElement("a");
+    a.href = window.URL.createObjectURL(blob);
+    a.download = fileName;
+    document.body.appendChild(a); // won't work in firefox otherwise
+    a.click();
+}
 
 function defineContent( file_list ,state){
 			var ticket = state.selectedTicket 
@@ -65,7 +72,6 @@ export default new Vuex.Store({
 	},
 	actions: {
 	
-
 		downloadFile({state}, [filename, messageId]){
 				
 			let token = window.localStorage['vue-token']		
@@ -73,18 +79,22 @@ export default new Vuex.Store({
 			let form = new FormData()
 			form.append('uid', 'd2717165-4f26-477b-a992-bc31b2b085cd')
 			messageId = messageId.replace(/\s/g,'')
-			let options_ticket = {
-				url: 'http://localhost:5000/ticket/5f7ca3260dc776f0b5031413/user/d2717165-4f26-477b-a992-bc31b2b085cd/message/'+messageId +'/file/'+filename,
+			let options = {
+				url: 'http://localhost:5070/gateway/ticket/' + id +'/message/'+messageId +'/file/'+filename,
 				method: 'get',
 				headers: {
 					'Authorization': 'Bearer ' + token,
-					'responseType': 'blob'
 				},
 				data: form
 			}
 			
-			axios(options_ticket).then(r => {console.log(r) 
-fileDownload(r.data, 'munky.pdf')})
+			console.log(options.url)
+			//window.open(options.url)
+			axios(options).then(r => {
+				if (r.status == 200){
+					window.open(r.config.url)
+				}
+			})
 		},
 		postSelected({state, dispatch}){
 	
@@ -124,7 +134,6 @@ fileDownload(r.data, 'munky.pdf')})
 
 				
          		axios(options_files).then(response =>{
-						console.log(response)
 						dispatch('getTickets')
 					})
 				} else {
@@ -183,9 +192,8 @@ fileDownload(r.data, 'munky.pdf')})
 			axios(options_ticket).then(response =>{
 				if(response.status == 200 && file_list.length > 0){
 						console.log(response)	
-						let id = response.data.id
 						let options_files = {
-							url: 'http://localhost:5070/gateway/ticket/' + id + '/message/' + messageId  +'/files/',
+							url: 'http://localhost:5070/gateway/ticket/' + ticket.id + '/message/' + messageId  +'/files/',
 							method: 'POST',
 							headers: {
 								'Authorization': 'Bearer ' + token,
@@ -206,38 +214,23 @@ fileDownload(r.data, 'munky.pdf')})
 			})	
 
 		},
-		pufSelected(context){
-
+		logout(context){
 			let token = window.localStorage['vue-token']
-			let ticket = context.state.selectedTicket
-			let content = {
-				'timestamp': new Date().toUTCString(),
-				'message':ticket.content,
-				'appendices' : null
-			}
-			let messages_reverse = ticket.messages.reverse()
-			messages_reverse.push(content)
-			ticket.messages = messages_reverse.reverse()
-
-			delete context.state.selectedTicket.content
-			
-			let options  = {
-				url: 'http://localhost:5070/gateway/ticket/'+ ticket.id,
-				method: 'PUT',
+			let refresh_token = window.localStorage['vue-refresh-token']
+			let options = {
+				//url: 'http://localhost:5070/gateway/logout',
+				url : 'http://localhost:8000/auth/realms/Odonata/protocol/openid-connect/logout?client_id=ticket-service&refresh_token='+ refresh_token,
+				method : 'POST',
 				headers: {
-					'Authorization': 'Bearer ' + token,
-					'Content-Type': 'application/json;charset=UTF-8'
-				},
-				data: {
-					ticket: ticket 
+					'Authorization' : 'Bearer ' + token,
+		//			'Access-Control-Allow-Origin' : '*',
 				}
 			}
 
-			axios(options).then(response =>{
-				console.log(response)
-				context.dispatch('getTickets')
-			})
-		}
+			axios(options)			
+
+
+		}	
 	},
 	modules: {
 	}
