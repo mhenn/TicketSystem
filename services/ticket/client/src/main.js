@@ -12,6 +12,7 @@ let initOptions = {
 Vue.config.productionTip = false
 
 let keycloak = Keycloak(initOptions);
+store.commit('setCloak', keycloak)
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
     

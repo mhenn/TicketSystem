@@ -1,6 +1,6 @@
 <template>
 	<Inferno>
-		Settings
+		<iframe src="http://localhost:8000/auth/realms/Odonata/account"></iframe>
 	</Inferno>
 </template>
 

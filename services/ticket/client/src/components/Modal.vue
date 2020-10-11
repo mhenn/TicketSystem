@@ -17,12 +17,13 @@
 					solo
 					/>
 
-		<ValidationProvider v-slot="{ errors }" name="Subject" rules="required|max:50">
+		<ValidationProvider v-slot="{ errors, valid }" name="subject" rules="required|max:50">
         <v-text-field  :readonly="!emptyTicket"
 			solo
           v-model="subject"
           :counter="50"
           :error-messages="errors"
+				:success="valid"
           label="Betreff"
           required
         ></v-text-field>
@@ -96,6 +97,7 @@
           <v-btn v-if='newTicket' color="grey darken-1" text @click="updateTicket">Update</v-btn>
         </v-card-actions>
       </v-card>
+		
     </v-dialog>
   </v-row>
 </template>
@@ -134,7 +136,8 @@
 				get(){
 					return store.state.selectedTicket.to
 				},
-				set(value){ 
+				set(value){
+				this.$validator.clean() 
 				store.commit('updateTicketData', ['to', value])}
 			},
 		subject:{

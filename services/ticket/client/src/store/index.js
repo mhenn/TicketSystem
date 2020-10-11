@@ -18,7 +18,6 @@ function defineContent( file_list ,state){
 			var ticket = state.selectedTicket 
 			var file_names = []
 			file_list.forEach(file => file_names.push(file.name))		
-	
 			let content = {
 				'timestamp': new Date().toUTCString(),
 				'message':ticket.content,
@@ -43,9 +42,13 @@ export default new Vuex.Store({
 		tickets: [],
 		selectedTicket: {},	
 		files: [],
-		emptyTicket: false
+		emptyTicket: false,
+		cloak : ''
 	},
 	mutations: {
+		setCloak(state, cloak){
+			state.cloak = cloak
+		},
 		updateFiles(state, files){
 			state.files = files
 		},
@@ -67,7 +70,11 @@ export default new Vuex.Store({
 		updateTicketData(state, data){
 			let field = data[0]
 			let value = data[1]
+			console.log(state.selectedTicket)
+			console.log(data)
 			state.selectedTicket[field] = value
+			console.log(state.selectedTicket)
+				
 		}
 	},
 	actions: {
@@ -215,21 +222,7 @@ export default new Vuex.Store({
 
 		},
 		logout(context){
-			let token = window.localStorage['vue-token']
-			let refresh_token = window.localStorage['vue-refresh-token']
-			let options = {
-				//url: 'http://localhost:5070/gateway/logout',
-				url : 'http://localhost:8000/auth/realms/Odonata/protocol/openid-connect/logout?client_id=ticket-service&refresh_token='+ refresh_token,
-				method : 'POST',
-				headers: {
-					'Authorization' : 'Bearer ' + token,
-		//			'Access-Control-Allow-Origin' : '*',
-				}
-			}
-
-			axios(options)			
-
-
+			context.state.cloak.logout()
 		}	
 	},
 	modules: {

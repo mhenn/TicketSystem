@@ -3,7 +3,6 @@
 
 	
 	<v-btn @click="switchDialog(null)">New Ticket</v-btn>
-	<v-btn @click="logout">Logout</v-btn>
 	<v-data-table
 		class="table"
 		:headers="headers"
@@ -103,10 +102,6 @@ export default {
 			store.commit('switch')
 			store.commit('changeSelectedTicket',id)
 		},
-		logout(){
-			store.dispatch('logout')
-		},
-		
 		
 	}
 }

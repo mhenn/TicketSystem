@@ -18,6 +18,7 @@
 			<NavbarItem linkto="/privacy" title="Datenschutz">
             <v-icon>mdi-security</v-icon>
 			</NavbarItem>
+			<a href="http://localhost:8000/auth/realms/Odonata/account">Settings</a>
       </v-list>
 		</v-navigation-drawer>
 
@@ -27,6 +28,10 @@
 		>
 			<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 			<v-toolbar-title>Odonata</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-btn @click="logout" icon>
+				<v-icon>mdi-logout-variant</v-icon>
+			</v-btn>
 		</v-app-bar>
 
 		<v-container class="content" fluid>
@@ -50,7 +55,7 @@
 <script>
 	//import Footer from '@/components/Footer'
 	import NavbarItem from '@/components/NavbarItem'
-
+	import store from '@/store'
 	export default {
 		name: "Inferno",
 		components: {
@@ -62,7 +67,12 @@
 			drawer: null
 		}),
 		created() {
-		this.$vuetify.theme.dark=false
+			this.$vuetify.theme.dark=false
+		},
+		methods:{
+			logout(){
+				store.dispatch('logout')
+			}
 		}
 	}
 
