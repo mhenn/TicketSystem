@@ -1,37 +1,46 @@
-from db.iticketdb import ITicketDatabase 
 from pymongo import MongoClient
-from interface import implements
 from bson import ObjectId
 
-class MongoDatabase(implements(ITicketDatabase)):
+class MongoDatabase():
 
-	def setup(self):
-		client = MongoClient('mongodb://localhost:27017/')
-		self.db = client.ticketdb
+    def setup(self):
+        client = MongoClient('mongodb://localhost:27017/')
+        self.db = client.ticketdb
 
 
-	def __init__(self):
-		ITicketDatabase.__init__(self)
-		
-	def update(self, ticket, id):
+    def __init__(self):
+        self.setup()
 
-		print(type(ticket))
-		self.db.ticket.update_one({'_id': ObjectId(id)}, { '$set' : ticket})
 
-	def delete(self, ticketID):
-		self.db.ticket.delete_one({'_id': ObjectId(ticketID)})
+    def update(self, ticket, id):
+        print(type(ticket))
+        self.db.ticket.update_one({'_id': ObjectId(id)}, { '$set' : ticket})
 
-	def create(self, ticket):
-		if 'id' in ticket:
-			del ticket['id']
-		return self.db.ticket.insert(ticket)
+    def delete(self, ticketID):
+        self.db.ticket.delete_one({'_id': ObjectId(ticketID)})
 
-	def get(self):
-		cursor = self.db.ticket.find()
-		tickets =  [ t for t in cursor]
-		for t in tickets:
-			t['id'] = str(t['_id'])
-			del t['_id']
-		return tickets
-		
-	
+    def create(self, ticket):
+        if 'id' in ticket:
+            del ticket['id']
+        return self.db.ticket.insert(ticket)
+
+    def get(self, uid):
+        cursor = self.db.ticket.find({'uid' : uid})
+
+        tickets =  [ t for t in cursor]
+        print(tickets)
+        for t in tickets:
+            t['id'] = str(t['_id'])
+            del t['_id']
+        return tickets
+
+
+    def get_all(self):
+        cursor = self.db.ticket.find()
+        tickets =  [ t for t in cursor]
+        for t in tickets:
+            t['id'] = str(t['_id'])
+            del t['_id']
+        return tickets
+
+

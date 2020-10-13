@@ -1,6 +1,13 @@
 <template>
 	<Inferno>
-		<iframe src="http://localhost:8000/auth/realms/Odonata/account"></iframe>
+      <v-row>
+         <v-col cols="9"  md="4" align-self="center">
+				The user settings are administrated via keycloak:
+			</v-col>
+			<v-col cols="12" md="4">
+				<v-btn @click="open" dense solo>Open</v-btn>
+			</v-col>
+		</v-row>
 	</Inferno>
 </template>
 
@@ -12,7 +19,12 @@ export default {
 	name: 'Settings',
 	components: {
 		Inferno
-	}
+	},
+	methods: {
+		open(){
+			window.open("http://localhost:8000/auth/realms/Odonata/account")
+		}	
+	}	
 }
 </script>
 

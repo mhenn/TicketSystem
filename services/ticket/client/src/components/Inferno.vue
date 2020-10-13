@@ -6,7 +6,10 @@
 			clipped
 		>
       <v-list dense>
-			<NavbarItem linkto="/" title="Dashboard">
+			<NavbarItem v-if="!contains(roles,'Support')" linkto="/" title="Dashboard">
+            <v-icon>mdi-view-dashboard</v-icon>
+			</NavbarItem>
+			<NavbarItem v-if="contains(roles,'Support')" linkto="/" title="Support Dashboard">
             <v-icon>mdi-view-dashboard</v-icon>
 			</NavbarItem>
 			<NavbarItem linkto="/settings" title="Settings">
@@ -18,7 +21,6 @@
 			<NavbarItem linkto="/privacy" title="Datenschutz">
             <v-icon>mdi-security</v-icon>
 			</NavbarItem>
-			<a href="http://localhost:8000/auth/realms/Odonata/account">Settings</a>
       </v-list>
 		</v-navigation-drawer>
 
@@ -62,6 +64,11 @@
 			NavbarItem
 	//		Footer
 		},
+		computed:{
+			roles() {
+				return JSON.stringify(store.state.cloak.tokenParsed.realm_access.roles)
+			}
+		},
 		data: () =>({
 			cards:[{title:'test'}],
 			drawer: null
@@ -70,6 +77,9 @@
 			this.$vuetify.theme.dark=false
 		},
 		methods:{
+			contains(list,role){
+				return list.includes(role)
+			},
 			logout(){
 				store.dispatch('logout')
 			}

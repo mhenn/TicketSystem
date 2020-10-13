@@ -10,11 +10,11 @@
 			<v-card-text>
           <v-container class="swole">
             <v-row>
-              <v-col cols="12"  md="4">
+              <v-col cols="12"  >
 			<ValidationSelect :readonly="!emptyTicket" rules="required" v-model='to' :items="selection" label="Contact"/> 
 			<ValidationTextfield :readonly="!emptyTicket" rules="required|max:50" v-model="subject" label="Subject"/>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" >
 			<ValidationTextarea rules="required" v-model="content" label="Message"/>
 		<Upload />			
 

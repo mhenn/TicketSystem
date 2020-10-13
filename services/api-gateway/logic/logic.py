@@ -11,20 +11,20 @@ class Logic:
 	def __init__(self):
 		self.service_token = ServiceToken()	
 
-	def get_ticket(self):
+	def get_ticket(self, uid):
 		token = self.service_token.get()
 		header = {'Authorization': 'Bearer ' + token }
-		r = requests.get('http://localhost:5000/ticket/', headers=header)		
+		r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}' , headers=header)		
 		return r.json()['tickets']
 
-	def post_ticket(self, ticket):	
+	def post_ticket(self, ticket, uid):	
 		token = self.service_token.get()
 		header = {
 			'Authorization': 'Bearer ' + token,
 			'content-type' : 'application/json'
 		}
 		print(ticket)
-		r = requests.post('http://localhost:5000/ticket/', headers=header, data=json.dumps(ticket))	
+		r = requests.post(f'http://localhost:5000/ticket-service/user/{uid}', headers=header, data=json.dumps(ticket))	
 		print(r.json())
 		return r.status_code, r.json()['id']
 
@@ -37,7 +37,7 @@ class Logic:
 			'content-type' : 'application/json'
 		}
 		print(ticket)
-		r = requests.put(f'http://localhost:5000/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
+		r = requests.put(f'http://localhost:5000/ticket-service/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
 		return r.status_code
 
 
@@ -48,7 +48,7 @@ class Logic:
 		headers = {
 			'Authorization': 'Bearer ' + token,
 		}	
-		r = requests.post(f'http://localhost:5000/ticket/{ticketId}/message/{messageId}', headers=headers,data=data, files=files)
+		r = requests.post(f'http://localhost:5000/ticket-service/ticket/{ticketId}/message/{messageId}', headers=headers,data=data, files=files)
 		print(r)
 		return r.status_code	
 
@@ -57,7 +57,7 @@ class Logic:
 		headers = {
 			"Authorization" : 'Bearer ' + token
 		}
-		r = requests.get(f'http://localhost:5000/ticket/{ticketId}/user/{uid}/message/{messageId}/file/{filename}', headers=headers)
+		r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}', headers=headers)
 		print(r.headers)	
 		return Response(r, content_type=r.headers['Content-Type']) 
 		

@@ -1,17 +1,15 @@
 from flask import Flask
-#from flask_restplus import Api
 from flask_restx import Api
 from flask_cors import CORS
 from flask_jwt_oidc import AuthError, JwtManager
 from flask_jwt_extended import JWTManager
-#from flask_oidc import OpenIDConnect
 
 from config import Config
 from db.mongo import MongoDatabase
 from logic.logic import Logic
 
 
-name = 'ticket'
+name = 'ticket-service'
 description = 'Ticket API'
 
 authorizations = {
@@ -44,25 +42,16 @@ flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
 CORS(flask_app)
 
-
-
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
 api = app.namespace(name, description=description)
 
 jwt = JWTManager(flask_app)
 
 
-def setupLogic(db):
-	return Logic(db)
-
-def setupDB():
-	return MongoDatabase()	
-
-
 def setup():
-	db = setupDB()
-	logic = setupLogic(db)
-	return   logic
+    db = MongoDatabase()
+    logic = Logic(db)
+    return   logic
 
 
 logic = setup()

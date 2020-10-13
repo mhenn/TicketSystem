@@ -12,14 +12,13 @@ let initOptions = {
 Vue.config.productionTip = false
 
 let keycloak = Keycloak(initOptions);
-store.commit('setCloak', keycloak)
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
-    
     if(!auth) {
       window.location.reload();
     }
-
+	
+	store.commit('setCloak', keycloak)
 	new Vue({
       router,
       vuetify,

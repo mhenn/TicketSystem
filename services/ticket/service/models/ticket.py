@@ -12,7 +12,8 @@ content_model =  api.model('Content', {
 })
 
 ticket_model = api.model('Ticket',  {
-	'id': fields.Integer,
+	'id': fields.String,
+        'uid': fields.String,
 	'from': fields.String,
 	'to': fields.String,
 	'subject': fields.String,
