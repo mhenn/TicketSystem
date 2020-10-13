@@ -6,14 +6,6 @@ import fileDownload from 'js-file-download'
 //import {serialize} from 'object-to-formdata'
 Vue.use(Vuex)
 
-function saveBlob(blob, fileName) {
-    var a = document.createElement("a");
-    a.href = window.URL.createObjectURL(blob);
-    a.download = fileName;
-    document.body.appendChild(a); // won't work in firefox otherwise
-    a.click();
-}
-
 function defineContent( file_list ,state){
 			var ticket = state.selectedTicket 
 			var file_names = []
@@ -40,7 +32,7 @@ export default new Vuex.Store({
 	state: {
 		dialog: false,
 		tickets: [],
-		selectedTicket: {},	
+		selectedTicket: {'to':'', 'subject':'', 'content':''},	
 		files: [],
 		emptyTicket: false,
 		cloak : ''
@@ -58,22 +50,22 @@ export default new Vuex.Store({
 		update(state, tickets){
 			state.tickets = tickets
 		},
+		clearSelectedTicket(state){
+			state.selectedTicket = {}
+		},
 		changeSelectedTicket(state, id){
 			if(id != null){	
 				state.selectedTicket = state.tickets.find( el => {return el.id == id}) 
 				state.emptyTicket = false
 			} else{
 				state.emptyTicket = true
-				state.selectedTicket = {}
+				state.selectedTicket = {'to':'', 'subject':'', 'content':''}	
 			}	
 		},
 		updateTicketData(state, data){
 			let field = data[0]
 			let value = data[1]
-			console.log(state.selectedTicket)
-			console.log(data)
 			state.selectedTicket[field] = value
-			console.log(state.selectedTicket)
 				
 		}
 	},
@@ -95,7 +87,6 @@ export default new Vuex.Store({
 				data: form
 			}
 			
-			console.log(options.url)
 			//window.open(options.url)
 			axios(options).then(r => {
 				if (r.status == 200){
@@ -126,7 +117,6 @@ export default new Vuex.Store({
 			
 			axios(options_ticket).then(response =>{
 				if(response.status == 200 && file_list.length > 0){
-						console.log(response)	
 						let id = response.data.id
 						let options_files = {
 							url: 'http://localhost:5070/gateway/ticket/' + id + '/message/' + messageId  +'/files/',
@@ -198,7 +188,6 @@ export default new Vuex.Store({
 			
 			axios(options_ticket).then(response =>{
 				if(response.status == 200 && file_list.length > 0){
-						console.log(response)	
 						let options_files = {
 							url: 'http://localhost:5070/gateway/ticket/' + ticket.id + '/message/' + messageId  +'/files/',
 							method: 'POST',
@@ -212,7 +201,6 @@ export default new Vuex.Store({
 
 				
          		axios(options_files).then(response =>{
-						console.log(response)
 						dispatch('getTickets')
 					})
 				} else {

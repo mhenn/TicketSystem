@@ -3,45 +3,19 @@
     <v-dialog   v-model="dialog" persistent max-width="600px">
             <v-card >
         <v-card-title>
-          <span class="headline">User Profile</span>
+          <span class="headline">New Ticket</span>
         </v-card-title>
-        <v-card-text>
+		<ValidationObserver ref="form"> 
+			<form @submit.prevent='onSubmit'>
+			<v-card-text>
           <v-container class="swole">
             <v-row>
               <v-col cols="12"  md="4">
-							<v-select :readonly="!emptyTicket"
-					v-model="to"
-					:items="selection"
-					label="Contact"
-					dense
-					solo
-					/>
-
-		<ValidationProvider v-slot="{ errors, valid }" name="subject" rules="required|max:50">
-        <v-text-field  :readonly="!emptyTicket"
-			solo
-          v-model="subject"
-          :counter="50"
-          :error-messages="errors"
-				:success="valid"
-          label="Betreff"
-          required
-        ></v-text-field>
-			</ValidationProvider>
-
+			<ValidationSelect :readonly="!emptyTicket" rules="required" v-model='to' :items="selection" label="Contact"/> 
+			<ValidationTextfield :readonly="!emptyTicket" rules="required|max:50" v-model="subject" label="Subject"/>
               </v-col>
               <v-col cols="12">
-			
-			<ValidationProvider v-slot="{ errors }" name="Message" rules="required">
-					<v-textarea
-      label="Message"
-		v-model="content"
-		:auto-grow="true"
-		:solo="true"
-		:error-messages="errors"
-		required
-    ></v-textarea>
-
+			<ValidationTextarea rules="required" v-model="content" label="Message"/>
 		<Upload />			
 
 <v-list v-if="!emptyTicket" >
@@ -84,18 +58,22 @@
     </v-list>
 
 
-		</ValidationProvider>
               </v-col>
             </v-row>
           </v-container>
-          <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn color="grey darken-1" text @click="clear">Clear</v-btn>
+			<v-spacer></v-spacer>
+			<v-spacer></v-spacer>
           <v-btn color="grey darken-1" text @click="switchDialog">Close</v-btn>
-          <v-btn v-if='!newTicket' color="grey darken-1" text @click="addTicket">Send</v-btn>
+          <v-btn v-if='!newTicket' color="grey darken-1" text type='submit'>Submit</v-btn>
           <v-btn v-if='newTicket' color="grey darken-1" text @click="updateTicket">Update</v-btn>
         </v-card-actions>
+
+		</form>
+		</ValidationObserver>
       </v-card>
 		
     </v-dialog>
@@ -106,8 +84,11 @@
 
 
 	import { required, max } from 'vee-validate/dist/rules'
-	import { extend,  ValidationProvider  } from 'vee-validate'
+	import { extend, ValidationObserver  } from 'vee-validate'
 	import store from '@/store'	
+	import ValidationSelect from './inputs/ValidationSelect'
+	import ValidationTextfield from  './inputs/ValidationTextfield'
+	import ValidationTextarea from  './inputs/ValidationTextarea'
 //	import axios from 'axios'
 	import Upload from '@/components/FileUpload'
 	extend('required', {
@@ -137,7 +118,6 @@
 					return store.state.selectedTicket.to
 				},
 				set(value){
-				this.$validator.clean() 
 				store.commit('updateTicketData', ['to', value])}
 			},
 		subject:{
@@ -173,15 +153,25 @@
 		}),
 	
 	methods:{
+		async clear(){
+		this.content = ''
+		requestAnimationFrame(() => {
+        this.$refs.form.reset();
+      });
+		},
+		onSubmit(){
+			this.$refs.form.validate().then(e =>{
+				if( e ){
+					this.addTicket()
+				}
+			})
+		},
 		download(file, messageId){
-			console.log(file)
-			console.log(messageId)
 			store.dispatch('downloadFile', [file, messageId])
 
 		},
 		onFileChange(event){
 			this.files = event.target.files[0]
-			console.log(this.files)
 		},
 		switchDialog(){
 			store.commit('switch')
@@ -196,7 +186,10 @@
 		}
 	},
 	components:{
-		ValidationProvider,
+		ValidationObserver,
+		ValidationSelect,
+		ValidationTextfield,
+		ValidationTextarea,
 		Upload
 	}
 }
