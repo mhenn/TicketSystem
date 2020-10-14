@@ -1,33 +1,23 @@
 <template>
 	<v-app :dark='this.$vuetify.theme.dark = true'>
-		<v-navigation-drawer  permanent
+		<v-navigation-drawer 
 			v-model="drawer"
 			app
 			clipped
 		>
-      <v-list dense>
+      <v-list dense >
 			<NavbarItem linkto="/" title="Dashboard">
             <v-icon>mdi-view-dashboard</v-icon>
 			</NavbarItem>
-			<NavbarItem linkto="/settings" title="Settings">
-            <v-icon>mdi-tools</v-icon>
-			</NavbarItem>
-			<NavbarItem linkto="/legal" title="Impressum">
-            <v-icon>mdi-briefcase</v-icon>
-			</NavbarItem>
-			<NavbarItem linkto="/privacy" title="Datenschutz">
-            <v-icon>mdi-security</v-icon>
-			</NavbarItem>
       </v-list>
 		</v-navigation-drawer>
-
 		<v-app-bar
 			app
 			clipped-left
 		>
+		<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 			<v-toolbar-title>Odonata</v-toolbar-title>
 		</v-app-bar>
-
 		<v-container class="content" fluid>
 			<v-row dense>
 				<v-col
