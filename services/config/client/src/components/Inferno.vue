@@ -6,7 +6,16 @@
 			clipped
 		>
       <v-list dense >
-			<NavbarItem linkto="/" title="Dashboard">
+			<NavbarItem linkto="/queue" title="Queues">
+            <v-icon>mdi-view-dashboard</v-icon>
+			</NavbarItem>
+			<NavbarItem linkto="/roles" title="Roles">
+            <v-icon>mdi-view-dashboard</v-icon>
+			</NavbarItem>
+			<NavbarItem linkto="/mail" title="Mail">
+            <v-icon>mdi-view-dashboard</v-icon>
+			</NavbarItem>
+			<NavbarItem linkto="/config" title="Main Config">
             <v-icon>mdi-view-dashboard</v-icon>
 			</NavbarItem>
       </v-list>
