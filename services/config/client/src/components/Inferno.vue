@@ -1,6 +1,7 @@
 <template>
-	<v-app :dark='this.$vuetify.theme.dark = true'>
+	<v-app :dark='this.$vuetify.theme.dark = false'>
 		<v-navigation-drawer 
+			dark
 			v-model="drawer"
 			app
 			clipped
@@ -21,6 +22,7 @@
       </v-list>
 		</v-navigation-drawer>
 		<v-app-bar
+			dark
 			app
 			clipped-left
 		>

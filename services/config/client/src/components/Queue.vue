@@ -1,39 +1,68 @@
 <template>
+	<div>
+		<div class='flex'>	
+			<v-text-field v-model="queueName" label='New Entry' dense solo ></v-text-field>
+			<v-btn @click='addItem' icon>
+				<v-icon>mdi-plus</v-icon>
+			</v-btn>
+		</div>
 
-	<v-list>
-		<v-list-group
-			v-for="item in fick"
-		>
-		
-			<template v-slot:activator>
-				<v-list-item-content>
-					<v-list-item-title v-text="item"></v-list-item-title>
-				</v-list-item-content>
-			</template>		
-
-			<v-list-item
+		<v-list  class="thick">
+			<v-item
+				v-for="queue in queues"
+				:key='queue.title'
 			>
-				<v-list-item-content>
-					<v-card>
-						OOOO
-					</v-card>
+			<div class='flex'>
+				<v-list-item-content >
+					<v-list-item-title v-text='queue.title'></v-list-item-title>	
 				</v-list-item-content>
-			</v-list-item>
-	
-		</v-list-group>
-	</v-list>
-
+					<v-btn @click='deleteItem(queue.id)' icon>
+						<v-icon>mdi-trash-can-outline</v-icon>
+					</v-btn>
+			</div>
+			</v-item>
+		</v-list>
+	</div>
 </template>
 
 <script>
 
+import store from '@/store'
 
 export default {
 	name: 'QueueContent',
-	data: () => ({
-		fick : [1,2,3,4]
-	})
-
+	computed: {
+		queues(){
+			return store.state.queues
+		}
+	},
+	data(){
+		return{
+			queueName: ''
+		}
+	},
+	methods: {
+		deleteItem(id){
+			store.dispatch('deleteQueue', id)		
+		},
+		addItem(){
+			store.dispatch('postQueue', this.queueName)	
+		}
+	},
+	components: {
+		store
+	}
+	
 }
 
 </script>
+
+<style>
+	.flex{
+		display:flex;
+	}
+
+	.thick{
+		width: 50vw;
+	}
+</style>

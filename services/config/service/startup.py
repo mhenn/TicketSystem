@@ -45,4 +45,4 @@ jwt = JWTManager(flask_app)
 
 
 db = MongoDatabase()	
-base_logic = BaseLogic(db)
+logic = {'queue' : QueueLogic(db)}
