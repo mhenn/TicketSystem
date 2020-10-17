@@ -7,6 +7,13 @@ from flask_jwt_extended import (jwt_required, get_jwt_identity)
 import requests
 import json
 
+@api.route("/queues/")
+class Queues(Resource):
+
+    @jwt_required
+    def get(self):
+        queues = logic.get_queues()
+        return {'status' : 200, 'queues': queues}
 
 @api.route("/ticket/")
 class TicketClass(Resource):

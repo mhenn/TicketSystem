@@ -10,7 +10,7 @@ import store from '@/store'
 export default{
 	created(){
 		store.dispatch('getTickets')
-		
+		store.dispatch('getQueues')		
 	}
 }
 

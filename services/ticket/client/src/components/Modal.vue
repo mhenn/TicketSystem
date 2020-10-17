@@ -103,6 +103,14 @@
   export default {
 		name: "Modal",
 		computed: {
+			selection(){
+				let queue = store.state.queues
+				var queues = []
+				queue.forEach(item =>{
+					queues.push({'name' : item.title, 'text': item.title, 'id': item.id})
+				})
+				return queues
+			},
 			emptyTicket(){
 				return store.state.emptyTicket
 			},
@@ -149,7 +157,6 @@
 			],
 			message: '',
 			show: 0,
-			selection : [{name:'Foo', text:'Foo'}, {name:'Bar', text:'Bar'}],
 		}),
 	
 	methods:{

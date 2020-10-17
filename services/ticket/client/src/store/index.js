@@ -35,11 +35,15 @@ export default new Vuex.Store({
 		selectedTicket: {'to':'', 'subject':'', 'content':''},	
 		files: [],
 		emptyTicket: false,
-		cloak : ''
+		cloak : '',
+		queues: []
 	},
 	mutations: {
 		setCloak(state, cloak){
 			state.cloak = cloak
+		},
+		updateQueues(state,queues){
+			state.queues = queues
 		},
 		updateFiles(state, files){
 			state.files = files
@@ -70,7 +74,24 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
-	
+
+		getQueues({commit}){
+			let token = window.localStorage['vue-token']		
+		
+			let options = {
+				url: 'http://localhost:5070/gateway/queues/',
+				method: 'get',
+				headers: {
+					'Authorization': 'Bearer ' + token,
+				},
+			}
+			axios(options).then(r =>{
+				commit('updateQueues', r.data.queues)
+			
+			})	
+
+		},
+
 		downloadFile({state}, [filename, messageId]){
 				
 			let token = window.localStorage['vue-token']		
