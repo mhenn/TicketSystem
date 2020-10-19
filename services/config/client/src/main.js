@@ -6,6 +6,8 @@ import * as Keycloak from 'keycloak-js'
 import store from './store'
 import Unauthorized from './Unauthorized.vue'
 
+import KcAdminClient from 'keycloak-admin'
+
 const config_role = 'config_admin'
 
 let initOptions = {
@@ -14,12 +16,31 @@ let initOptions = {
 
 Vue.config.productionTip = false
 
+const admin = new KcAdminClient()
+admin.baseUrl = 'http://localhost:8000/auth'
+admin.realmName = 'Odonata'
+console.log(admin)
+async function blyn(admin){
 
+		
+
+	await admin.auth(
+		{
+			username: 'oadmin',
+			password: 'oadmin',
+			grantType: 'password',
+			clientId: 'config-service'	
+		} 
+	)
+	store.commit('updateRoles', await admin.roles.find())
+	console.log(admin)
+}
+
+blyn(admin)
 let keycloak = Keycloak(initOptions);
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 	store.commit('setCloak', keycloak)
-	
 
 	let roles = JSON.stringify(keycloak.tokenParsed.realm_access.roles)
 	console.log(roles)
@@ -41,9 +62,6 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 			store,
 			render: h => h(Unauthorized)
 		}).$mount('#app')
-
-
-
 	}
 
 	localStorage.setItem("vue-token", keycloak.token);

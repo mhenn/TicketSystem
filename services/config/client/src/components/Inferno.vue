@@ -28,6 +28,10 @@
 		>
 		<v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 			<v-toolbar-title>Odonata</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<v-btn @click="logout" icon>
+				<v-icon>mdi-logout-variant</v-icon>
+			</v-btn>
 		</v-app-bar>
 		<v-container class="content" fluid>
 			<v-row dense>
@@ -50,7 +54,7 @@
 <script>
 	//import Footer from '@/components/Footer'
 	import NavbarItem from '@/components/NavbarItem'
-
+	import store from '@/store'
 	export default {
 		name: "Inferno",
 		components: {
@@ -61,6 +65,11 @@
 			cards:[{title:'test'}],
 			drawer: null
 		}),
+		methods:{
+			logout(){
+				store.dispatch('logout')
+			}
+		},
 		created() {
 		this.$vuetify.theme.dark=false
 		}
