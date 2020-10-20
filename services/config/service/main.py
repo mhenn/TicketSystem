@@ -29,11 +29,24 @@ class SpecificQueue(Resource):
         return {'status': status}
 
 
-@api.route("/roles/")
-class Roles(Resource):
+@api.route("/role-mapping/")
+class Mappings(Resource):
 
     def post(self):
-        pass
+        mapping = json.loads(request.data)
+        logic['mapping'].create(mapping)
+        return {'status': 200 }
 
     def get(self):
+        mapping = logic['mapping'].get()
+        return {'status': 200, 'mapping': mapping}
+    
+@api.route('/role-mapping/<string:mappingId>')
+class SpecificMapping(Resource):
+
+    def get(self, mappingId):
         pass
+
+    def delete(self, mappingId):
+        status = logic['mapping'].delete(mappingId)
+        return {'status': status}

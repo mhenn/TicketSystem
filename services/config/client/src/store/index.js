@@ -8,7 +8,8 @@ export default new Vuex.Store({
 	state: {
 		cloak :'',
 		queues: [],
-		roles: []
+		roles: [],
+		mapping:[]
 	},
 	mutations: {
 
@@ -22,6 +23,10 @@ export default new Vuex.Store({
 		updateQueues(state,queues){
 			console.log(queues)
 			state.queues = queues
+		},
+		updateMapping(state,mapping){
+			console.log(mapping)
+			state.mapping = mapping
 		}
 	},
 	actions: {	
@@ -86,6 +91,68 @@ export default new Vuex.Store({
 			}
 			axios(options).then(r =>{ console.log(r)})
 		},
+		//MAPPING
+		postMapping({dispatch}, mapping){
+			
+
+
+			let token = window.localStorage['vue-token']
+			let data = mapping
+
+			let options = {
+				url: 'http://localhost:5555/config/role-mapping/',
+				method: 'POST',
+				headers: {
+					'Authorization' : 'Bearer ' + token
+				},
+				data: data
+			}
+			axios(options).then(() => {
+				dispatch('getMappings')
+			})
+
+		},
+		getMappings({commit}){
+
+         let token = window.localStorage['vue-token']
+         let options = {
+            url :'http://localhost:5555/config/role-mapping/',
+            method: 'GET',
+            headers: {
+               'Authorization' : 'Bearer ' + token
+            }
+         }
+
+         axios(options).then(response =>{
+            commit('updateMapping', response.data.mapping)
+         })
+      },
+      deleteMapping(context, id){
+         let token = window.localStorage['vue-token']
+			let options = {
+				url: 'http://localhost:5555/config/role-mapping/' + id,
+				method: 'DELETE',
+				headers:{
+            	Authorization: "Bearer " + token,
+            }
+			}
+			axios(options).then(() =>{
+            context.dispatch('getMappings')
+         })
+      },
+		getMapping(context){
+			let token = window.localStorage['vue-token']
+
+			let options = {
+				url: 'http://localhost:8000/auth/admin/realms/Odonata/clients/64ce3a4f-c9a8-4105-a5b3-32522f1f1e88/roles',
+				method: 'GET',
+				headers:{
+					Authorization: "Bearer " + token
+				}
+			}
+			axios(options).then(r =>{ console.log(r)})
+		},
+
 	},
 	modules: {
 	}

@@ -10,6 +10,7 @@ import store from '@/store'
 export default{
 	created(){
 		store.dispatch('getQueues')
+		store.dispatch('getMappings')
 	}
 }
 

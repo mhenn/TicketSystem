@@ -2,6 +2,7 @@ from db.mongo import *
 import requests
 import json 
 
+
 class QueueLogic():
 
     def __init__(self, db):
@@ -15,3 +16,19 @@ class QueueLogic():
 
     def get(self):
         return self.db.get_queues()
+
+
+class MappingLogic():
+
+    def __init__(self, db):
+        self.db = db
+
+    def create(self, mapping):
+        self.db.create_mapping(mapping)
+
+    def delete(self, mappingId):
+        self.db.delete_mapping(mappingId)
+
+
+    def get(self):
+        return self.db.get_mappings()

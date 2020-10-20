@@ -14,7 +14,7 @@
 									<v-checkbox
 										v-model="selectedRole"
 										:label="role.name"
-										:value="role.name"
+										:value="role"
 									></v-checkbox>	
 								</v-list-item-content>
 							</v-list-item>
@@ -43,8 +43,28 @@
 			</div>
 
 			<v-divider class='space' vertical></v-divider>	
+			
 			<ListGroup title='Existing Mappings'>
-				<v-treeview></v-treeview>
+
+				<v-list-group v-for="mapping in mappings"
+					:key="mapping.id"
+				>
+					<template v-slot:activator>
+						<div class="flex">
+							<v-list-item-title v-text="mapping.name"> </v-list-item-title>
+							<v-btn @click="deleteMapping(mapping.id)" icon>
+								<v-icon>mdi-trash-can-outline</v-icon>
+							</v-btn>
+						</div>
+					</template>
+
+					<v-list v-for="child in mapping.children"
+						:key="child"
+					>
+						<v-list-item v-text="child"></v-list-item>
+					</v-list>
+
+				</v-list-group>
 			</ListGroup>
 		</div>
 	</div>
@@ -64,7 +84,10 @@ export default {
 		},
 		roles(){
 			return store.state.roles
-		}
+		},
+		mappings(){
+			return store.state.mapping
+		},
 	},
 	data(){
 		return{
@@ -74,9 +97,14 @@ export default {
 		}
 	},
 	methods: {
+		deleteMapping(id){
+			store.dispatch('deleteMapping', id)
+		},
 		submitMapping(){
-			console.log(this.selectedQueue)
-			console.log(this.selectedRole)
+			this.selectedRole.forEach((role) => {	
+					let mapping = {'id': role.id, 'name': role.name, 'children': this.selectedQueue}
+					store.dispatch('postMapping',mapping)
+			})
 		},
 		deleteItem(id){
 			store.dispatch('deleteQueue', id)		

@@ -26,3 +26,21 @@ class MongoDatabase():
             q['id'] = str(q['_id'])
             del q['_id']
         return queues
+
+
+    def create_mapping(self, mapping):
+        self.db.mapping.insert(mapping)	
+
+
+    def delete_mapping(self,  mappingId):
+        self.db.mapping.delete_one({'_id' : ObjectId(mappingId)})
+
+
+    def get_mappings(self):
+        cursor = self.db.mapping.find()
+        mappings = [q for q in cursor] 
+        for m in mappings:
+            m['id'] = str(m['_id'])
+            del m['_id']
+        return mappings
+ 
