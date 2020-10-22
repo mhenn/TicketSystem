@@ -35,7 +35,7 @@ class TicketClass(Resource):
 
 @api.route('/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
 class SpecificFile(Resource):
-
+    @jwt_required
     def get(self, ticketId, messageId, filename):
         uid = get_jwt_identity()
         return logic.get_file(ticketId, messageId, filename, uid)

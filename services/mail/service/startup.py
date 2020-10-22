@@ -12,8 +12,8 @@ from logic.token import ServiceToken
 import json
 import requests
 
-name = 'ticket-service'
-description = 'Ticket API'
+name = 'mail-service'
+description = 'Mail API'
 
 authorizations = {
     'Bearer Auth': {
@@ -50,25 +50,11 @@ api = app.namespace(name, description=description)
 
 jwt = JWTManager(flask_app)
 
-service = TokenService()
 
-def setup(service):
+def setup():
     db = MongoDatabase()
-    logic = {'base' : Logic(db), 'pub' : PubLogic(db, service)}
+    logic = {'base' : Logic(db)}
     return   logic
 
-
-def checkAndCreatePub(service):
-    token = service.get() 
-    header = {'Authorization': 'Bearer ' + token}
-
-    res = requests.get('http://localhost:5050/pubsub/', headers=header)
-    pubs = res.json()['publishers']
-    if 'ticket' not in [ t['name'] for t in pubs]:
-        data = {'publisher': 'ticket'}
-        requests.post('http://localhost:5050/pubsub/', headers=header, data=json.dumps(data))
-    
-
-checkAndCreatePub(service)
 
 logic = setup()

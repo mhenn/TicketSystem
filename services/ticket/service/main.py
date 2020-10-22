@@ -11,12 +11,12 @@ import os
 
 @api.route('/ticket/<string:ticketId>/message/<string:messageId>')
 class UserFileUpload(Resource):
-
+    @jwt_required
     def post(self,  ticketId, messageId):
         print(f'req: {request} form: {request.form.to_dict()} files: {request.files.to_dict()} header: {request.headers}')
         files = request.files.to_dict()
         form = request.form.to_dict()
-        logic.createFiles(files, form['uid'], ticketId, messageId)
+        print( logic['base'].createFiles(files, form['uid'], ticketId, messageId))
         #print(uploaded_file.filename)
         #uploaded_file.save(f'./files/{uploaded_file.filename}')
         return {'status':200}
@@ -25,7 +25,7 @@ class UserFileUpload(Resource):
 
 @api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
 class FileDownload(Resource):
-
+    @jwt_required
     def get(self, ticketId, uid, messageId, filename):
         uid = 'd2717165-4f26-477b-a992-bc31b2b085cd'
         return send_from_directory(f'./files/{uid}/{ticketId}/{messageId}', filename, as_attachment=True)
@@ -38,12 +38,15 @@ class TicketClass(Resource):
     @api.expect(ticket_model)
     def post(self, userId):
         print(f'req: {request} data: {request.data} header: {request.headers}')
-        id = logic.create(json.loads(request.data), userId)
+        id = logic['base'].create(json.loads(request.data), userId)
+
+        logic['pub'].created(str(id))
+
         return {'status': 200, 'id': str(id)}
 
     @jwt_required
     def get(self, userId):
-        tickets = logic.get(userId)
+        tickets = logic['base'].get(userId)
         return {'status': 200, 'tickets': tickets}
 
 
@@ -51,13 +54,13 @@ class TicketClass(Resource):
 class TicketID(Resource):
     @jwt_required
     def delete(self, userId, ticketID):
-        logic.delete(ticketID)
+        logic['base'].delete(ticketID)
         return {'status':200}
 
     @api.expect(ticket_model)
     def put(self, ticketID):
         print(f'req: {request} data: {request.data} header: {request.headers}')
-        logic.update(request.data, ticketID)
+        logic['base'].update(request.data, ticketID)
         return {'status' :200}
 
 @api.route("/callback/")
