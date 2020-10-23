@@ -49,7 +49,8 @@ class PubLogic():
     def created(self, oid):
         ticket = self.db.get({'_id' : ObjectId(oid)})
         token = self.token_service.get()
+        print(ticket)
         header = {'Authorization' : 'Bearer ' + token}
-        data = {'actions': 'created', 'ticket': ticket}
-        requests.post('http://localhost:5050/pubsub/ticket/', headers=header, data=ticket)
+        data = {'message': {'actions': 'created', 'ticket': ticket}}
+        requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(ticket))
 

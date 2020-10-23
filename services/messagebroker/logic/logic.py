@@ -19,8 +19,9 @@ class PublisherLogic():
     def send_msg(self, publisher, content):
         pub = self.db.get_publisher(publisher)
         for sub in pub['subscribers']:
-            print(json.dumps({'message':content}))
-            requests.post(sub['callback'], data={'message':content})	
+            print(sub)
+            print(json.dumps(content))
+            requests.post(sub['callback'], data=json.dumps(content))	
 
 
 class PubSubscriberLogic():

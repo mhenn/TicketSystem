@@ -50,11 +50,32 @@ api = app.namespace(name, description=description)
 
 jwt = JWTManager(flask_app)
 
-
 def setup():
     db = MongoDatabase()
     logic = {'base' : Logic(db)}
     return   logic
 
+def connectToBroker():
+
+    token = ServiceToken().get()
+
+    name = 'mail-service'
+    pub = 'ticket'
+    baseurl= 'http://localhost:5050/pubsub/'
+    header = {'Authorization': 'Bearer ' + token}
+
+    res = requests.get(baseurl, headers=header)
+    pubs = res.json()['publishers']
+    if pub not in [ t['name'] for t in pubs]:
+        raise Exception('Messagebroker does not contain the needed Publisher, therefore the corresponding service is not running')
+
+    
+    res = requests.get(f'{baseurl}{pub}/{name}', headers=header)
+
+    if  res.status_code == 404:
+        data = {'subscriber': 'mail-service', 'callback': 'http://localhost:5025/'}
+        requests.put(f'{baseurl}ticket', headers=header, data=json.dumps(data))
+
+connectToBroker()
 
 logic = setup()

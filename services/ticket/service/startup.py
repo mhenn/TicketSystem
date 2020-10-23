@@ -50,7 +50,7 @@ api = app.namespace(name, description=description)
 
 jwt = JWTManager(flask_app)
 
-service = TokenService()
+service = ServiceToken()
 
 def setup(service):
     db = MongoDatabase()
@@ -71,4 +71,4 @@ def checkAndCreatePub(service):
 
 checkAndCreatePub(service)
 
-logic = setup()
+logic = setup(service)

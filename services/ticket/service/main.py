@@ -1,5 +1,5 @@
-from startup import *
-from flask_restplus import  Resource, marshal_with
+from startup import * 
+from flask_restx import Resource
 from flask_cors import CORS, cross_origin
 from models.ticket import  content_model, ticket_model, callback_model
 from logic.logic import *

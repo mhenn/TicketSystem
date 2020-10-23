@@ -10,10 +10,9 @@ import json
 import os
 
 @api.route('/')
-class UserFileUpload(Resource):
+class MailCallback(Resource):
     
-    @jwt_required
-    def post(self,  ticketId, messageId):
+    def post(self):
         print(f'req: {request} form: {request.form.to_dict()} files: {request.files.to_dict()} header: {request.headers}')
         # print( logic['base'].createFiles(files, form['uid'], ticketId, messageId))
         #print(uploaded_file.filename)

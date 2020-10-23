@@ -35,12 +35,12 @@ class Publisher(Resource):
     @jwt_required
     @api.expect(msg)
     def post(self, publisher):
-        publisher_logic.send_msg(publisher, api.payload['message'])
+        publisher_logic.send_msg(publisher, json.loads(request.data))
 
     @jwt_required
     @api.expect(sub)	
     def put(self, publisher):
-        publisher_logic.add_subscriber(publisher, api.payload)
+        publisher_logic.add_subscriber(publisher, json.loads(request.data))
         return {'status': 200, 'msg': 'Added subscriber'}	
 
 
@@ -57,7 +57,7 @@ class PubSubscriber(Resource):
         try:
             sub = pubsub_logic.get_subscriber(publisher,subscriber)
         except ValueError:
-            return {'status': 404}
+            return {'message': 404}, 404
         return {'status': 200, 'publishers': sub}	
 
     @jwt_required
