@@ -20,7 +20,7 @@ class PublisherLogic():
         pub = self.db.get_publisher(publisher)
         for sub in pub['subscribers']:
             print(sub)
-            print(json.dumps(content))
+            print(content)
             requests.post(sub['callback'], data=json.dumps(content))	
 
 

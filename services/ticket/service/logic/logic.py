@@ -2,7 +2,6 @@ from db.mongo import *
 import requests
 import json
 import os
-from bson import ObjectId
 
 
 class Logic():
@@ -47,10 +46,9 @@ class PubLogic():
         self.token_service = ts
 
     def created(self, oid):
-        ticket = self.db.get({'_id' : ObjectId(oid)})
+        #ticket = self.db.get({'_id' : ObjectId(oid)})
         token = self.token_service.get()
-        print(ticket)
         header = {'Authorization' : 'Bearer ' + token}
-        data = {'message': {'actions': 'created', 'ticket': ticket}}
-        requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(ticket))
+        data = {'message': {'actions': 'created', 'ticketId': oid}}
+        requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(data))
 

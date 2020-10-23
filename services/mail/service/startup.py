@@ -73,7 +73,7 @@ def connectToBroker():
     res = requests.get(f'{baseurl}{pub}/{name}', headers=header)
 
     if  res.status_code == 404:
-        data = {'subscriber': 'mail-service', 'callback': 'http://localhost:5025/'}
+        data = {'subscriber': 'mail-service', 'callback': 'http://localhost:5025/mail-service/'}
         requests.put(f'{baseurl}ticket', headers=header, data=json.dumps(data))
 
 connectToBroker()

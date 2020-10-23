@@ -13,10 +13,12 @@ import os
 class MailCallback(Resource):
     
     def post(self):
-        print(f'req: {request} form: {request.form.to_dict()} files: {request.files.to_dict()} header: {request.headers}')
+        print(f'req: {request} data: {request.data}  header: {request.headers}')
         # print( logic['base'].createFiles(files, form['uid'], ticketId, messageId))
         #print(uploaded_file.filename)
         #uploaded_file.save(f'./files/{uploaded_file.filename}')
+        prepared_mail = logic['base'].prepare_mail(json.loads(request.data))
+        logic['base'].send_mail(prepared_mail)
         return {'status':200}
 
 
