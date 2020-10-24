@@ -38,7 +38,15 @@ class Logic():
     
     def get(self, uid):
         return self.db.get({'uid':uid})
-   
+
+
+    def getTicketByTopic(self, content):
+        
+        tickets = []
+        for topic in content['topics']:
+            tickets = tickets + self.db.get({'to' : topic})
+        return tickets
+
 class PubLogic():
 
     def __init__(self,db,ts):

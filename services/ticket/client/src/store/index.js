@@ -36,7 +36,8 @@ export default new Vuex.Store({
 		files: [],
 		emptyTicket: false,
 		cloak : '',
-		queues: []
+		queues: [],
+		mappings: [],
 	},
 	mutations: {
 		setCloak(state, cloak){
@@ -44,6 +45,9 @@ export default new Vuex.Store({
 		},
 		updateQueues(state,queues){
 			state.queues = queues
+		},
+		updateMapping(state, mapping){
+			state.mappings = mapping
 		},
 		updateFiles(state, files){
 			state.files = files
@@ -230,9 +234,52 @@ export default new Vuex.Store({
 			})	
 
 		},
+		getMappings({state, commit}){
+			let token = window.localStorage['vue-token']		
+			let options = {
+				url :'http://localhost:5070/gateway/config/role-mapping/',
+				method: 'GET',
+				headers: {
+					'Authorization' : 'Bearer ' + token
+				}
+			}
+
+			axios(options).then(response =>{
+				commit('updateMapping', response.data.mapping)	
+			})	
+		},
 		logout(context){
 			context.state.cloak.logout()
-		}	
+		},
+		getSupporterTickets({state,commit}){
+
+			let token = window.localStorage['vue-token']		
+			
+			let topics = []
+			console.log(state.mappings)
+			state.mappings.forEach(m =>{
+				m.children.forEach(c =>{
+					topics.push(c)
+				})
+			})
+			console.log(topics)
+			let data = {'topics': topics}
+
+			let options = {
+				url :'http://localhost:5070/gateway/supporter/ticket/',
+				method: 'POST',
+				headers: {
+					'Authorization' : 'Bearer ' + token
+				},
+				data: data
+			}
+
+			axios(options).then(response =>{
+				console.log('asdd')
+				console.log(response)
+				commit('update', response.data.tickets)	
+			})
+		},
 	},
 	modules: {
 	}

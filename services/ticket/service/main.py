@@ -21,6 +21,13 @@ class UserFileUpload(Resource):
         #uploaded_file.save(f'./files/{uploaded_file.filename}')
         return {'status':200}
 
+@api.route('/ticket/topics/')
+class TicketByTopics(Resource):
+
+    @jwt_required
+    def post(self):
+        tickets = logic['base'].getTicketByTopic(json.loads(request.data))
+        return {'tickets': tickets}
 
 
 @api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')

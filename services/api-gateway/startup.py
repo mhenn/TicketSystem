@@ -4,9 +4,10 @@ from flask_restx import Api
 from flask_cors import CORS
 from flask_jwt_oidc import AuthError, JwtManager
 from flask_jwt_extended import JWTManager
+from logic.token import  ServiceToken
 #from flask_oidc import OpenIDConnect
 
-from logic.logic import Logic
+from logic.logic import *
 
 
 name = 'gateway'
@@ -47,4 +48,5 @@ api = app.namespace(name, description=description)
 
 jwt = JWTManager(flask_app)
 
-logic = Logic()
+service = ServiceToken()	
+logic = {'base':Logic(service), 'config': ConfigLogic(service)}

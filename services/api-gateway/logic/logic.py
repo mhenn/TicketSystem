@@ -1,13 +1,13 @@
 from logic.token import ServiceToken
-from flask import Response
+from flask import Response, jsonify
 from flask import stream_with_context
 import requests
 import json
 
 class Logic:
 
-    def __init__(self):
-        self.service_token = ServiceToken()	
+    def __init__(self, service):
+        self.service_token = service
 
     def get_ticket(self, uid):         
         token = self.service_token.get()
@@ -68,7 +68,27 @@ class Logic:
         }   
         r = requests.get('http://localhost:5555/config/queues/', headers=headers)
         return r.json()['queues']
-        
+    
+    def ticket_topic(self, data):
+        print(data)
+        token = self.service_token.get()
+        header = {
+            "Authorization" : 'Bearer ' + token,
+        }
+        r = requests.post('http://localhost:5000/ticket-service/ticket/topics/', headers=header,data=data)
+        print(r)
+        return json.loads(r.content)
 
 
+class ConfigLogic():
+
+    def __init__(self, service):
+        self.service_token = service
+
+    def get_mapping(self):
+        token = self.service_token.get()
+        header = {'Authorization': 'Bearer ' + token }
+    
+        r = requests.get('http://localhost:5555/config/role-mapping', headers=header)
+        return json.loads(r.content)
 
