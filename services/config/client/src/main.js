@@ -19,7 +19,6 @@ Vue.config.productionTip = false
 const admin = new KcAdminClient()
 admin.baseUrl = 'http://localhost:8000/auth'
 admin.realmName = 'Odonata'
-console.log(admin)
 async function blyn(admin){
 
 		
@@ -35,6 +34,9 @@ async function blyn(admin){
 	store.commit('updateRoles', await admin.roles.find())
 	console.log(admin)
 }
+
+
+
 
 blyn(admin)
 let keycloak = Keycloak(initOptions);
@@ -74,10 +76,8 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 				console.log('Token refreshed' + refreshed);
 				localStorage.setItem("vue-token", keycloak.token);
 				localStorage.setItem("vue-refresh-token", keycloak.refreshToken);
-			} else {
-				console.log('Token not refreshed, valid for '
-					+ Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
 			}
+	
 		}).catch(() => {
 			console.log('Failed to refresh token');
 		});

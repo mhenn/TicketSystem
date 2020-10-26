@@ -32,3 +32,15 @@ class MappingLogic():
 
     def get(self):
         return self.db.get_mappings()
+
+
+class MailLogic():
+
+    def __init__(self,db):
+        self.db = db
+
+    def create(self, mapping):
+        self.db.create_mail_mapping(mapping)
+
+    def get(self):
+        return self.db.get_mail_mappings()

@@ -44,3 +44,15 @@ class MongoDatabase():
             del m['_id']
         return mappings
  
+    def create_mail_mapping(self,mapping):
+        return self.db.mail.insert(mapping)
+    
+    def get_mail_mappings(self):
+        cursor = self.db.mail.find()
+        mappings = [q for q in cursor] 
+        for m in mappings:
+            m['id'] = str(m['_id'])
+            del m['_id']
+        return mappings
+ 
+

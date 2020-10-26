@@ -1,15 +1,17 @@
 <template>
 	<Inferno>
-		<div>Mail</div>
+		<Mail/>
 	</Inferno>
 </template>
 
 <script>
 	import Inferno from '@/components/Inferno'
+	import Mail from '@/components/Mail'
 
 export default {
 	components: {
-		Inferno
+		Inferno,
+		Mail
 	}
 }
 

@@ -16,9 +16,6 @@
 			<NavbarItem linkto="/mail" title="Mail">
             <v-icon>mdi-view-dashboard</v-icon>
 			</NavbarItem>
-			<NavbarItem linkto="/config" title="Main Config">
-            <v-icon>mdi-view-dashboard</v-icon>
-			</NavbarItem>
       </v-list>
 		</v-navigation-drawer>
 		<v-app-bar

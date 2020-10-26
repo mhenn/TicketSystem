@@ -29,14 +29,31 @@ class SpecificQueue(Resource):
         return {'status': status}
 
 
+@api.route("/mail-mapping/")
+class Mail(Resource):
+    
+    @jwt_required
+    def post(self):
+        mapping = json.loads(request.data)
+        logic['mail'].create(mapping)
+        return
+
+    @jwt_required
+    def get(self):
+        mapping = logic['mail'].get()
+        return { "mapping": mapping}
+
+
 @api.route("/role-mapping/")
 class Mappings(Resource):
 
+    @jwt_required
     def post(self):
         mapping = json.loads(request.data)
         logic['mapping'].create(mapping)
         return {'status': 200 }
 
+    @jwt_required
     def get(self):
         mapping = logic['mapping'].get()
         return {'status': 200, 'mapping': mapping}

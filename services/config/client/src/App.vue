@@ -11,6 +11,7 @@ export default{
 	created(){
 		store.dispatch('getQueues')
 		store.dispatch('getMappings')
+		store.dispatch('getMailMappings')
 	}
 }
 
