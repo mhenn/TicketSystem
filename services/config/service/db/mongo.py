@@ -44,6 +44,7 @@ class MongoDatabase():
             del m['_id']
         return mappings
  
+
     def create_mail_mapping(self,mapping):
         return self.db.mail.insert(mapping)
     
@@ -55,4 +56,7 @@ class MongoDatabase():
             del m['_id']
         return mappings
  
+
+    def delete_mail_mapping(self,  mappingId):
+        self.db.mapping.delete_one({'_id' : ObjectId(mappingId)})
 

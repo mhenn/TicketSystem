@@ -7,6 +7,22 @@ from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 import json
 
+def normalize_query_param(value):
+    return value if len(value) > 1 else value[0]
+
+def normalize_query(params):
+    params_non_flat = params.to_dict(flat=False)
+    return {k: normalize_query_param(v) for k,v in params_non_flat.items()}
+
+
+@api.route("/user/")
+class User(Resource):
+
+    def get(self):
+        print(normalize_query(request.args))
+        return
+
+
 @api.route("/queues/")
 class Queue(Resource):
 
@@ -28,6 +44,14 @@ class SpecificQueue(Resource):
         status =  logic['queue'].delete(queueId)
         return {'status': status}
 
+
+@api.route("/mail-mapping/<string:mailMappingId>")
+class Mail(Resource):
+
+    @jwt_required
+    def delete(self, mailMappingId):
+        logic['mail'].delete(mailMappingId)
+        return
 
 @api.route("/mail-mapping/")
 class Mail(Resource):

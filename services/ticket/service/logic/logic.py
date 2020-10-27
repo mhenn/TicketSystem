@@ -53,10 +53,16 @@ class PubLogic():
         self.db = db
         self.token_service = ts
 
-    def created(self, oid):
-        #ticket = self.db.get({'_id' : ObjectId(oid)})
+    def __send (self, oid, u_type):
         token = self.token_service.get()
         header = {'Authorization' : 'Bearer ' + token}
-        data = {'message': {'actions': 'created', 'ticketId': oid}}
+        data = {'message': {'actions': u_type, 'ticketId': oid}}
         requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(data))
+
+    def updated(self, oid)
+        self.__send(oid, 'updated')
+
+def created(self, oid):
+        self.__send(oid, 'created')
+        #ticket = self.db.get({'_id' : ObjectId(oid)})
 

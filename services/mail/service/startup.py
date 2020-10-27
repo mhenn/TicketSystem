@@ -41,8 +41,6 @@ B2U9tf7FIlN4r5xXSRlk0IKZ9NIvEAr3k3JIFrZQeThu9ITM66Rne9Ndh1HoIOEY
 
 flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
-
-
 CORS(flask_app)
 
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
@@ -50,14 +48,16 @@ api = app.namespace(name, description=description)
 
 jwt = JWTManager(flask_app)
 
-def setup():
+service = ServiceToken()
+
+def setup(service):
     db = MongoDatabase()
-    logic = {'base' : Logic(db)}
+    logic = {'base' : Logic(db,service)}
     return   logic
 
-def connectToBroker():
+def connectToBroker(service):
 
-    token = ServiceToken().get()
+    token = service.get()
 
     name = 'mail-service'
     pub = 'ticket'
@@ -76,6 +76,8 @@ def connectToBroker():
         data = {'subscriber': 'mail-service', 'callback': 'http://localhost:5025/mail-service/'}
         requests.put(f'{baseurl}ticket', headers=header, data=json.dumps(data))
 
-connectToBroker()
 
-logic = setup()
+connectToBroker(service)
+logic = setup(service)
+
+

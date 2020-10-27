@@ -10,10 +10,24 @@ export default new Vuex.Store({
 		queues: [],
 		roles : [],
 		mapping:[],
-		mail: []
+		mail: [],
+		userRoles:[],
 	},
 	mutations: {
+		selfUpdateUserRoles(state){
 
+         let roles = state.cloak.tokenParsed.realm_access.roles
+         let res = state.cloak.tokenParsed.resource_access
+         console.log(roles)
+         console.log(res)
+         for(let key in res){
+            if(key){
+               roles = [...roles, ...res[key].roles]
+            }
+         }
+
+         state.userRoles = roles
+      },
 		setCloak(state,cloak){
 			state.cloak = cloak
 		},
@@ -24,11 +38,10 @@ export default new Vuex.Store({
 			state.queues = queues
 		},
 		updateMapping(state,mapping){
-			console.log(mapping)
 			state.mapping = mapping
 		},
 		updateMailMapping(state, mapping){
-			state.mapping = mapping
+			state.mail = mapping
 		}
 	},
 	actions: {	
@@ -153,7 +166,7 @@ export default new Vuex.Store({
 				data: data
 			}
 			axios(options).then(r =>{
-				console.log(r)
+				context.dispatch('getMailMappings')
 			})
 		},
 		getMailMappings({commit}){
@@ -168,11 +181,26 @@ export default new Vuex.Store({
          }
 
          axios(options).then(response =>{
-				console.log(response.data)
             commit('updateMailMapping', response.data.mapping)
          })
       },
- 
+		deleteMailMapping({dispatch}, id){
+	
+         let token = window.localStorage['vue-token']
+         let options = {
+            url :'http://localhost:5555/config/mail-mapping/' + id,
+            method: 'DELETE',
+            headers: {
+               'Authorization' : 'Bearer ' + token
+            }
+         }
+
+         axios(options).then(response =>{
+				console.log(response)
+            dispatch('getMailMappings')
+         })
+			
+		}
 	},
 	modules: {
 	}

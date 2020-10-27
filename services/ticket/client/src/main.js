@@ -17,8 +17,10 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
     if(!auth) {
       window.location.reload();
     }
-	
 	store.commit('setCloak', keycloak)
+
+	store.commit('selfUpdateRoles')
+
 	new Vue({
       router,
       vuetify,

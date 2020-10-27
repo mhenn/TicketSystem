@@ -51,6 +51,7 @@ export default {
 	computed: {
 		mail(){
 			let a = store.state.mail
+			console.log('mail')
 			console.log(a)
 			return a
 		},
@@ -59,13 +60,13 @@ export default {
 			let queues = store.state.queues			
 			let items = [{obj:{name:'Roles', disabled: true}}]
 			roles.forEach(role =>{
-				items.push({obj:{name:role.name, id: role.id, type: 'role'}})
+				items.push({obj:{name:role.name, mappingId: role.id, type: 'role'}})
 			})
 
 			items.push({obj:{name: 'Queues', disabled: true}})
 
 			queues.forEach(queue =>{
-				items.push({obj:{name:queue.title,id:queue.id, type: 'queue'}})
+				items.push({obj:{name:queue.title,mappingId:queue.id, type: 'queue'}})
 			})				
 			return items 
 		},
@@ -86,6 +87,10 @@ export default {
 				store.dispatch('postMailMapping', e)
 			})	
 		
+		},
+		deleteMapping(id){
+			console.log(id)
+			store.dispatch('deleteMailMapping', id)
 		}
 	},
 	components: {

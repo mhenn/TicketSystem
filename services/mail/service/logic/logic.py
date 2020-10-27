@@ -1,18 +1,23 @@
 import smtplib
 import email.utils
 from email.mime.text import MIMEText
+import requests
 
 
 class Logic():
 
-    def __init__(self, db):
+    def __init__(self, db, service):
         self.db = db
+        self.token = service
 	   
     def prepare_mail(self, content):
-        print(content)
-        
         action = content['message']['actions']
-    
+        
+        token = self.token.get()
+        header = {'Authorization': 'Bearer ' + token}
+        params = {'data': ['1','2','3'] }
+        requests.get('http://localhost:5555/config/user/', headers=header, params=params)
+
         # TODO edit recipient list gathered from config service. 
         # TODO Think about saving the config localy and updating it via message broker
 

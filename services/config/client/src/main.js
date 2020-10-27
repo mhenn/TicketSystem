@@ -43,9 +43,11 @@ let keycloak = Keycloak(initOptions);
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 	store.commit('setCloak', keycloak)
-
-	let roles = JSON.stringify(keycloak.tokenParsed.realm_access.roles)
+	store.commit('selfUpdateUserRoles')
+	
+	let roles = store.state.userRoles
 	console.log(roles)
+
 	if(!auth) {
 		window.location.reload();
 	}

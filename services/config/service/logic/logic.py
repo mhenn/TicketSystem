@@ -44,3 +44,6 @@ class MailLogic():
 
     def get(self):
         return self.db.get_mail_mappings()
+
+    def delete(self, mailId):
+        return self.db.delete_mail_mapping(mailId)

@@ -68,6 +68,7 @@ class TicketID(Resource):
     def put(self, ticketID):
         print(f'req: {request} data: {request.data} header: {request.headers}')
         logic['base'].update(request.data, ticketID)
+        logic['pub'].updated(ticketID)
         return {'status' :200}
 
 @api.route("/callback/")

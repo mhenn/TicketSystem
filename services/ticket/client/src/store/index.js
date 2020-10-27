@@ -38,10 +38,25 @@ export default new Vuex.Store({
 		cloak : '',
 		queues: [],
 		mappings: [],
+		userRoles: [],
 	},
 	mutations: {
 		setCloak(state, cloak){
 			state.cloak = cloak
+		},
+		selfUpdateRoles(state){
+
+			let roles = state.cloak.tokenParsed.realm_access.roles
+			let res = state.cloak.tokenParsed.resource_access
+			console.log(roles)
+			console.log(res)
+			for(let key in res){
+				if(key){
+					roles = [...roles, ...res[key].roles]	
+				}
+			}
+
+			state.userRoles = roles
 		},
 		updateQueues(state,queues){
 			state.queues = queues
