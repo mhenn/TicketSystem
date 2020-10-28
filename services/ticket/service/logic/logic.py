@@ -2,7 +2,7 @@ from db.mongo import *
 import requests
 import json
 import os
-
+from bson import ObjectId
 
 class Logic():
 
@@ -33,12 +33,13 @@ class Logic():
         return self.db.create(ticket)
 	    
     def get_all(self):
-        return self.db.get()
+        return self.db.get_all()
     
-    
-    def get(self, uid):
-        return self.db.get({'uid':uid})
+    def get_by_uid(self,uid):
+        return self.db.get({'uid': uid})
 
+    def get_by_id(self, tId):
+        return self.db.get({'_id': ObjectId(tId)})
 
     def getTicketByTopic(self, content):
         
@@ -59,10 +60,10 @@ class PubLogic():
         data = {'message': {'actions': u_type, 'ticketId': oid}}
         requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(data))
 
-    def updated(self, oid)
+    def updated(self, oid):
         self.__send(oid, 'updated')
 
-def created(self, oid):
+    def created(self, oid):
         self.__send(oid, 'created')
         #ticket = self.db.get({'_id' : ObjectId(oid)})
 

@@ -29,6 +29,14 @@ class TicketByTopics(Resource):
         tickets = logic['base'].getTicketByTopic(json.loads(request.data))
         return {'tickets': tickets}
 
+@api.route('/ticket/<string:ticketId>')
+class TicketById(Resource):
+
+    @jwt_required
+    def get(self, ticketId):
+        ticket = logic['base'].get_by_id(ticketId)
+        return {'ticket': ticket}
+
 
 @api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
 class FileDownload(Resource):
@@ -53,7 +61,7 @@ class TicketClass(Resource):
 
     @jwt_required
     def get(self, userId):
-        tickets = logic['base'].get(userId)
+        tickets = logic['base'].get_by_uid(userId)
         return {'status': 200, 'tickets': tickets}
 
 
