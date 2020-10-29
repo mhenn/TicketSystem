@@ -27,7 +27,7 @@ class Logic:
         print(r.json())
         return r.status_code, r.json()['id']
 
-    def put_ticket(self, ticketId, ticket):	
+    def put_ticket(self, ticketId, ticket, uid):	
         ticket = json.loads(ticket)
         token = self.service_token.get()
         ticket = ticket['ticket']
@@ -36,7 +36,7 @@ class Logic:
             'content-type' : 'application/json'
         }
         print(ticket)
-        r = requests.put(f'http://localhost:5000/ticket-service/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
+        r = requests.put(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
         return r.status_code
 
 

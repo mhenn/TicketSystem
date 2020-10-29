@@ -67,13 +67,14 @@ class TicketClass(Resource):
 
 @api.route("/user/<string:userId>/ticket/<string:ticketID>")
 class TicketID(Resource):
+
     @jwt_required
     def delete(self, userId, ticketID):
         logic['base'].delete(ticketID)
         return {'status':200}
 
     @api.expect(ticket_model)
-    def put(self, ticketID):
+    def put(self, userId, ticketID):
         print(f'req: {request} data: {request.data} header: {request.headers}')
         logic['base'].update(request.data, ticketID)
         logic['pub'].updated(ticketID)

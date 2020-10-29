@@ -53,6 +53,7 @@ class Mail(Resource):
         logic['mail'].delete(mailMappingId)
         return
 
+
 @api.route("/mail-mapping/")
 class Mail(Resource):
     

@@ -46,7 +46,8 @@ class SpecificTicket(Resource):
     @jwt_required
     def put(self, ticketId):
         print(f'req: {request} data: {request.data} header: {request.headers}')
-        status = logic['base'].put_ticket(ticketId, request.data)
+        uid = get_jwt_identity()
+        status = logic['base'].put_ticket(ticketId, request.data, uid)
         return {'status': status}
 
 
