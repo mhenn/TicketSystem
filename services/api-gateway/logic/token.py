@@ -39,6 +39,8 @@ class ServiceToken:
             self.time_received = time.time()
             self._access_token = j_response['access_token']
             self._refresh_token = j_response['refresh_token']
+            print('updated_Token')
+        print('after potential update')
         threading.Timer(self.duration, self.update_token).start()
 
 

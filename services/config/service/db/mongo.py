@@ -58,5 +58,5 @@ class MongoDatabase():
  
 
     def delete_mail_mapping(self,  mappingId):
-        self.db.mapping.delete_one({'_id' : ObjectId(mappingId)})
+        self.db.mail.delete_one({'_id' : ObjectId(mappingId)})
 

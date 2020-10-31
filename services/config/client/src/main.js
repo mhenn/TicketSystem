@@ -67,8 +67,6 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 			render: h => h(Unauthorized)
 		}).$mount('#app')
 	}
-
-	localStorage.setItem("vue-token", keycloak.token);
 	localStorage.setItem("vue-refresh-token", keycloak.refreshToken);
 
 
@@ -76,8 +74,6 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 		keycloak.updateToken(70).then((refreshed) => {
 			if (refreshed) {
 				console.log('Token refreshed' + refreshed);
-				localStorage.setItem("vue-token", keycloak.token);
-				localStorage.setItem("vue-refresh-token", keycloak.refreshToken);
 			}
 	
 		}).catch(() => {

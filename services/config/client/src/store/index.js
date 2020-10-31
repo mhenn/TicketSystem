@@ -48,9 +48,9 @@ export default new Vuex.Store({
 		logout({state}){
 			state.cloak.logout()
 		},
-		postQueue({dispatch}, queueName ){
+		postQueue({state, dispatch}, queueName ){
 			
-			let token = window.localStorage['vue-token']
+			let token = state.cloak.token
 			let data = {'title' : queueName}
 
 			let options = {
@@ -66,9 +66,9 @@ export default new Vuex.Store({
 			})
 
 		},
-		getQueues({commit}){
+		getQueues({state,commit}){
+			let token = state.cloak.token
 
-         let token = window.localStorage['vue-token']
          let options = {
             url :'http://localhost:5555/config/queues/',
             method: 'GET',
@@ -81,8 +81,8 @@ export default new Vuex.Store({
             commit('updateQueues', response.data.queues)
          })
       },
-      deleteQueue(context, id){
-         let token = window.localStorage['vue-token']
+      deleteQueue({state, dispatch}, id){
+			let token = state.cloak.token
 			let options = {
 				url: 'http://localhost:5555/config/queues/' + id,
 				method: 'DELETE',
@@ -91,11 +91,11 @@ export default new Vuex.Store({
             }
 			}
 			axios(options).then(() =>{
-            context.dispatch('getQueues')
+            dispatch('getQueues')
          })
       },
-		getRoles(context){
-			let token = window.localStorage['vue-token']
+		getRoles({state }){
+			let token = state.cloak.token
 
 			let options = {
 				url: 'http://localhost:8000/auth/admin/realms/Odonata/clients/64ce3a4f-c9a8-4105-a5b3-32522f1f1e88/roles',
@@ -107,11 +107,11 @@ export default new Vuex.Store({
 			axios(options).then(r =>{ console.log(r)})
 		},
 		//MAPPING
-		postMapping({dispatch}, mapping){
+		postMapping({state, dispatch}, mapping){
 			
 
+			let token = state.cloak.token
 
-			let token = window.localStorage['vue-token']
 			let data = mapping
 
 			let options = {
@@ -127,9 +127,9 @@ export default new Vuex.Store({
 			})
 
 		},
-		getMappings({commit}){
+		getMappings({state, commit}){
 
-         let token = window.localStorage['vue-token']
+			let token = state.cloak.token
          let options = {
             url :'http://localhost:5555/config/role-mapping/',
             method: 'GET',
@@ -142,8 +142,9 @@ export default new Vuex.Store({
             commit('updateMapping', response.data.mapping)
          })
       },
-      deleteMapping(context, id){
-         let token = window.localStorage['vue-token']
+      deleteMapping({state, dispatch }, id){
+			
+			let token = state.cloak.token
 			let options = {
 				url: 'http://localhost:5555/config/role-mapping/' + id,
 				method: 'DELETE',
@@ -152,11 +153,12 @@ export default new Vuex.Store({
             }
 			}
 			axios(options).then(() =>{
-            context.dispatch('getMappings')
+            dispatch('getMappings')
          })
       },
-		postMailMapping(context, data){
-			let token = window.localStorage['vue-token']
+		postMailMapping({state, dispatch}, data){
+			let token = state.cloak.token	
+			
 			let options = {
 				url: 'http://localhost:5555/config/mail-mapping/',
 				method: 'POST',
@@ -166,12 +168,13 @@ export default new Vuex.Store({
 				data: data
 			}
 			axios(options).then(r =>{
-				context.dispatch('getMailMappings')
+				dispatch('getMailMappings')
 			})
 		},
-		getMailMappings({commit}){
+		getMailMappings({state, commit}){
+			
+			let token = state.cloak.token	
 
-         let token = window.localStorage['vue-token']
          let options = {
             url :'http://localhost:5555/config/mail-mapping/',
             method: 'GET',
@@ -184,9 +187,9 @@ export default new Vuex.Store({
             commit('updateMailMapping', response.data.mapping)
          })
       },
-		deleteMailMapping({dispatch}, id){
-	
-         let token = window.localStorage['vue-token']
+		deleteMailMapping({state, dispatch}, id){
+			
+			let token = state.cloak.token	
          let options = {
             url :'http://localhost:5555/config/mail-mapping/' + id,
             method: 'DELETE',

@@ -28,7 +28,6 @@ class MongoDatabase():
         cursor = self.db.ticket.find(criteria)
 
         tickets =  [ t for t in cursor]
-        print(tickets)
         for t in tickets:
             t['id'] = str(t['_id'])
             del t['_id']

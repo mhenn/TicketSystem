@@ -71,7 +71,7 @@ export default {
 			return items 
 		},
 		updateSelection(){
-			return ['update', 'create']
+			return ['updated', 'created']
 		}
 	},
 	data(){

@@ -17,8 +17,10 @@ class MailCallback(Resource):
         # print( logic['base'].createFiles(files, form['uid'], ticketId, messageId))
         #print(uploaded_file.filename)
         #uploaded_file.save(f'./files/{uploaded_file.filename}')
-        prepared_mail = logic['base'].prepare_mail(json.loads(request.data))
-        logic['base'].send_mail(prepared_mail)
+        prepared_mails = logic['base'].prepare_mail(json.loads(request.data))
+        print(prepared_mails)
+        for recipient in prepared_mails:
+            logic['base'].send_mail(prepared_mails[recipient], recipient)
         return {'status':200}
 
 

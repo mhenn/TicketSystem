@@ -7,6 +7,7 @@ from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 import json
 
+
 def normalize_query_param(value):
     return value if len(value) > 1 else value[0]
 
@@ -15,12 +16,13 @@ def normalize_query(params):
     return {k: normalize_query_param(v) for k,v in params_non_flat.items()}
 
 
-@api.route("/user/")
+@api.route("/mail/")
 class User(Resource):
 
     def get(self):
-        print(normalize_query(request.args))
-        return
+        query = normalize_query(request.args)
+        print(query['data']) 
+        return logic['user'].get_by_roles(query['data'])
 
 
 @api.route("/queues/")

@@ -4,9 +4,16 @@ from flask_restx import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 
+from keycloak import KeycloakAdmin
 from db.mongo import MongoDatabase
 from logic.logic import *
 
+
+admin = KeycloakAdmin(server_url="http://localhost:8000/auth/",
+                               username='oadmin',
+                               password='oadmin',
+                               realm_name="Odonata",
+                               verify=True)
 
 name = 'config'
 description = 'Configuration API'
@@ -45,4 +52,4 @@ jwt = JWTManager(flask_app)
 
 
 db = MongoDatabase()	
-logic = {'queue' : QueueLogic(db), 'mapping': MappingLogic(db), 'mail': MailLogic(db)}
+logic = {'user': UserLogic(admin), 'queue' : QueueLogic(db), 'mapping': MappingLogic(db), 'mail': MailLogic(db)}

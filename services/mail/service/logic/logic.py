@@ -18,7 +18,7 @@ class Logic():
 
 
         header = {'Authorization': 'Bearer ' + token}
-        
+      
  
         header = {'Authorization': 'Bearer ' + token}
         r = requests.get('http://localhost:5000/ticket-service/ticket/' + tId , headers=header)
@@ -37,37 +37,37 @@ class Logic():
         relevant = [ x['name'] for x in r_mapping if to in x['children']]
 
 
-        print('AYEEEEEEEEEEE')
-        print(m_mapping)
-        print(r_mapping)
-        print(relevant)
-
-        effective = [x for x in m_mapping if x['name'] in relevant and action in x['actions'] ] 
+        effective = [x['name'] for x in m_mapping if x['name'] in relevant and action in x['actions'] ] 
         print(f'effective: {effective}')
         # get user for mapping
-        params = {'data' : action}
-        requests.get('http://localhost:5555/config/user/', headers=header, params=params)
+        params = {'data' : effective }
+        r = requests.get('http://localhost:5555/config/mail/', headers=header, params=params)
 
+        mail_list = json.loads(r.content)
         # TODO edit recipient list gathered from config service. 
         # TODO Think about saving the config localy and updating it via message broker
+       
         
         ticketId = content['message']['ticketId']
+        mails = {}
+        
+        for recipient in mail_list:
+            print(f'ayoo {recipient}')
+            msg = MIMEText(f'The Ticket {ticketId} has been {action}')
+            msg['To'] = email.utils.formataddr(('Recipient',recipient))
+            msg['From'] = email.utils.formataddr(('Author','ticket-service@example.com'))
+            msg['Subject'] = 'Ticket Notification'
+            mails[recipient] = msg.as_string()
 
-        msg = MIMEText(f'The Ticket {ticketId} has been {action}')
-        msg['To'] = email.utils.formataddr(('Recipient',
-            'recipient@example.com'))
-        msg['From'] = email.utils.formataddr(('Author',
-            'author@example.com'))
-        msg['Subject'] = 'Simple test message'
-
-        return msg.as_string()
+        return mails
 
 
-    def send_mail(self, mail):
+    def send_mail(self, mail, recipient):
         server = smtplib.SMTP('127.0.0.1', 1025)
         server.set_debuglevel(True)  # show communication with the server
+        print(recipient)
         try:
-            server.sendmail('author@example.com',['Mikeianhenning93@gmail.com'],mail)
+            server.sendmail('ticket-service@example.com',[recipient],mail)
         except Exception as e:
             print(e)
 

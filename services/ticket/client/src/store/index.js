@@ -94,8 +94,8 @@ export default new Vuex.Store({
 	},
 	actions: {
 
-		getQueues({commit}){
-			let token = window.localStorage['vue-token']		
+		getQueues({state,commit}){
+			let token = state.cloak.token
 		
 			let options = {
 				url: 'http://localhost:5070/gateway/queues/',
@@ -113,7 +113,7 @@ export default new Vuex.Store({
 
 		downloadFile({state}, [filename, messageId]){
 				
-			let token = window.localStorage['vue-token']		
+			let token = state.cloak.token
 			let id = state.selectedTicket.id
 			let form = new FormData()
 			form.append('uid', 'd2717165-4f26-477b-a992-bc31b2b085cd')
@@ -142,7 +142,7 @@ export default new Vuex.Store({
 			file_list.forEach( file => form.append(file.name, file))
 			
 			
-			let token = window.localStorage['vue-token']		
+			let token = state.cloak.token
 			let [ticket, messageId]  = defineContent(file_list, state)
 			messageId = messageId.replace(/\s/g, '')
 			let options_ticket = {
@@ -179,9 +179,9 @@ export default new Vuex.Store({
 			})	
 
 		}, 
-		getTickets({commit}){
+		getTickets({state,commit}){
 
-			let token = window.localStorage['vue-token']		
+			let token = state.cloak.token
 			let options = {
 				url :'http://localhost:5070/gateway/ticket/',
 				method: 'GET',
@@ -194,14 +194,14 @@ export default new Vuex.Store({
 				commit('update', response.data.tickets)	
 			})
 		},
-			deleteSelected(context){
-			let token = window.localStorage['vue-token']	
+			deleteSelected({state, dispatch}){
+			let token = state.cloak.token	
 			axios
 			.delete('http://localhost:5000/ticket/' + context.state.selectedTicket.id,{headers:{
 				Authorization: "Bearer " + token,
 				}}, )
 			.then(() =>{
-				context.dispatch('getTickets')
+				dispatch('getTickets')
 			})
 		},
 		putSelected({state, dispatch}){
@@ -212,7 +212,7 @@ export default new Vuex.Store({
 			file_list.forEach( file => form.append(file.name, file))
 			
 			
-			let token = window.localStorage['vue-token']		
+			let token = state.cloak.token	
 			let [ticket, messageId]  = defineContent(file_list, state)
 			messageId = messageId.replace(/\s/g, '')
 			let options_ticket = {
@@ -250,7 +250,7 @@ export default new Vuex.Store({
 
 		},
 		getMappings({state, commit}){
-			let token = window.localStorage['vue-token']		
+			let token = state.cloak.token
 			let options = {
 				url :'http://localhost:5070/gateway/config/role-mapping/',
 				method: 'GET',
@@ -268,8 +268,7 @@ export default new Vuex.Store({
 		},
 		getSupporterTickets({state,commit}){
 
-			let token = window.localStorage['vue-token']		
-			
+			let token = state.cloak.token	
 			let topics = []
 			console.log(state.mappings)
 			state.mappings.forEach(m =>{

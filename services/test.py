@@ -13,6 +13,7 @@ clients = admin.get_clients()
 
 ticket = next((x for x in clients if x['clientId'] == 'ticket-client'), None)
 conf = next((x for x in user if x['username'] == 'config'),None)
-userRoles = admin.get_client_roles_of_user(client_id=ticket['id'], user_id=conf['id']))
-
+userRoles = admin.get_client_roles_of_user(client_id=ticket['id'], user_id=conf['id'])
+print(conf)
+print(userRoles)
 
