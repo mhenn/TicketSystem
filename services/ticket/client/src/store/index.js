@@ -39,8 +39,13 @@ export default new Vuex.Store({
 		queues: [],
 		mappings: [],
 		userRoles: [],
+		userName : '',
 	},
 	mutations: {
+		async updateUserName(state, info){
+			info = await info
+			state.userName = info.preferred_username
+		},
 		setCloak(state, cloak){
 			state.cloak = cloak
 		},
@@ -144,6 +149,7 @@ export default new Vuex.Store({
 			
 			let token = state.cloak.token
 			let [ticket, messageId]  = defineContent(file_list, state)
+			ticket.sender = state.userName
 			messageId = messageId.replace(/\s/g, '')
 			let options_ticket = {
 				url: 'http://localhost:5070/gateway/ticket/',

@@ -68,7 +68,8 @@ def checkAndCreatePub(service):
         data = {'publisher': 'ticket'}
         requests.post('http://localhost:5050/pubsub/', headers=header, data=json.dumps(data))
     
-
-checkAndCreatePub(service)
-
+try:
+    checkAndCreatePub(service)
+except Exception as e:
+    print(e)
 logic = setup(service)

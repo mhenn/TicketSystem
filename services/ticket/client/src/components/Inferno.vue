@@ -12,15 +12,22 @@
 			<NavbarItem v-if="contains(roles,'Support')" linkto="/" title="Support Dashboard">
             <v-icon>mdi-view-dashboard</v-icon>
 			</NavbarItem>
-			<NavbarItem linkto="/settings" title="Settings">
-            <v-icon>mdi-tools</v-icon>
-			</NavbarItem>
+			<v-list-item @click='settings()'> 
+				<v-list-item-action>
+					<v-icon>mdi-tools</v-icon>
+				</v-list-item-action>
+				<v-list-item-content>
+					<v-list-item-title>Settings</v-list-item-title> 
+				</v-list-item-content>
+			</v-list-item>
 			<NavbarItem linkto="/legal" title="Impressum">
             <v-icon>mdi-briefcase</v-icon>
 			</NavbarItem>
 			<NavbarItem linkto="/privacy" title="Datenschutz">
             <v-icon>mdi-security</v-icon>
 			</NavbarItem>
+
+
       </v-list>
 		</v-navigation-drawer>
 
@@ -77,6 +84,9 @@
 			this.$vuetify.theme.dark=false
 		},
 		methods:{
+			settings(){
+				store.state.cloak.accountManagement()
+			},
 			contains(list,role){
 				return list.includes(role)
 			},

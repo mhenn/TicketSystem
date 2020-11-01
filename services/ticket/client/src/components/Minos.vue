@@ -1,24 +1,23 @@
 <template>
 	<div class="content Minos">
 
-	
-	<v-btn @click="switchDialog(null)">New Ticket</v-btn>
-	<v-data-table
-		class="table"
-		:headers="headers"
-      :items="items"
-      >
-			<template v-slot:item.id="{item}" >
-				<v-btn class="ma-2" outlined small fab  key="item.id" @click="switchDialog(item.id)">
-					<v-icon>mdi-pencil</v-icon>
-				</v-btn> 		
-				<v-btn class="ma-2" outlined small fab  key="item.id + 1" @click="deleteDialog(item.id)">
-					<v-icon>mdi-trash-can-outline</v-icon>
-				</v-btn> 		
-
-			</template>
-      
-      </v-data-table>	
+		<div >	
+			<v-btn class='swole' dark @click="switchDialog(null)">New Ticket</v-btn>
+			<v-data-table
+				class="table"
+				:headers="headers"
+				:items="items"
+				>
+					<template v-slot:item.id="{item}" >
+						<v-btn class="ma-2" outlined small fab  key="item.id" @click="switchDialog(item.id)">
+							<v-icon>mdi-pencil</v-icon>
+						</v-btn> 		
+						<v-btn class="ma-2" outlined small fab  key="item.id + 1" @click="deleteDialog(item.id)">
+							<v-icon>mdi-trash-can-outline</v-icon>
+						</v-btn> 		
+					</template>
+				</v-data-table>	
+		</div>
 		<Modal/>
 
 		<v-dialog
@@ -120,10 +119,13 @@ justify-content: center;
 }
 
 .table{
-	margin-top:3em;
+	margin-top:1em;
 	margin-bottom:3em;
 }
 
+.swole{
+	width: 100%;
+}
 
 thead{
 	background-color: #1E1E1E;

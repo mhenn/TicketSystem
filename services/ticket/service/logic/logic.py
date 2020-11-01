@@ -55,10 +55,13 @@ class PubLogic():
         self.token_service = ts
 
     def __send (self, oid, u_type):
-        token = self.token_service.get()
-        header = {'Authorization' : 'Bearer ' + token}
-        data = {'message': {'actions': u_type, 'ticketId': oid}}
-        requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(data))
+        try:
+            token = self.token_service.get()
+            header = {'Authorization' : 'Bearer ' + token}
+            data = {'message': {'actions': u_type, 'ticketId': oid}}
+            requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(data))
+        except Exception as e:
+            print(e)
 
     def updated(self, oid):
         self.__send(oid, 'updated')

@@ -2,8 +2,8 @@
   <div class="limbo">
 
 	<Inferno>
-		<Minos v-if="contains(roles(),'support')"   /> 
-		<Support v-if="!contains(roles(),'support')"   /> 
+		<Minos v-if="!contains(roles(),'Support')"   /> 
+		<Support v-if="contains(roles(),'Support')"   /> 
 	</Inferno>
 
   </div>
@@ -25,7 +25,7 @@ export default {
 	},
 	methods:{	
 		roles() {
-			return JSON.stringify(store.state.cloak.tokenParsed.realm_access.roles)
+			return store.state.userRoles 
 		},
 		contains(list,role){
 			return list.includes(role)

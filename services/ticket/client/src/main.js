@@ -14,13 +14,14 @@ Vue.config.productionTip = false
 let keycloak = Keycloak(initOptions);
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
-	
+
 	if(!auth) {
       window.location.reload();
     }
 	store.commit('setCloak', keycloak)
 
 	store.commit('selfUpdateRoles')
+	store.commit('updateUserName', keycloak.loadUserInfo())
 
 	new Vue({
       router,
@@ -35,10 +36,7 @@ setInterval(() => {
     keycloak.updateToken(70).then((refreshed) => {
       if (refreshed) {
 			console.log('Token refreshed' + refreshed);
-      } else {
-//        console.log('Token not refreshed, valid for '
-//         + Math.round(keycloak.tokenParsed.exp + keycloak.timeSkew - new Date().getTime() / 1000) + ' seconds');
-      }
+      } 
     }).catch(() => {
       console.log('Failed to refresh token');
     });

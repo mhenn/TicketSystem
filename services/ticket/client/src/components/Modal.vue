@@ -2,9 +2,6 @@
   <v-row  justify="center">
     <v-dialog   v-model="dialog" persistent max-width="600px">
             <v-card >
-        <v-card-title>
-          <span class="headline">New Ticket</span>
-        </v-card-title>
 		<ValidationObserver ref="form"> 
 			<form @submit.prevent='onSubmit'>
 			<v-card-text>
@@ -13,6 +10,7 @@
               <v-col cols="12"  >
 			<ValidationSelect :readonly="!emptyTicket" rules="required" v-model='to' :items="selection" label="Contact"/> 
 			<ValidationTextfield :readonly="!emptyTicket" rules="required|max:50" v-model="subject" label="Subject"/>
+			<ValidationSelect :readonly="state == 'closed'" v-if="contains(roles(),'Support')" rules="required" v-model='state' :items="stateSelection" label="State"/> 
               </v-col>
               <v-col cols="12" >
 			<ValidationTextarea rules="required" v-model="content" label="Message"/>
@@ -69,7 +67,7 @@
 			<v-spacer></v-spacer>
           <v-btn color="grey darken-1" text @click="switchDialog">Close</v-btn>
           <v-btn v-if='!newTicket' color="grey darken-1" text type='submit'>Submit</v-btn>
-          <v-btn v-if='newTicket' color="grey darken-1" text @click="updateTicket">Update</v-btn>
+          <v-btn v-if='newTicket && state != "closed"' color="grey darken-1" text @click="updateTicket">Update</v-btn>
         </v-card-actions>
 
 		</form>
@@ -128,6 +126,14 @@
 				set(value){
 				store.commit('updateTicketData', ['to', value])}
 			},
+		state:{
+			get(){
+				return store.state.selectedTicket.status
+			},
+			set(value){
+				store.commit('updateTicketData', ['status', value])
+			}
+		},
 		subject:{
 				get(){
 					return store.state.selectedTicket.subject
@@ -148,6 +154,7 @@
 		},
 		data: () => ({
 			files: null,
+			stateSelection: ['open', 'inquiry', 'closed'],
 			items:[
 				{
 					actions: 'mdi-ticket',
@@ -159,12 +166,18 @@
 			show: 0,
 		}),
 	
-	methods:{
+methods:{
+		roles() {
+			return store.state.userRoles 
+		},
+		contains(list,role){
+			return list.includes(role)
+		},
 		async clear(){
-		this.content = ''
-		requestAnimationFrame(() => {
-        this.$refs.form.reset();
-      });
+				this.content = ''
+				requestAnimationFrame(() => {
+				this.$refs.form.reset();
+			});
 		},
 		onSubmit(){
 			this.$refs.form.validate().then(e =>{
