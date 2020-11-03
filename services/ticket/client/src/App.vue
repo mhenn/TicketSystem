@@ -11,12 +11,11 @@ import store from '@/store'
 
 export default{
 	created(){
-		let roles  = JSON.stringify(store.state.cloak.tokenParsed.realm_access.roles)
-		if(roles.includes('support')){
+		let roles = store.state.userRoles
+		if(!roles.includes('Support')){
 			store.dispatch('getTickets')
 		}	else {
 			store.dispatch('getMappings')
-		//	store.dispatch('getSupporterTickets')
 		}
 		store.dispatch('getQueues')		
 	},

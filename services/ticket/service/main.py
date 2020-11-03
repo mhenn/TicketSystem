@@ -35,6 +35,7 @@ class TicketById(Resource):
     @jwt_required
     def get(self, ticketId):
         ticket = logic['base'].get_by_id(ticketId)
+
         return {'ticket': ticket}
 
 
@@ -42,7 +43,6 @@ class TicketById(Resource):
 class FileDownload(Resource):
     @jwt_required
     def get(self, ticketId, uid, messageId, filename):
-        uid = 'd2717165-4f26-477b-a992-bc31b2b085cd'
         return send_from_directory(f'./files/{uid}/{ticketId}/{messageId}', filename, as_attachment=True)
 
 
@@ -62,6 +62,7 @@ class TicketClass(Resource):
     @jwt_required
     def get(self, userId):
         tickets = logic['base'].get_by_uid(userId)
+        print(len(tickets))
         return {'status': 200, 'tickets': tickets}
 
 

@@ -174,7 +174,10 @@ methods:{
 			return list.includes(role)
 		},
 		async clear(){
+				this.to = ''
+				this.subject = ''
 				this.content = ''
+				store.commit('clearFiles')
 				requestAnimationFrame(() => {
 				this.$refs.form.reset();
 			});

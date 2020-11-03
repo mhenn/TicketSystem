@@ -1,6 +1,6 @@
 <template>
-  <v-card class="example-vuex">
     <div class="upload">
+  <v-card class="example-vuex">
       <ul>
         <li v-for="(file, index) in files" :key="file.id">
           <span>{{file.name}}</span> -
@@ -12,27 +12,20 @@
           <span v-else>{{index}}</span>
         </li>
       </ul>
-      <div class="example-btn">
+  </v-card>
+      <div >
         <file-upload
-          class="btn btn-primary"
+			class="swole"
           post-action="/upload/post"
           :multiple="true"
           :value="files"
           @input="inputUpdate"
           ref="upload">
-          <i class="fa fa-plus"></i>
-          Select files
+          <v-btn dark class="swole">Select Files</v-btn>
         </file-upload>
       </div>
     </div>
-  </v-card>
 </template>
-<style>
-.example-vuex label.btn {
-  margin-bottom: 0;
-  margin-right: 1rem;
-}
-</style>
 
 <script>
 import { mapState } from 'vuex'
@@ -54,3 +47,17 @@ export default {
   }
 }
 </script>
+
+
+<style scoped>
+
+.swole{
+	width:100%;
+}
+
+
+.example-vuex label.btn {
+  margin-bottom: 0;
+  margin-right: 1rem;
+}
+</style>

@@ -53,8 +53,6 @@ export default new Vuex.Store({
 
 			let roles = state.cloak.tokenParsed.realm_access.roles
 			let res = state.cloak.tokenParsed.resource_access
-			console.log(roles)
-			console.log(res)
 			for(let key in res){
 				if(key){
 					roles = [...roles, ...res[key].roles]	
@@ -71,6 +69,9 @@ export default new Vuex.Store({
 		},
 		updateFiles(state, files){
 			state.files = files
+		},
+		clearFiles(state){
+			state.files = []
 		},
 		switch(state){
 			state.dialog = state.dialog ? false : true
@@ -120,23 +121,20 @@ export default new Vuex.Store({
 				
 			let token = state.cloak.token
 			let id = state.selectedTicket.id
-			let form = new FormData()
-			form.append('uid', 'd2717165-4f26-477b-a992-bc31b2b085cd')
 			messageId = messageId.replace(/\s/g,'')
 			let options = {
 				url: 'http://localhost:5070/gateway/ticket/' + id +'/message/'+messageId +'/file/'+filename,
-				method: 'get',
+				method: 'GET',
+				responseType: 'blob',
 				headers: {
 					'Authorization': 'Bearer ' + token,
-				},
-				data: form
-			}
-			
-			//window.open(options.url)
-			axios(options).then(r => {
-				if (r.status == 200){
-					window.open(r.config.url)
+					'Accept': '*/*'
 				}
+			}
+			axios(options).then(r => {
+				let url = window.url || window.webkitURL
+				let downloadUrl = url.createObjectURL(r.data)
+				window.open(downloadUrl)
 			})
 		},
 		postSelected({state, dispatch}){
@@ -174,7 +172,6 @@ export default new Vuex.Store({
 							},
 							data:form
 						}
-
 				
          		axios(options_files).then(response =>{
 						dispatch('getTickets')
@@ -276,15 +273,12 @@ export default new Vuex.Store({
 
 			let token = state.cloak.token	
 			let topics = []
-			console.log(state.mappings)
 			state.mappings.forEach(m =>{
 				m.children.forEach(c =>{
 					topics.push(c)
 				})
 			})
-			console.log(topics)
-			let data = {'topics': topics}
-
+			let data = {'topics': [... new Set(topics)]}
 			let options = {
 				url :'http://localhost:5070/gateway/supporter/ticket/',
 				method: 'POST',
@@ -295,8 +289,6 @@ export default new Vuex.Store({
 			}
 
 			axios(options).then(response =>{
-				console.log('asdd')
-				console.log(response)
 				commit('update', response.data.tickets)	
 			})
 		},

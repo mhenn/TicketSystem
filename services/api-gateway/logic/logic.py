@@ -57,9 +57,15 @@ class Logic:
             "Authorization" : 'Bearer ' + token
         }
         r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}', headers=headers)
-        print(r.headers)	
-        return Response(r, content_type=r.headers['Content-Type']) 
+#        return Response(r.content, content_type=r.headers['Content-Type']) 
+        excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
+        headers = [(name, value) for (name, value) in r.raw.headers.items()
+               if name.lower() not in excluded_headers]
 
+        if not r.ok:
+            return 404
+
+        return Response(r.content, r.status_code, headers)
 
     def get_queues(self):
         token = self.service_token.get()
