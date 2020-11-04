@@ -17,8 +17,6 @@ class UserFileUpload(Resource):
         files = request.files.to_dict()
         form = request.form.to_dict()
         print( logic['base'].createFiles(files, form['uid'], ticketId, messageId))
-        #print(uploaded_file.filename)
-        #uploaded_file.save(f'./files/{uploaded_file.filename}')
         return {'status':200}
 
 @api.route('/ticket/topics/')
