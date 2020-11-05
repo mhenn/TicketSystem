@@ -42,12 +42,6 @@ export default new Vuex.Store({
 		updateRoles(state,roles){
 			state.roles = roles
 		},
-		updateQueues(state,queues){
-			state.queues = queues
-		},
-		updateMapping(state,mapping){
-			state.mapping = mapping
-		},
 		updateMailMapping(state, mapping){
 			state.mail = mapping
 		}
@@ -74,20 +68,7 @@ export default new Vuex.Store({
 			})
 
 		},
-		getQueues({state,commit}){
-			let token = state.cloak.token
-         let options = {
-            url :'http://localhost:5555/config/queues/',
-            method: 'GET',
-            headers: {
-               'Authorization' : 'Bearer ' + token
-            }
-         }
-         axios(options).then(response =>{
-            commit('updateQueues', response.data.queues)
-         })
-      },
-      deleteQueue({state, dispatch}, id){
+		      deleteQueue({state, dispatch}, id){
 			let token = state.cloak.token
 			let options = {
 				url: 'http://localhost:5555/config/queues/' + id,
@@ -211,6 +192,4 @@ export default new Vuex.Store({
 			
 		}
 	},
-	modules: {
-	}
 })
