@@ -1,10 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import queues from './modules/queues'
+import mapping from './modules/mapping'
+import mail from './modules/mail'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+	modules:{
+		queues,
+		mapping,
+		mail
+	},
 	state: {
 		cloak :'',
 		queues: [],
@@ -68,7 +76,6 @@ export default new Vuex.Store({
 		},
 		getQueues({state,commit}){
 			let token = state.cloak.token
-
          let options = {
             url :'http://localhost:5555/config/queues/',
             method: 'GET',
@@ -76,7 +83,6 @@ export default new Vuex.Store({
                'Authorization' : 'Bearer ' + token
             }
          }
-
          axios(options).then(response =>{
             commit('updateQueues', response.data.queues)
          })
