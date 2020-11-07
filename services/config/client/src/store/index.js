@@ -15,7 +15,6 @@ export default new Vuex.Store({
 	},
 	state: {
 		cloak :'',
-		queues: [],
 		roles : [],
 		mapping:[],
 		mail: [],

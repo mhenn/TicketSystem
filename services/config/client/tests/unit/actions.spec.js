@@ -5,12 +5,9 @@ import axios from "axios"
 import MockAdapter from "axios-mock-adapter"
 
 import {testAction} from "../testUtils"
-
-import store from "@/store"
+import queues_n from '@/store/modules/queues'
 
 let mock = new MockAdapter(axios)
-
-
 
 chai.use(sinonChai)
 
@@ -31,8 +28,7 @@ describe("actions", ()=>{
 		mock.onGet("http://localhost:5555/config/queues/").reply(200, response)
 		
 		const actionPayload = null
-		const state = {queues: []}
-
+		const state = {cloak: {'token': 'id'}}
 
 		const expectedMutations =[
 			{
@@ -40,7 +36,8 @@ describe("actions", ()=>{
 				payload: response.queues
 			}
 		]
-		testAction(store,'getQueues',actionPayload, state, expectedMutations )
+		
+		testAction(queues_n.actions.getQueues,actionPayload, state, expectedMutations ,done)
 
 	})
 })

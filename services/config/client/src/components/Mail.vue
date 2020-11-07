@@ -57,7 +57,7 @@ export default {
 		},
 		items(){
 			let roles = store.state.roles
-			let queues = store.state.queues			
+			let queues = store.state.queues.queues			
 			let items = [{obj:{name:'Roles', disabled: true}}]
 			roles.forEach(role =>{
 				items.push({obj:{name:role.name, mappingId: role.id, type: 'role'}})

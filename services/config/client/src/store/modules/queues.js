@@ -1,5 +1,6 @@
-import {queue_url} from '@/store/utils.js'
 import axios from 'axios'
+
+const queue_url = 'http://localhost:5555/config/queues/'
 
 function get_auth_header(token){
 	return {'Authorization': 'Bearer ' + token}
@@ -18,8 +19,8 @@ const mutations = {
 }
 
 const actions = {
-	postQueue({rootState,state, dispatch}, queueName ){	
-		let token = state.cloak.token
+	postQueue({rootState, dispatch}, queueName ){	
+		let token = rootState.cloak.token
 		let data = {'title' : queueName}
 
 		let options = {
@@ -32,10 +33,10 @@ const actions = {
 			dispatch('getQueues')
 		})
 	},
-	getQueues({rootState, state,commit}){
-		console.log('aasdfgfsadf')
+	getQueues({rootState ,commit}){
+		console.log(rootState)
+		console.log(commit)
 		let token = rootState.cloak.token
-		console.log('aasdfgfsadf')
       let options = {
          url : queue_url,
          method: 'GET',
@@ -43,14 +44,13 @@ const actions = {
 				'Authorization': 'Bearer ' + token
 			},
       }
-		console.log('asdfff')
       axios(options).then(response =>{
-			console.log('asdfff')
-         commit('updateQueues', response.data.queues)
+      	console.log(response)
+			commit('updateQueues', response.data.queues)
       })
    },
-   deleteQueue({state, dispatch}, id){
-		let token = state.cloak.token
+   deleteQueue({rootState, dispatch}, id){
+		let token = rootState.cloak.token
 		let options = {
 			url: queue_url + id,
 			method: 'DELETE',

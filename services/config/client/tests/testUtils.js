@@ -1,15 +1,13 @@
 import { expect } from "chai";
 
 export const testAction = (
-  store,
-  action,
+ action,
   actionPayload,
-  state,
+  rootState,
   expectedMutations,
   done
 ) => {
-  console.log('mkhee')
-	console.log(done)
+  
   let count = 0;
   let commit = (type, payload) => {
     let mutation = expectedMutations[count];
@@ -35,6 +33,6 @@ export const testAction = (
     expect(count).to.equal(0);
     done();
   } else {
-    store.dispatch(action,{commit, state}, actionPayload);
+    action({commit, rootState}, actionPayload);
   }
 };

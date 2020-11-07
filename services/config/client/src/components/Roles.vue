@@ -80,7 +80,7 @@ export default {
 	name: 'QueueContent',
 	computed: {
 		queues(){
-			return store.state.queues
+			return store.state.queues.queues
 		},
 		roles(){
 			return store.state.roles
@@ -107,10 +107,10 @@ export default {
 			})
 		},
 		deleteItem(id){
-			store.dispatch('deleteQueue', id)		
+			store.dispatch('queues/deleteQueue', id)		
 		},
 		addItem(){
-			store.dispatch('postQueue', this.queueName)	
+			store.dispatch('queues/postQueue', this.queueName)	
 		}
 	},
 	components: {
