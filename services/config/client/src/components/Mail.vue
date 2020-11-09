@@ -50,7 +50,7 @@ export default {
 	name: 'Mail',
 	computed: {
 		mail(){
-			let a = store.state.mail
+			let a = store.state.mail.mail
 			console.log('mail')
 			console.log(a)
 			return a
@@ -84,13 +84,12 @@ export default {
 		submit(){
 			this.sel.forEach(e =>{
 				e['actions']= this.updates	
-				store.dispatch('postMailMapping', e)
+				store.dispatch('mail/postMailMapping', e)
 			})	
 		
 		},
 		deleteMapping(id){
-			console.log(id)
-			store.dispatch('deleteMailMapping', id)
+			store.dispatch('mail/deleteMailMapping', id)
 		}
 	},
 	components: {

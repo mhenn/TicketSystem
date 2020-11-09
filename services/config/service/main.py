@@ -31,7 +31,7 @@ class Queue(Resource):
     def post(self):
         queue = json.loads(request.data)
         logic['queue'].create(queue)
-        return {'status': 200 }
+        return {}, 200
 
     def get(self):
         print(logic)

@@ -16,8 +16,6 @@ export default new Vuex.Store({
 	state: {
 		cloak :'',
 		roles : [],
-		mapping:[],
-		mail: [],
 		userRoles:[],
 	},
 	mutations: {
@@ -41,46 +39,12 @@ export default new Vuex.Store({
 		updateRoles(state,roles){
 			state.roles = roles
 		},
-		updateMailMapping(state, mapping){
-			state.mail = mapping
-		}
 	},
 	actions: {	
 		logout({state}){
 			state.cloak.logout()
 		},
-		postQueue({state, dispatch}, queueName ){
-			
-			let token = state.cloak.token
-			let data = {'title' : queueName}
-
-			let options = {
-				url: 'http://localhost:5555/config/queues/',
-				method: 'POST',
-				headers: {
-					'Authorization' : 'Bearer ' + token
-				},
-				data: data
-			}
-			axios(options).then(() => {
-				dispatch('getQueues')
-			})
-
-		},
-		      deleteQueue({state, dispatch}, id){
-			let token = state.cloak.token
-			let options = {
-				url: 'http://localhost:5555/config/queues/' + id,
-				method: 'DELETE',
-				headers:{
-            	Authorization: "Bearer " + token,
-            }
-			}
-			axios(options).then(() =>{
-            dispatch('getQueues')
-         })
-      },
-		getRoles({state }){
+			getRoles({state }){
 			let token = state.cloak.token
 
 			let options = {
@@ -92,103 +56,5 @@ export default new Vuex.Store({
 			}
 			axios(options).then(r =>{ console.log(r)})
 		},
-		//MAPPING
-		postMapping({state, dispatch}, mapping){
-			
-
-			let token = state.cloak.token
-
-			let data = mapping
-
-			let options = {
-				url: 'http://localhost:5555/config/role-mapping/',
-				method: 'POST',
-				headers: {
-					'Authorization' : 'Bearer ' + token
-				},
-				data: data
-			}
-			axios(options).then(() => {
-				dispatch('getMappings')
-			})
-
-		},
-		getMappings({state, commit}){
-
-			let token = state.cloak.token
-         let options = {
-            url :'http://localhost:5555/config/role-mapping/',
-            method: 'GET',
-            headers: {
-               'Authorization' : 'Bearer ' + token
-            }
-         }
-
-         axios(options).then(response =>{
-            commit('updateMapping', response.data.mapping)
-         })
-      },
-      deleteMapping({state, dispatch }, id){
-			
-			let token = state.cloak.token
-			let options = {
-				url: 'http://localhost:5555/config/role-mapping/' + id,
-				method: 'DELETE',
-				headers:{
-            	Authorization: "Bearer " + token,
-            }
-			}
-			axios(options).then(() =>{
-            dispatch('getMappings')
-         })
-      },
-		postMailMapping({state, dispatch}, data){
-			let token = state.cloak.token	
-			
-			let options = {
-				url: 'http://localhost:5555/config/mail-mapping/',
-				method: 'POST',
-				headers: {
-					'Authorization' : 'Bearer ' + token
-				},
-				data: data
-			}
-			axios(options).then(r =>{
-				dispatch('getMailMappings')
-			})
-		},
-		getMailMappings({state, commit}){
-			
-			let token = state.cloak.token	
-
-         let options = {
-            url :'http://localhost:5555/config/mail-mapping/',
-            method: 'GET',
-            headers: {
-               'Authorization' : 'Bearer ' + token
-            }
-         }
-
-         axios(options).then(response =>{
-            commit('updateMailMapping', response.data.mapping)
-         })
-      },
-		deleteMailMapping({state, dispatch}, id){
-			
-			let token = state.cloak.token	
-         let options = {
-            url :'http://localhost:5555/config/mail-mapping/' + id,
-            method: 'DELETE',
-            headers: {
-               'Authorization' : 'Bearer ' + token
-            }
-         }
-
-         axios(options).then(response =>{
-				console.log(response)
-            dispatch('getMailMappings')
-         })
-			
-		}
 	},
 })

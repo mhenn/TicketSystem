@@ -1,5 +1,10 @@
-import {mapping_url, get_auth_header} from '@/store/utils.js'
+import axios from 'axios'
 
+const mapping_url = 'http://localhost:5555/config/role-mapping/'
+
+function get_auth_header(token){
+	return {'Authorization': 'Bearer ' + token}
+}
 
 const state= () =>  ({
 	mapping:[],
@@ -12,9 +17,9 @@ const mutations = {
 }
 
 const actions = {	
-	postMapping({state, dispatch}, mapping){
+	postMapping({rootState, dispatch}, mapping){
 		
-		let token = state.cloak.token
+		let token = rootState.cloak.token
 		let data = mapping
 
 		let options = {
@@ -27,9 +32,9 @@ const actions = {
 			dispatch('getMappings')
 		})
 	},
-	getMappings({state, commit}){
+	getMappings({rootState, commit}){
 
-		let token = state.cloak.token
+		let token = rootState.cloak.token
       let options = {
          url : mapping_url,
          method: 'GET',
@@ -37,12 +42,12 @@ const actions = {
       }
 
       axios(options).then(response =>{
-         //commit('/updateMapping', response.data.mapping)
+         commit('updateMapping', response.data.mapping)
       })
    },
-   deleteMapping({state, dispatch }, id){
+   deleteMapping({rootState, dispatch }, id){
 		
-		let token = state.cloak.token
+		let token = rootState.cloak.token
 		let options = {
 			url: mapping_url + id,
 			method: 'DELETE',

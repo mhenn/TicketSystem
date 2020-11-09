@@ -86,7 +86,7 @@ export default {
 			return store.state.roles
 		},
 		mappings(){
-			return store.state.mapping
+			return store.state.mapping.mapping
 		},
 	},
 	data(){
@@ -98,12 +98,12 @@ export default {
 	},
 	methods: {
 		deleteMapping(id){
-			store.dispatch('deleteMapping', id)
+			store.dispatch('mapping/deleteMapping', id)
 		},
 		submitMapping(){
 			this.selectedRole.forEach((role) => {	
 					let mapping = {'id': role.id, 'name': role.name, 'children': this.selectedQueue}
-					store.dispatch('postMapping',mapping)
+					store.dispatch('mapping/postMapping',mapping)
 			})
 		},
 		deleteItem(id){

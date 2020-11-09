@@ -55,7 +55,7 @@ class TicketClass(Resource):
 
         logic['pub'].created(str(id))
 
-        return {'status': 200, 'id': str(id)}
+        return { 'id': str(id)}, 200
 
     @jwt_required
     def get(self, userId):

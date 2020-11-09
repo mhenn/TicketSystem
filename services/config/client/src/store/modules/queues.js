@@ -35,7 +35,6 @@ const actions = {
 	},
 	getQueues({rootState ,commit}){
 		console.log(rootState)
-		console.log(commit)
 		let token = rootState.cloak.token
       let options = {
          url : queue_url,
