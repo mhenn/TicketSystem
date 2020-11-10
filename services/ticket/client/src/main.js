@@ -18,10 +18,9 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 	if(!auth) {
       window.location.reload();
     }
-	store.commit('setCloak', keycloak)
-
-	store.commit('selfUpdateRoles')
-	store.commit('updateUserName', keycloak.loadUserInfo())
+	store.commit('config/setCloak', keycloak)
+	store.commit('config/selfUpdateRoles')
+	store.commit('config/updateUserName', keycloak.loadUserInfo())
 
 	new Vue({
       router,

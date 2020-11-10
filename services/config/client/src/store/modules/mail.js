@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const mail_url = 'http://localhost:5555/config/mail-mapping'
+const mail_url = 'http://localhost:5555/config/mail-mapping/'
 
 const state = () => ({
 		mail: [],
@@ -15,10 +15,10 @@ const mutations =  {
 	
 const actions = {	
 	postMailMapping({rootState, dispatch}, data){
-		let token = rootState.cloak.token	
+		let token = rootState.misc.cloak.token	
 		
 		let options = {
-			url: 'http://localhost:5555/config/mail-mapping/',
+			url: mail_url, 
 			method: 'POST',
 			headers: {
 				'Authorization' : 'Bearer ' + token
@@ -31,10 +31,10 @@ const actions = {
 	},
 	getMailMappings({rootState, commit}){
 		
-		let token = rootState.cloak.token	
+		let token = rootState.misc.cloak.token	
 
 		let options = {
-			url :'http://localhost:5555/config/mail-mapping/',
+			url:  mail_url,
 			method: 'GET',
 			headers: {
 				'Authorization' : 'Bearer ' + token
@@ -47,9 +47,9 @@ const actions = {
 	},
 	deleteMailMapping({rootState, dispatch}, id){
 		
-		let token = rootState.cloak.token	
+		let token = rootState.misc.cloak.token	
 		let options = {
-			url :'http://localhost:5555/config/mail-mapping/' + id,
+			url : mail_url + id,
 			method: 'DELETE',
 			headers: {
 				'Authorization' : 'Bearer ' + token

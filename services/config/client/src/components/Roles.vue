@@ -83,7 +83,7 @@ export default {
 			return store.state.queues.queues
 		},
 		roles(){
-			return store.state.roles
+			return store.state.misc.roles
 		},
 		mappings(){
 			return store.state.mapping.mapping

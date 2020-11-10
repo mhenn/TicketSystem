@@ -56,7 +56,7 @@ export default {
 			return a
 		},
 		items(){
-			let roles = store.state.roles
+			let roles = store.state.misc.roles
 			let queues = store.state.queues.queues			
 			let items = [{obj:{name:'Roles', disabled: true}}]
 			roles.forEach(role =>{

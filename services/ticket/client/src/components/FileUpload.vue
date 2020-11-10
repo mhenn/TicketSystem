@@ -28,24 +28,24 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import FileUpload from 'vue-upload-component'
-export default {
-  name : 'Upload',
-  components: {
-    FileUpload,
-  },
-  computed: {
-    ...mapState([
-      'files',
-    ])
-  },
-  methods: {
-    inputUpdate(files) {
-      this.$store.commit('updateFiles', files)
-    },
-  }
-}
+	import store from '@/store/'
+	import FileUpload from 'vue-upload-component'
+	export default {
+		name : 'Upload',
+		components: {
+			FileUpload,
+		},
+		computed: {
+			files(){
+				return store.state.ticket.files
+			}
+		},
+		methods: {
+			inputUpdate(files) {
+				store.commit('ticket/updateFiles', files)
+			},
+		}
+	}
 </script>
 
 

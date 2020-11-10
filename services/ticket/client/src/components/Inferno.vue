@@ -73,7 +73,7 @@
 		},
 		computed:{
 			roles() {
-				return JSON.stringify(store.state.cloak.tokenParsed.realm_access.roles)
+				return store.state.config.userRoles
 			}
 		},
 		data: () =>({
@@ -85,13 +85,13 @@
 		},
 		methods:{
 			settings(){
-				store.state.cloak.accountManagement()
+				store.state.config.cloak.accountManagement()
 			},
 			contains(list,role){
 				return list.includes(role)
 			},
 			logout(){
-				store.dispatch('logout')
+				store.dispatch('config/logout')
 			}
 		}
 	}

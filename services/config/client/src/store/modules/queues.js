@@ -20,7 +20,7 @@ const mutations = {
 
 const actions = {
 	postQueue({rootState, dispatch}, queueName ){	
-		let token = rootState.cloak.token
+		let token = rootState.misc.cloak.token
 		let data = {'title' : queueName}
 
 		let options = {
@@ -34,8 +34,7 @@ const actions = {
 		})
 	},
 	getQueues({rootState ,commit}){
-		console.log(rootState)
-		let token = rootState.cloak.token
+		let token = rootState.misc.cloak.token
       let options = {
          url : queue_url,
          method: 'GET',
@@ -44,12 +43,11 @@ const actions = {
 			},
       }
       axios(options).then(response =>{
-      	console.log(response)
 			commit('updateQueues', response.data.queues)
       })
    },
    deleteQueue({rootState, dispatch}, id){
-		let token = rootState.cloak.token
+		let token = rootState.misc.cloak.token
 		let options = {
 			url: queue_url + id,
 			method: 'DELETE',

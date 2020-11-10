@@ -66,9 +66,8 @@ export default {
 		Modal
 	},
 	computed: {
-			items() {
-			console.log(store.state.tickets)
-			return store.state.tickets
+		items() {
+			return store.state.ticket.tickets
 		}
 	},
 	data() {
@@ -91,15 +90,15 @@ export default {
 		},
 		deleteDialog(id){
 			this.delDialog = true
-			store.commit('changeSelectedTicket',  id)
+			store.commit('ticket/changeSelectedTicket',  id)
 		},
 		deleteTicket(){
-			store.dispatch('deleteSelected')
+			store.dispatch('ticket/deleteSelected')
 			this.delDialog = false
 		},
 		switchDialog(id){
-			store.commit('switch')
-			store.commit('changeSelectedTicket',id)
+			store.commit('misc/switch')
+			store.commit('ticket/changeSelectedTicket',id)
 		},
 		
 	}

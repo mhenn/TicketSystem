@@ -11,23 +11,23 @@ import store from '@/store'
 
 export default{
 	created(){
-		let roles = store.state.userRoles
+		let roles = store.state.config.userRoles
 		if(!roles.includes('Support')){
-			store.dispatch('getTickets')
+			store.dispatch('ticket/getTickets')
 		}	else {
-			store.dispatch('getMappings')
+			store.dispatch('config/getMappings')
 		}
-		store.dispatch('getQueues')		
+		store.dispatch('config/getQueues')		
 	},
 	computed:{
 		mappings(){
-			return store.state.mappings
+			return store.state.config.mappings
 		}
 	},
 	watch:{
 		mappings(value){
 			if(value.length > 0){
-				store.dispatch('getSupporterTickets')
+				store.dispatch('ticket/getSupporterTickets')
 			}
 		}
 	}

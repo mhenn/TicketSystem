@@ -102,7 +102,7 @@
 		name: "Modal",
 		computed: {
 			selection(){
-				let queue = store.state.queues
+				let queue = store.state.config.queues
 				var queues = []
 				queue.forEach(item =>{
 					queues.push({'name' : item.title, 'text': item.title, 'id': item.id})
@@ -110,47 +110,46 @@
 				return queues
 			},
 			emptyTicket(){
-				return store.state.emptyTicket
+				return store.state.ticket.emptyTicket
 			},
 			newTicket(){
-				return store.state.selectedTicket.id
+				return store.state.ticket.selectedTicket.id
 			},
 			dialog(){
-				return store.state.dialog
+				return store.state.misc.dialog
 			},
 
 		to:{
 				get(){
-					return store.state.selectedTicket.to
+					return store.state.ticket.selectedTicket.to
 				},
 				set(value){
-				store.commit('updateTicketData', ['to', value])}
+				store.commit('ticket/updateTicketData', ['to', value])}
 			},
 		state:{
 			get(){
-				return store.state.selectedTicket.status
+				return store.state.ticket.selectedTicket.status
 			},
 			set(value){
-				store.commit('updateTicketData', ['status', value])
+				store.commit('ticket/updateTicketData', ['status', value])
 			}
 		},
 		subject:{
 				get(){
-					return store.state.selectedTicket.subject
+					return store.state.ticket.selectedTicket.subject
 				},
-				set(value){ store.commit('updateTicketData', ['subject', value])}
+				set(value){ store.commit('ticket/updateTicketData', ['subject', value])}
 			},
 
 		content:{
 				get(){
-					return store.state.selectedTicket.content
+					return store.state.ticket.selectedTicket.content
 				},
-				set(value){store.commit('updateTicketData', ['content', value])}
+				set(value){store.commit('ticket/updateTicketData', ['content', value])}
 			},
 		messages(){
-			return store.state.selectedTicket.messages
+			return store.state.ticket.selectedTicket.messages
 		},
-			picket(){return store.state.selectedTicket}
 		},
 		data: () => ({
 			files: null,
@@ -168,7 +167,7 @@
 	
 methods:{
 		roles() {
-			return store.state.userRoles 
+			return store.state.config.userRoles 
 		},
 		contains(list,role){
 			return list.includes(role)
@@ -177,7 +176,7 @@ methods:{
 				this.to = ''
 				this.subject = ''
 				this.content = ''
-				store.commit('clearFiles')
+				store.commit('ticket/clearFiles')
 				requestAnimationFrame(() => {
 				this.$refs.form.reset();
 			});
@@ -190,22 +189,24 @@ methods:{
 			})
 		},
 		download(file, messageId){
-			store.dispatch('downloadFile', [file, messageId])
-
+			console.log(file)
+			console.log(messageId)
+			store.dispatch('ticket/downloadFile', [file, messageId])
+			console.log('ree')
 		},
 		onFileChange(event){
 			this.files = event.target.files[0]
 		},
 		switchDialog(){
-			store.commit('switch')
+			store.commit('misc/switch')
 		},
 		addTicket(){
-			store.dispatch('postSelected')
-			store.commit('switch')
+			store.dispatch('ticket/postSelected')
+			store.commit('misc/switch')
 		},
 		updateTicket(){
-			store.dispatch('putSelected')
-			store.commit('switch')
+			store.dispatch('ticket/putSelected')
+			store.commit('misc/switch')
 		}
 	},
 	components:{

@@ -41,9 +41,9 @@ export default {
 		TicketTable
 	},
 	computed: {
-			items() {
+		items() {
 				
-			let tickets = store.state.tickets
+			let tickets = store.state.ticket.tickets
 			let open = tickets.filter(e => e.status == 'open')
 			let inquiry = tickets.filter(e => e.status == 'inquiry')
 			let closed = tickets.filter(e => e.status == 'closed')

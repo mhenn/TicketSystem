@@ -11,6 +11,7 @@ let mock = new MockAdapter(axios)
 
 chai.use(sinonChai)
 
+const state = {misc :{cloak: {'token': 'id'}}}
 let base_url = "http://localhost:5555/config/queues/"
 
 describe("Module: Queue, Action :", ()=>{
@@ -30,7 +31,6 @@ describe("Module: Queue, Action :", ()=>{
 		mock.onGet(base_url).reply(200, response)
 		
 		const actionPayload = null
-		const state = {cloak: {'token': 'id'}}
 
 		const expectedMutations =[
 			{
@@ -46,7 +46,6 @@ describe("Module: Queue, Action :", ()=>{
 		mock.onPost(base_url ).reply(200)
 		
 		const actionPayload = null
-		const state = {cloak : {'token': 'id'}}
 
 		const expectedActions =
 		[
@@ -63,7 +62,6 @@ describe("Module: Queue, Action :", ()=>{
 		mock.onDelete(base_url + '1').reply(200)
 		
 		const actionPayload = 1
-		const state = {cloak : {'token': 'id'}}
 
 		const expectedActions =
 		[

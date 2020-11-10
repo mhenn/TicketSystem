@@ -31,8 +31,7 @@ async function blyn(admin){
 			clientId: 'config-service'	
 		} 
 	)
-	store.commit('updateRoles', await admin.roles.find())
-	console.log(admin)
+	store.commit('misc/updateRoles', await admin.roles.find())
 }
 
 
@@ -42,10 +41,10 @@ blyn(admin)
 let keycloak = Keycloak(initOptions);
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
-	store.commit('setCloak', keycloak)
-	store.commit('selfUpdateUserRoles')
-	
-	let roles = store.state.userRoles
+	store.commit('misc/setCloak', keycloak)
+	store.commit('misc/selfUpdateUserRoles')
+	console.log(store)	
+	let roles = store.state.misc.userRoles
 	console.log(roles)
 
 	if(!auth) {
@@ -81,6 +80,7 @@ keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 		});
 	}, 6000)
 
-}).catch(() => {
-	console.log("Authenticated Failed");
+}).catch((e) => {
+	console.log(e)
+	console.log("Authentication Failed");
 });

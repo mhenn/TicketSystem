@@ -29,8 +29,8 @@ export default {
 	},
 	methods:{
 		switchDialog(id){
-			store.commit('switch')
-			store.commit('changeSelectedTicket',id)
+			store.commit('misc/switch')
+			store.commit('ticket/changeSelectedTicket',id)
 		},
 	}
 }

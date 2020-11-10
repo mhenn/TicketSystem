@@ -19,7 +19,7 @@ const mutations = {
 const actions = {	
 	postMapping({rootState, dispatch}, mapping){
 		
-		let token = rootState.cloak.token
+		let token = rootState.misc.cloak.token
 		let data = mapping
 
 		let options = {
@@ -34,7 +34,7 @@ const actions = {
 	},
 	getMappings({rootState, commit}){
 
-		let token = rootState.cloak.token
+		let token = rootState.misc.cloak.token
       let options = {
          url : mapping_url,
          method: 'GET',
@@ -47,7 +47,7 @@ const actions = {
    },
    deleteMapping({rootState, dispatch }, id){
 		
-		let token = rootState.cloak.token
+		let token = rootState.misc.cloak.token
 		let options = {
 			url: mapping_url + id,
 			method: 'DELETE',

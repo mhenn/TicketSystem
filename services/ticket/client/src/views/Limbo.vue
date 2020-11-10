@@ -25,7 +25,7 @@ export default {
 	},
 	methods:{	
 		roles() {
-			return store.state.userRoles 
+			return store.state.config.userRoles 
 		},
 		contains(list,role){
 			return list.includes(role)
