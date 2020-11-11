@@ -1,5 +1,10 @@
 import { expect } from "chai";
 
+import axios from "axios"
+import MockAdapter from "axios-mock-adapter"
+export var mock = new MockAdapter(axios)
+
+
 export const testCommitAction = (
 	action,
 	actionPayload,
@@ -41,7 +46,6 @@ export const testDispatchAction = (
 	expectedActions,
 	done
 ) => {
-	console.log(action)
 	let count = 0
 		let dispatch = (type, payload) => {
 		

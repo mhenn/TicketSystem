@@ -17,7 +17,7 @@ const mutations = {
 }
 
 const actions = {	
-	postMapping({rootState, dispatch}, mapping){
+	postMapping({rootState, dispatch, commit}, mapping){
 		
 		let token = rootState.misc.cloak.token
 		let data = mapping
@@ -28,12 +28,15 @@ const actions = {
 			headers: get_auth_header(token),
 			data: data
 		}
-		axios(options).then(() => {
-			dispatch('getMappings')
+		axios(options).then(r => {
+			if(r.status > 205)
+				throw 'Failed postMapping'
+			dispatch('getMappings')	
+      }).catch(e =>{
+			commit('misc/updateFail', 'postMapping')
 		})
 	},
 	getMappings({rootState, commit}){
-
 		let token = rootState.misc.cloak.token
       let options = {
          url : mapping_url,
@@ -42,10 +45,14 @@ const actions = {
       }
 
       axios(options).then(response =>{
+			if(response.status > 205)
+				throw 'Failed getMappings'
          commit('updateMapping', response.data.mapping)
-      })
+      }).catch(e =>{
+			commit('misc/updateFail', 'getMappings')
+		})
    },
-   deleteMapping({rootState, dispatch }, id){
+   deleteMapping({rootState, dispatch, commit}, id){
 		
 		let token = rootState.misc.cloak.token
 		let options = {
@@ -53,9 +60,13 @@ const actions = {
 			method: 'DELETE',
 			headers: get_auth_header(token),
 		}
-		axios(options).then(() =>{
+		axios(options).then(r =>{
+			if(r.status > 205)
+				throw 'Failed deleteMapping'
          dispatch('getMappings')
-      })
+      }).catch(e =>{
+			commit('misc/updateFail', 'deleteMapping')
+		})
    },
 }
 

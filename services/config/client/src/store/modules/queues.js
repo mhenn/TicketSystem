@@ -7,7 +7,7 @@ function get_auth_header(token){
 }
 
 const state = () => ({
-		queues: []
+	queues: [],
 })
 
 const getters = {}
@@ -19,7 +19,7 @@ const mutations = {
 }
 
 const actions = {
-	postQueue({rootState, dispatch}, queueName ){	
+	postQueue({rootState, dispatch, commit}, queueName ){	
 		let token = rootState.misc.cloak.token
 		let data = {'title' : queueName}
 
@@ -31,6 +31,8 @@ const actions = {
 		}
 		axios(options).then(() => {
 			dispatch('getQueues')
+		}).catch(e =>{
+			commit('misc/updateFail', 'postQueue')
 		})
 	},
 	getQueues({rootState ,commit}){
@@ -43,19 +45,28 @@ const actions = {
 			},
       }
       axios(options).then(response =>{
+			if(response.status > 205)
+				throw "Failed getQueues"
 			commit('updateQueues', response.data.queues)
-      })
+      }).catch(e =>{
+			
+			commit('misc/updateFail', 'getQueue')
+		})
    },
-   deleteQueue({rootState, dispatch}, id){
+   deleteQueue({rootState, dispatch, commit}, id){
 		let token = rootState.misc.cloak.token
 		let options = {
 			url: queue_url + id,
 			method: 'DELETE',
 			headers: get_auth_header(token),
 		}
-		axios(options).then(() =>{
+		axios(options).then(r =>{
+			if(r.status > 205)
+				throw "Failed Delete"
          dispatch('getQueues')
-      })
+      }).catch(e =>{
+			commit('misc/updateFail', 'deleteQueue')
+		})
 	}
 }
 
