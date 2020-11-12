@@ -1,6 +1,5 @@
+/*eslint-disable*/
 import axios from 'axios'
-
-
 
 const state = () => ({
 		cloak : '',
@@ -47,7 +46,11 @@ const actions = {
 			},
 		}
 		axios(options).then(r =>{
+			if(r.status > 205)
+				throw 'getQueues failed'
 			commit('updateQueues', r.data.queues)
+		}).catch(e =>{
+			commit('misc/updateFail', 'getQueues')
 		})	
 	},
 	getMappings({state, commit}){
@@ -61,8 +64,12 @@ const actions = {
 		}
 
 		axios(options).then(response =>{
+			if(response.status > 205)
+				throw "getMappings failed"
 			commit('updateMapping', response.data.mapping)	
-		})	
+		}).catch(e =>{
+			commit('misc/updateFail', 'getMappings')
+		})
 	},
 
 	logout(context){

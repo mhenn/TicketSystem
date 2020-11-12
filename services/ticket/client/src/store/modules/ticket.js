@@ -131,7 +131,7 @@ const actions = {
 
 	}, 
 	getTickets({rootState,commit}){
-
+	
 		let token = rootState.config.cloak.token
 		let options = {
 			url : base_url,
@@ -142,6 +142,7 @@ const actions = {
 		}
 
 		axios(options).then(response =>{
+			console.log(response.data.tickets)
 			commit('update', response.data.tickets)	
 		})
 	},
@@ -229,5 +230,6 @@ export default{
 	namespaced: true,
 	state,
 	actions,
-	mutations
+	mutations,
+	base_url
 }
