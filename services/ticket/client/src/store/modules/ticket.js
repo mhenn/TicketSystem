@@ -1,9 +1,9 @@
+/* eslint-disable*/
 import axios from 'axios'
 
 const base_url = 'http://localhost:5070/gateway/ticket/'
 
 function defineContent( file_list ,state){
-			console.log(state)	
 			var ticket = state.selectedTicket 
 			var file_names = []
 			file_list.forEach(file => file_names.push(file.name))		
@@ -50,8 +50,6 @@ const mutations =  {
 		if(id != null){	
 			state.selectedTicket = state.tickets.find( el => {return el.id == id}) 
 			state.emptyTicket = false
-			console.log(id)
-			console.log(state.selectedTicket)
 		} else{
 			state.emptyTicket = true
 			state.selectedTicket = {'to':'', 'subject':'', 'content':''}	
@@ -61,15 +59,21 @@ const mutations =  {
 		let field = data[0]
 		let value = data[1]
 		state.selectedTicket[field] = value
+	},
+	downloadedFile(state,data){
+		let url = window.url || window.webkitURL
+		let downloadUrl = url.createObjectURL(data)
+		window.open(downloadUrl)
 	}
 }
 
 const actions = {
-	downloadFile({rootState}, [filename, messageId]){
+	downloadFile({rootState,commit}, [filename, messageId]){
 			
 		let token = rootState.config.cloak.token
 		let id = rootState.ticket.selectedTicket.id
 		messageId = messageId.replace(/\s/g,'')
+
 		let options = {
 			url: 'http://localhost:5070/gateway/ticket/' + id +'/message/'+messageId +'/file/'+filename,
 			method: 'GET',
@@ -80,18 +84,17 @@ const actions = {
 			}
 		}
 		axios(options).then(r => {
-			let url = window.url || window.webkitURL
-			let downloadUrl = url.createObjectURL(r.data)
-			window.open(downloadUrl)
+			commit('downloadedFile', r.data)
+		}).catch(e =>{
+			commit('misc/updateFail', 'downloadFile')
 		})
 	},
-	postSelected({rootState, dispatch}){
+	postSelected({rootState, dispatch, commit}){
 	
 		let form = new FormData()
 		let file_list = []		
 		rootState.ticket.files.forEach(file => file_list.push(file.file))
 		file_list.forEach( file => form.append(file.name, file))
-		
 		
 		let token = rootState.config.cloak.token
 		let [ticket, messageId]  = defineContent(file_list, rootState.ticket)
@@ -108,7 +111,7 @@ const actions = {
 		}
 		
 		axios(options_ticket).then(response =>{
-			if(response.status == 200 && file_list.length > 0){
+			if(response.status <= 205 && file_list.length > 0){
 					let id = response.data.id
 					let options_files = {
 						url: base_url + id + '/message/' + messageId  +'/files/',
@@ -123,11 +126,17 @@ const actions = {
 			
 				axios(options_files).then(() =>{
 					dispatch('getTickets')
+				}).catch(e =>{
+					commit('misc/updateFail', 'postSelected/uploadFiles')
 				})
+
 			} else {
 				dispatch('getTickets')
 			}
-		})	
+		}).catch(e =>{
+			commit('misc/updateFail', 'postSelected')
+		})
+
 
 	}, 
 	getTickets({rootState,commit}){
@@ -142,9 +151,11 @@ const actions = {
 		}
 
 		axios(options).then(response =>{
-			console.log(response.data.tickets)
 			commit('update', response.data.tickets)	
+		}).catch(e =>{
+			commit('misc/updateFail', 'getTickets')
 		})
+
 	},
 	deleteSelected({rootState,  dispatch}){
 		let token = rootState.config.cloak.token	
@@ -154,9 +165,12 @@ const actions = {
 			}}, )
 		.then(() =>{
 			dispatch('getTickets')
+		}).catch(e =>{
+			commit('misc/updateFail', 'deleteTickets')
 		})
+
 	},
-	putSelected({rootState, dispatch}){
+	putSelected({rootState, dispatch, commit}){
 	
 		let form = new FormData()
 		let file_list = []		
@@ -194,11 +208,17 @@ const actions = {
 			
 				axios(options_files).then(() =>{
 					dispatch('getTickets')
+				}).catch(e =>{
+					commit('misc/updateFail', 'putSelected/uploadFiles')
 				})
+
 			} else {
 				dispatch('getTickets')
 			}
-		})	
+		}).catch(e =>{
+			commit('misc/updateFail', 'putSelected')
+		})
+	
 
 	},
 	getSupporterTickets({rootState,commit}){
@@ -222,7 +242,10 @@ const actions = {
 
 		axios(options).then(response =>{
 			commit('update', response.data.tickets)	
+		}).catch(e =>{
+			commit('misc/updateFail', 'getSupporterTickets')
 		})
+
 	},
 }
 
