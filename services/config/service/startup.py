@@ -1,5 +1,4 @@
 from flask import Flask
-#from flask_restplus import Api
 from flask_restx import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -9,11 +8,15 @@ from db.mongo import MongoDatabase
 from logic.logic import *
 
 
-admin = KeycloakAdmin(server_url="http://localhost:8000/auth/",
+
+def getAdmin():
+    return  KeycloakAdmin(server_url="http://localhost:8000/auth/",
                                username='oadmin',
                                password='oadmin',
                                realm_name="Odonata",
                                verify=True)
+#admin = getAdmin()
+admin = 0
 
 name = 'config'
 description = 'Configuration API'
@@ -41,6 +44,7 @@ B2U9tf7FIlN4r5xXSRlk0IKZ9NIvEAr3k3JIFrZQeThu9ITM66Rne9Ndh1HoIOEY
 6QIDAQAB
 -----END PUBLIC KEY-----"""
 
+
 flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
 CORS(flask_app)
@@ -48,8 +52,14 @@ CORS(flask_app)
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
 api = app.namespace(name, description=description)
 
+def mongo():
+    return MongoClient('mongodb://localhost:27000/')	
+
+
 jwt = JWTManager(flask_app)
+db = MongoDatabase(mongo())
 
+def getLogic(admin, db):
+    return {'user': UserLogic(admin), 'queue' : QueueLogic(db), 'mapping': MappingLogic(db), 'mail': MailLogic(db)}
 
-db = MongoDatabase()	
-logic = {'user': UserLogic(admin), 'queue' : QueueLogic(db), 'mapping': MappingLogic(db), 'mail': MailLogic(db)}
+logic = getLogic(admin, db)

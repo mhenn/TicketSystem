@@ -3,13 +3,8 @@ from bson import ObjectId
 
 class MongoDatabase():
 
-    def setup(self):
-        client = MongoClient('mongodb://localhost:27000/')
+    def __init__(self, client): 
         self.db = client.config
-
-
-    def __init__(self):
-        self.setup()
 
     def create_queue(self, queue):
         self.db.queue.insert(queue)	
@@ -20,6 +15,7 @@ class MongoDatabase():
 
 
     def get_queues(self):
+        print(self.db)
         cursor = self.db.queue.find()
         queues = [q for q in cursor] 
         for q in queues:

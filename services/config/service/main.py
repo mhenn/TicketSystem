@@ -1,5 +1,5 @@
 from startup import *
-from flask_restplus import  Resource, marshal_with
+from flask_restx import  Resource, marshal_with
 from flask_cors import CORS, cross_origin
 from models.models import msg_model, sub_model, pub_model
 from logic.logic import *
@@ -21,7 +21,6 @@ class User(Resource):
 
     def get(self):
         query = normalize_query(request.args)
-        print(query['data']) 
         return logic['user'].get_by_roles(query['data'])
 
 
@@ -34,7 +33,6 @@ class Queue(Resource):
         return {}, 200
 
     def get(self):
-        print(logic)
         queues = logic['queue'].get()
         return {'status': 200, 'queues': queues}	
 
