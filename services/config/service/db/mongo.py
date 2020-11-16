@@ -3,8 +3,9 @@ from bson import ObjectId
 
 class MongoDatabase():
 
-    def __init__(self, client): 
-        self.db = client.config
+
+    def __init__(self, url): 
+        self.db = MongoClient(url).config
 
     def create_queue(self, queue):
         self.db.queue.insert(queue)	
@@ -15,7 +16,6 @@ class MongoDatabase():
 
 
     def get_queues(self):
-        print(self.db)
         cursor = self.db.queue.find()
         queues = [q for q in cursor] 
         for q in queues:

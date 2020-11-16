@@ -1,5 +1,4 @@
 from db.mongo import *
-import requests
 import json 
 
 

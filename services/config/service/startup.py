@@ -52,12 +52,10 @@ CORS(flask_app)
 app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
 api = app.namespace(name, description=description)
 
-def mongo():
-    return MongoClient('mongodb://localhost:27000/')	
 
 
 jwt = JWTManager(flask_app)
-db = MongoDatabase(mongo())
+db = MongoDatabase('mongodb://localhost:27000/')
 
 def getLogic(admin, db):
     return {'user': UserLogic(admin), 'queue' : QueueLogic(db), 'mapping': MappingLogic(db), 'mail': MailLogic(db)}
