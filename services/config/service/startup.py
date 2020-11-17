@@ -55,6 +55,7 @@ api = app.namespace(name, description=description)
 
 
 jwt = JWTManager(flask_app)
+
 db = MongoDatabase('mongodb://localhost:27000/')
 
 def getLogic(admin, db):

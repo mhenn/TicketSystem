@@ -1,16 +1,11 @@
 from flask_restx import fields
 from startup import api
 
-sub_model = api.model('Subscription',  {
-	'subscriber': fields.String,
-	'callback': fields.String
+
+queue_model = api.model('Queue', {
+    'title': fields.String(required=True)
 })
 
-msg_model = api.model('Message', {
-	'message' : fields.String
-})
-
-
-pub_model = api.model('Publisher', {
-	'publisher' : fields.String
+mail_model = api.model('Mail', {
+    'title': fields.String
 })

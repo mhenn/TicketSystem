@@ -1,7 +1,7 @@
 from startup import *
-from flask_restx import  Resource, marshal_with
+from flask_restx import  Resource, marshal
 from flask_cors import CORS, cross_origin
-from models.models import msg_model, sub_model, pub_model
+from models.models import queue_model, mail_model 
 from logic.logic import *
 from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
@@ -19,6 +19,7 @@ def normalize_query(params):
 @api.route("/mail/")
 class User(Resource):
 
+
     def get(self):
         query = normalize_query(request.args)
         return logic['user'].get_by_roles(query['data'])
@@ -26,12 +27,19 @@ class User(Resource):
 
 @api.route("/queues/")
 class Queue(Resource):
-
+    
     def post(self):
-        queue = json.loads(request.data)
+        try:
+            data = marshal(json.loads(request.data), queue_model)
+            if next((False for k in data if bool(data[k])),True):
+                raise
+            queue = json.loads(request.data)
+        except:
+            return {}, 400
         logic['queue'].create(queue)
         return {}, 200
 
+    @jwt_required
     def get(self):
         queues = logic['queue'].get()
         return {'status': 200, 'queues': queues}	
@@ -82,7 +90,8 @@ class Mappings(Resource):
     def get(self):
         mapping = logic['mapping'].get()
         return {'status': 200, 'mapping': mapping}
-    
+
+
 @api.route('/role-mapping/<string:mappingId>')
 class SpecificMapping(Resource):
 

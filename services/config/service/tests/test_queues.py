@@ -1,9 +1,9 @@
 import json
-
 # /queues/
 #get
 
 url = '/config/queues/'
+
 def test_queues_get_one_queue(app, client, insert_queue):
     res = client.get(url)
     queues = json.loads(res.data)['queues']
@@ -29,10 +29,15 @@ def test_queues_get_no_queues(app, client, insert_no_queues):
 #POST
 
 def test_queues_post(app,client, db_config):
-    
-    res = client.post(url, data='dict')
-    
+   
+    res = client.post(url, data='{"title":"test"}')
     assert res.status_code == 200
 
+def test_queues_post_wrong(app,client, db_config):
+    res = client.post(url, data='{"caption":"test"}')
+    assert res.status_code == 400
 
+def test_queues_post_empty(app, client, db_config):
+    res = client.post(url, data='')
+    assert res.status_code == 400
 
