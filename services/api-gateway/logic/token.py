@@ -11,8 +11,8 @@ class ServiceToken:
     def __init__(self):
         self.duration = 250
         self.time_received = 0
-        self._access_token = ''	
-        self.update_token()        
+        self._access_token = ''
+        self._updating = False
 
     def update_token(self):
         current_time = time.time() -self.time_received 	
@@ -40,10 +40,14 @@ class ServiceToken:
             self._access_token = j_response['access_token']
             self._refresh_token = j_response['refresh_token']
             print('updated_Token')
-        print('after potential update')
-        threading.Timer(self.duration, self.update_token).start()
-
+        
+        timer = threading.Timer(self.duration, self.update_token)
+        timer.setDaemon(True)
+        timer.start()
 
 
     def get(self):
+        if not self._updating:
+            self._updating = True
+            self.update_token()
         return self._access_token

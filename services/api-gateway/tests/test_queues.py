@@ -1,7 +1,15 @@
 import json
+import responses
 #get
 
-url = '/config/queues/'
+url = '/gateway/queues/'
 
-def test_queues_get_one_queue(app, client, insert_queue):
-    assert 1 ==1
+@responses.activate
+def test_queues_get(app, client):
+    responses.add(responses.GET, 'http://localhost:5555/config/queues/',
+            body=b'{"queues": []}', status=200)
+    res = client.get(url)
+
+    assert res.status_code == 200
+
+

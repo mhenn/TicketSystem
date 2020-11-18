@@ -50,3 +50,4 @@ jwt = JWTManager(flask_app)
 
 service = ServiceToken()	
 logic = {'base':Logic(service), 'config': ConfigLogic(service)}
+

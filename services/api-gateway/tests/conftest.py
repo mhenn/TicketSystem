@@ -8,7 +8,6 @@ sys.path.insert(0, parent_dir)
 from main import *
 import pytest
 import pytest_mock 
-from  mongo_fixtures import * 
 
 @pytest.fixture
 def app(mocker):

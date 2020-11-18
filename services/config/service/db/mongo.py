@@ -8,8 +8,7 @@ class MongoDatabase():
         self.db = MongoClient(url).config
 
     def create_queue(self, queue):
-        print(queue)
-        self.db.queue.insert(queue)	
+        self.db.queue.insert_one(queue)	
 
 
     def delete_queue(self,  queueId):

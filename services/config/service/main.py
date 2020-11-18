@@ -22,6 +22,7 @@ class User(Resource):
 
     def get(self):
         query = normalize_query(request.args)
+        print(query)
         return logic['user'].get_by_roles(query['data'])
 
 
@@ -50,7 +51,7 @@ class SpecificQueue(Resource):
 
     def delete(self, queueId):
         status =  logic['queue'].delete(queueId)
-        return {'status': status}
+        return {'status': status}, 200
 
 
 @api.route("/mail-mapping/<string:mailMappingId>")
@@ -95,8 +96,6 @@ class Mappings(Resource):
 @api.route('/role-mapping/<string:mappingId>')
 class SpecificMapping(Resource):
 
-    def get(self, mappingId):
-        pass
 
     def delete(self, mappingId):
         status = logic['mapping'].delete(mappingId)

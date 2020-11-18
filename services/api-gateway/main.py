@@ -7,6 +7,7 @@ from flask_jwt_extended import (jwt_required, get_jwt_identity)
 import requests
 import json
 
+
 @api.route("/queues/")
 class Queues(Resource):
 
@@ -24,7 +25,6 @@ class TicketClass(Resource):
         print(f'req: {request} data: {json.loads(request.data)} header: {request.headers}')
         status, id = logic['base'].post_ticket(json.loads(request.data), uid)
         return {'status': status, 'id': id }
-
     @jwt_required
     def get(self):
         print(f'req: {request} data: {request.data} header: {request.headers}')
