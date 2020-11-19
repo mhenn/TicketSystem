@@ -1,5 +1,4 @@
 import json
-from main import db
 # /queues/
 #get
 
@@ -52,27 +51,3 @@ def test_queues_post_empty(app, client, insert_nothing):
     assert res.status_code == 400
     assert count == 0
 
-#DELETE
-
-
-def test_queues_delete_with_one_queue(app, client, insert_queue):
-    queue = insert_queue[0]
-    res = client.delete(url+ queue['id'])
-    d = insert_queue[1]
-    count = d.queue.count_documents({})
-    assert res.status_code == 200
-    assert count == 0 
-
-
-def test_queues_delete_with_multiple_queues(app, client, insert_multiple_queues):
-    queue = insert_multiple_queues[0]
-    res = client.delete(url+ queue[0]['id'])
-    d = insert_multiple_queues[1]
-    count = d.queue.count_documents({})
-    assert res.status_code == 200
-    assert count == len(queue ) -1
-
-   
-    
-def test_queues_delete_without_any_queues(app, client, insert_nothing): 
-    pass

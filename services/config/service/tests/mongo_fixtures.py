@@ -2,7 +2,7 @@ import pytest
 import mongomock
 from main import db 
 from db.mongo import *
-
+from bson import ObjectId
 
 @pytest.fixture
 def db_mock():
@@ -40,12 +40,11 @@ def insert_nothing(db_config):
     return db.db
 
 
-
 #MAIL
 
 @pytest.fixture
 def insert_mail_one(db_config):
-    mail = {"name": "test1", "mappingId": "1234", "type": "role", "actions": ["created"], "_id": "1"}
+    mail = {"name": "test1", "mappingId": "1234", "type": "mapping", "actions": ["created"], "_id": "1"}
     db_config.mail.insert_one(mail)
     db.db = db_config
     mail['id'] = mail['_id']
@@ -54,12 +53,33 @@ def insert_mail_one(db_config):
 
 @pytest.fixture
 def insert_mail_multiple(db_config):
-    mail =[{"name": "test1", "mappingId": "1234", "type": "role", "actions": ["created"], "_id": "1"},{"name": "test2", "mappingId": "1234", "type": "role", "actions": ["updated"], "_id": "2"},{"name": "test3", "mappingId": "1234", "type": "role", "actions": ["created","updated"], "_id": "3"} ] 
+    mail =[{"name": "test1", "mappingId": "1234", "type": "mapping", "actions": ["created"], "_id": "1"},{"name": "test2", "mappingId": "1234", "type": "mapping", "actions": ["updated"], "_id": "2"},{"name": "test3", "mappingId": "1234", "type": "mapping", "actions": ["created","updated"], "_id": "3"} ] 
     db_config.mail.insert_many(mail)
     db.db = db_config
     for m in mail:
         m['id'] = m['_id']
         del m['_id']
     return mail, db.db.mail
+
+#ROLE
+
+@pytest.fixture
+def insert_mapping_one(db_config):
+    mapping = {'_id':'1','name':'test1', 'children': ['t1','t2']}
+    db_config.mapping.insert_one(mapping)
+    db.db = db_config
+    mapping['id'] = mapping['_id']
+    del mapping['_id']
+    return mapping, db.db.mapping
+
+@pytest.fixture
+def insert_mapping_multiple(db_config):
+    mapping = [{'_id':'1','name':'test1', 'children': []},{'_id':'2', 'name':'test2', 'children': ['t1']},{'_id': '3', 'name':'test3', 'children': ['t1', 't2']}]
+    db_config.mapping.insert_many(mapping)
+    db.db = db_config
+    for m in mapping:
+        m['id'] = m['_id']
+        del m['_id']
+    return mapping, db.db.mapping
 
 

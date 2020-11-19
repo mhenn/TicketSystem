@@ -1,12 +1,12 @@
 from startup import *
 from flask_restx import  Resource, marshal
 from flask_cors import CORS, cross_origin
-from models.models import queue_model, mail_model 
+from models.models import queue_model, mail_model, role_model
 from logic.logic import *
 from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
 import json
-
+from decorator import model_integrity
 
 def normalize_query_param(value):
     return value if len(value) > 1 else value[0]
@@ -28,15 +28,11 @@ class User(Resource):
 
 @api.route("/queues/")
 class Queue(Resource):
-    
+   
+    @jwt_required
+    @model_integrity(queue_model)
     def post(self):
-        try:
-            data = marshal(json.loads(request.data), queue_model)
-            if next((False for k in data if bool(data[k])),True):
-                raise
-            queue = json.loads(request.data)
-        except:
-            return {}, 400
+        queue = json.loads(request.data)
         logic['queue'].create(queue)
         return {}, 200
 
@@ -67,6 +63,7 @@ class Mail(Resource):
 class Mail(Resource):
     
     @jwt_required
+    @model_integrity(mail_model)
     def post(self):
         mapping = json.loads(request.data)
         logic['mail'].create(mapping)
@@ -82,6 +79,7 @@ class Mail(Resource):
 class Mappings(Resource):
 
     @jwt_required
+    @model_integrity(role_model)
     def post(self):
         mapping = json.loads(request.data)
         logic['mapping'].create(mapping)

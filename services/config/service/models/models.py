@@ -7,5 +7,16 @@ queue_model = api.model('Queue', {
 })
 
 mail_model = api.model('Mail', {
-    'title': fields.String
+    
+    "name": fields.String(required=True),
+    "mappingId": fields.String(required=True) ,
+    "type": fields.String(required=True),
+    "actions":fields.List(fields.String, required=True)
+})
+
+role_model = api.model('Role', {
+    
+    "name": fields.String(required=True),
+    "id": fields.String(required=True) ,
+    "children":fields.List(fields.String, required=True)
 })

@@ -45,6 +45,7 @@ const actions = {
       }
 
       axios(options).then(response =>{
+			console.log(response.data)
 			if(response.status > 205)
 				throw 'Failed getMappings'
          commit('updateMapping', response.data.mapping)

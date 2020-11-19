@@ -12,8 +12,7 @@ class MongoDatabase():
 
 
     def delete_queue(self,  queueId):
-        self.db.queue.delete_one({'_id' : ObjectId(queueId)})
-
+        ret = self.db.queue.delete_one({'_id' : ObjectId(queueId)})
 
     def get_queues(self):
         cursor = self.db.queue.find()
@@ -25,7 +24,7 @@ class MongoDatabase():
 
 
     def create_mapping(self, mapping):
-        self.db.mapping.insert(mapping)	
+        self.db.mapping.insert_one(mapping)	
 
 
     def delete_mapping(self,  mappingId):
@@ -42,7 +41,7 @@ class MongoDatabase():
  
 
     def create_mail_mapping(self,mapping):
-        return self.db.mail.insert(mapping)
+        return self.db.mail.insert_one(mapping)
     
     def get_mail_mappings(self):
         cursor = self.db.mail.find()
