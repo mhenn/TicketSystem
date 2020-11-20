@@ -1,21 +1,16 @@
-from db.idb import IDatabase 
 from pymongo import MongoClient
-from interface import implements
 from bson import ObjectId
 
-class MongoDatabase(implements(IDatabase)):
+class MongoDatabase():
 
-    def setup(self):
+    def __init__(self):	
         client = MongoClient('mongodb://localhost:27070/')
         self.db = client.pubsub
 
-
-    def __init__(self):
-        IDatabase.__init__(self)
-		
-
     def create(self, publisher):
-        self.db.pub.insert({'name':publisher, 'subscribers':[]})	
+        if  self.get_publisher(publisher):
+            raise "publisher already existing"
+        self.db.pub.insert_one({'publisher':publisher, 'subscribers':[]})	
 
 		
     def delete_publisher(self, publisher):
@@ -25,7 +20,7 @@ class MongoDatabase(implements(IDatabase)):
     def delete_subscriber(self, publisher, subscriber):
         pub = self.get_publisher(publisher)
         pub['subscribers'] = list(filter(lambda x : x['subscriber'] != subscriber, pub['subscribers']))
-        self.db.pub.update({'name': publisher}, {'$set' : pub})
+        self.db.pub.update({'publisher': publisher}, {'$set' : pub})
 	
 		
     def get_publishers(self):
@@ -35,8 +30,9 @@ class MongoDatabase(implements(IDatabase)):
         return pubs	
 
     def get_publisher(self, publisher):
-        pub = self.db.pub.find_one({'name': publisher}) 
-        del pub['_id']
+        pub = self.db.pub.find_one({'publisher': publisher}) 
+        if pub:
+            del pub['_id']
         return pub
 
 
@@ -52,7 +48,7 @@ class MongoDatabase(implements(IDatabase)):
     def add_subscriber(self, publisher,sub):
         pub = self.get_publisher(publisher)
         pub['subscribers'].append(sub)
-        self.db.pub.update({'name' : publisher}, {'$set': pub})
+        self.db.pub.update({'publisher' : publisher}, {'$set': pub})
 		
     def delete(self, ticketID):
         self.db.pub.delete_one({'_id': ObjectId(ticketID)})
