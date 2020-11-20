@@ -9,7 +9,7 @@ class MongoDatabase():
 
     def create(self, publisher):
         if  self.get_publisher(publisher):
-            raise "publisher already existing"
+            raise {'msg':"publisher already existing", 'status': 409}
         self.db.pub.insert_one({'publisher':publisher, 'subscribers':[]})	
 
 		
@@ -25,14 +25,17 @@ class MongoDatabase():
 		
     def get_publishers(self):
         pubs = [ t for t in  self.db.pub.find() ]
+        if not pubs:
+            raise "No publishers found"
         for p in pubs:
             del p['_id']
         return pubs	
 
     def get_publisher(self, publisher):
         pub = self.db.pub.find_one({'publisher': publisher}) 
-        if pub:
-            del pub['_id']
+        if not pub:
+            raise "No such publisher found"
+        del pub['_id']
         return pub
 
 

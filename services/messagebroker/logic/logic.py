@@ -17,7 +17,11 @@ class PublisherLogic():
         self.db.delete_publisher(publisher)
 
     def send_msg(self, publisher, content):
-        pub = self.db.get_publisher(publisher)
+        try:
+            pub = self.db.get_publisher(publisher)
+        except:
+            return {'message': 'No such publisher'}, 409
+        print(pub)
         for sub in pub['subscribers']:
             requests.post(sub['callback'], data=json.dumps(content))	
 

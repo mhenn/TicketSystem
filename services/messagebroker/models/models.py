@@ -6,8 +6,9 @@ sub_model = api.model('Subscription',  {
 	'callback': fields.String
 })
 
+
 msg_model = api.model('Message', {
-	'message' : fields.String
+	'message' : fields.Raw
 })
 
 
