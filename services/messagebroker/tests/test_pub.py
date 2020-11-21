@@ -29,7 +29,7 @@ def test_pubs_get_no_pubs(app, client, insert_nothing):
 ##POST
 
 def test_pubs_post(app,client, insert_nothing):
-   
+      
     res = client.post(url, data='{"publisher":"test"}')
     d = insert_nothing
     count = d.pub.count_documents({})

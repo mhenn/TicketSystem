@@ -34,7 +34,7 @@ class Publisher(Resource):
 
     @jwt_required
     def get(self, publisher):
-        pub = publisher_logic.get_publisher(publisher) 
+        pub = publisher_logic.get_publisher(publisher)
         return {'publishers': pub}, 200
 
     @jwt_required
@@ -44,7 +44,8 @@ class Publisher(Resource):
         publisher_logic.send_msg(publisher, json.loads(request.data))
 
     @jwt_required
-    @api.expect(sub)	
+    @api.expect(sub)
+    @model_integrity(sub_model)
     def put(self, publisher):
         publisher_logic.add_subscriber(publisher, json.loads(request.data))
         return { 'msg': 'Added subscriber'}, 200	
@@ -58,7 +59,7 @@ class PubSubscriber(Resource):
         try:
             sub = pubsub_logic.get_subscriber(publisher,subscriber)
         except ValueError:
-            return {'message': 404}, 404
+            return {}, 404
         return {'publishers': sub}, 200	
 
     @jwt_required

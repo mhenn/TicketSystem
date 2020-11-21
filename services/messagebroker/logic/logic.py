@@ -8,7 +8,12 @@ class PublisherLogic():
         self.db = db
 
     def get_publisher(self, publisher):
-        return self.db.get_publisher(publisher)
+        try:
+            return self.db.get_publisher(publisher)
+        except ValueError as e:
+            #Log
+            print(e)
+            return []
 
     def add_subscriber(self, publisher, sub):
         self.db.add_subscriber(publisher, sub)
@@ -19,11 +24,16 @@ class PublisherLogic():
     def send_msg(self, publisher, content):
         try:
             pub = self.db.get_publisher(publisher)
-        except:
-            return {'message': 'No such publisher'}, 409
+        except ValueError as e:
+            return {'message': e}, 409
         print(pub)
         for sub in pub['subscribers']:
-            requests.post(sub['callback'], data=json.dumps(content))	
+            try:
+                requests.post(sub['callback'], data=json.dumps(content))	
+            except Exception as e:
+                #TODO LOG
+                print(e)
+
 
 
 class PubSubscriberLogic():
@@ -59,4 +69,9 @@ class BaseLogic():
         self.db.create(publisher)
 
     def get_publishers(self):
-        return self.db.get_publishers()
+        try:
+            return self.db.get_publishers()
+        except ValueError as e:
+            #Log
+            print(e)
+            return []
