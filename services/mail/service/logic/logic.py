@@ -16,10 +16,6 @@ class Logic():
         tId = message['ticketId']
         token = self.token.get()
 
-
-        header = {'Authorization': 'Bearer ' + token}
-      
- 
         header = {'Authorization': 'Bearer ' + token}
         r = requests.get('http://localhost:5000/ticket-service/ticket/' + tId , headers=header)
         ticket = json.loads(r.content)
