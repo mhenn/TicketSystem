@@ -4,6 +4,9 @@ from flask import stream_with_context
 import requests
 import json
 
+
+bad_gateway = 502 
+
 class Logic:
 
     def __init__(self, service):
@@ -12,8 +15,15 @@ class Logic:
     def get_ticket(self, uid):         
         token = self.service_token.get()
         header = {'Authorization': 'Bearer ' + token }
-        r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}' , headers=header)		
-        return r.json()['tickets']
+        try:
+            r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}' , headers=header)		
+            if not r.ok:
+                return [], bad_gateway
+        except requests.exceptions.RequestException as e:
+            #TODO LOG
+            return [], bad_gateway
+        
+        return r.json()['tickets'], 200
 
 
     def post_ticket(self, ticket, uid):	
@@ -23,20 +33,30 @@ class Logic:
             'content-type' : 'application/json'
         }
         print(ticket)
-        r = requests.post(f'http://localhost:5000/ticket-service/user/{uid}', headers=header, data=json.dumps(ticket))	
-        print(r.json())
-        return r.status_code, r.json()['id']
+        try:
+            r = requests.post(f'http://localhost:5000/ticket-service/user/{uid}', headers=header, data=json.dumps(ticket))	
+            if not r.ok:
+                return [], bad_gateway
+        except requests.exceptions.RequestException as e:
+            return [], bad_gateway
+        return  r.json()['id'], r.status_code
 
     def put_ticket(self, ticketId, ticket, uid):	
         ticket = json.loads(ticket)
         token = self.service_token.get()
+
         ticket = ticket['ticket']
         header = {
             'Authorization': 'Bearer ' + token,
             'content-type' : 'application/json'
         }
-        print(ticket)
-        r = requests.put(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
+        try:
+            r = requests.put(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
+            if not r.ok:
+                return  bad_gateway
+        except requests.exceptions.RequestException as e:
+            #TODO LOG
+            return  bad_gateway
         return r.status_code
 
 
@@ -94,7 +114,13 @@ class ConfigLogic():
     def get_mapping(self):
         token = self.service_token.get()
         header = {'Authorization': 'Bearer ' + token }
-    
-        r = requests.get('http://localhost:5555/config/role-mapping', headers=header)
-        return json.loads(r.content)
+        try:    
+            r = requests.get('http://localhost:5555/config/role-mapping', headers=header)
+        
+            if not r.ok:
+                return  [], bad_gateway
+        except requests.exceptions.RequestException as e:
+            #TODO LOG
+            return  [], bad_gateway
+        return json.loads(r.content), 200
 

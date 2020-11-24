@@ -23,7 +23,7 @@ def test_mappings_get_with_insert_multiple(app, client, insert_mapping_multiple)
         for k in inserted_mapping[i]:
             assert inserted_mapping[i][k] == ret_map[i][k]
    
-def test_mappings_iget_with_insert_none(app, client, insert_nothing):
+def test_mappings_get_with_insert_none(app, client, insert_nothing):
     res = client.get(url)
     res_map = json.loads(res.data)['mapping']
     assert res.status_code == 200

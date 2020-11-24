@@ -9,9 +9,10 @@ from main import *
 import pytest
 import pytest_mock 
 
+
 @pytest.fixture
 def app(mocker):
-    mocker.patch('flask_jwt_extended.view_decorators.verify_jwt_in_request', lambda : print('verify'))
+    mocker.patch('flask_jwt_extended.view_decorators.verify_jwt_in_request', lambda : print(''))
     mocker.patch('startup.service.update_token', lambda: '3')
     yield flask_app
 
