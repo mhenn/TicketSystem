@@ -51,25 +51,31 @@ api = app.namespace(name, description=description)
 jwt = JWTManager(flask_app)
 
 service = ServiceToken()
+db = MongoDatabase('mongodb://localhost:27017/')
+url = 'http://localhost:5050/pubsub/'
 
-def setup(service):
-    db = MongoDatabase()
+def setup(service, db):
     logic = {'base' : Logic(db), 'pub' : PubLogic(db, service)}
     return   logic
 
+def pubsubAlive():
+    res = request.get(url + '/alive/')
+    print(res)
+    return res.ok
 
 def checkAndCreatePub(service):
     token = service.get() 
     header = {'Authorization': 'Bearer ' + token}
 
-    res = requests.get('http://localhost:5050/pubsub/', headers=header)
+    res = requests.get(url, headers=header)
     pubs = res.json()['publishers']
     if 'ticket' not in [ t['name'] for t in pubs]:
         data = {'publisher': 'ticket'}
-        requests.post('http://localhost:5050/pubsub/', headers=header, data=json.dumps(data))
+        requests.post(url, headers=header, data=json.dumps(data))
     
 try:
-    checkAndCreatePub(service)
+    if pubsubAlive: 
+        checkAndCreatePub(service)
 except Exception as e:
     print(e)
-logic = setup(service)
+logic = setup(service,db)

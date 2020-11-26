@@ -24,8 +24,13 @@ class Logic():
 
     def update(self, ticket, ticketID):
         ticket = json.loads(ticket)
-        self.db.update(ticket, ticketID)
-
+        try:
+            self.db.update(ticket, ticketID)
+        except Exception as e:
+            #TODO LOG
+            print(e)
+            return 409
+        return 200
 
     def create(self, ticket, uid):
         ticket['status'] = 'open'
@@ -39,7 +44,12 @@ class Logic():
         return self.db.get({'uid': uid})
 
     def get_by_id(self, tId):
-        return self.db.get({'_id': ObjectId(tId)})
+        try:
+            return self.db.get({'_id': ObjectId(tId)}), 200
+        except Exception as e:
+            #TODO LOG
+            print(e)
+            return {}, 409
 
     def getTicketByTopic(self, content):
         

@@ -1,6 +1,5 @@
-from flask_restplus import fields
+from flask_restx import fields
 from startup import api
-
 
 
 
@@ -12,14 +11,25 @@ content_model =  api.model('Content', {
 })
 
 ticket_model = api.model('Ticket',  {
-	'id': fields.String,
-        'uid': fields.String,
-	'from': fields.String,
+        'sender': fields.String,
 	'to': fields.String,
 	'subject': fields.String,
 	'messages': fields.List(fields.Nested(content_model)),
-	'status': fields.String
 })
+
+
+
+update_model = api.model('Ticket',  {
+        'id': fields.String,
+        'status': fields.String,
+        'sender': fields.String,
+	'to': fields.String,
+	'subject': fields.String,
+	'messages': fields.List(fields.Nested(content_model)),
+})
+
+
+
 
 callback_model = api.model('MSG', {
 	'message': fields.String

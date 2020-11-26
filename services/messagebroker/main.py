@@ -11,6 +11,13 @@ msg = api.model('Message', msg_model)
 sub = api.model('Subscription',sub_model)
 pub = api.model('Publisher', pub_model)
 
+
+@api.route("/")
+class Alive(Resource):
+    def get(self):
+        return {}, 200
+
+
 @api.route("/")
 class Base(Resource):
     @jwt_required

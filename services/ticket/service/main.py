@@ -1,10 +1,11 @@
 from startup import * 
 from flask_restx import Resource
 from flask_cors import CORS, cross_origin
-from models.ticket import  content_model, ticket_model, callback_model
+from models.ticket import  content_model, ticket_model, callback_model, update_model
 from logic.logic import *
 from flask import request, send_from_directory
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
+from decorator import *
 import requests
 import json
 import os
@@ -32,9 +33,9 @@ class TicketById(Resource):
 
     @jwt_required
     def get(self, ticketId):
-        ticket = logic['base'].get_by_id(ticketId)
+        ticket, status = logic['base'].get_by_id(ticketId)
 
-        return {'ticket': ticket}
+        return {'ticket': ticket}, status
 
 
 @api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
@@ -49,6 +50,7 @@ class TicketClass(Resource):
 
     @jwt_required	
     @api.expect(ticket_model)
+    @model_integrity(ticket_model)
     def post(self, userId):
         print(f'req: {request} data: {request.data} header: {request.headers}')
         id = logic['base'].create(json.loads(request.data), userId)
@@ -72,12 +74,15 @@ class TicketID(Resource):
         logic['base'].delete(ticketID)
         return {'status':200}
 
-    @api.expect(ticket_model)
+    @model_integrity(update_model)
+    @api.expect(update_model)
     def put(self, userId, ticketID):
         print(f'req: {request} data: {request.data} header: {request.headers}')
-        logic['base'].update(request.data, ticketID)
+        status = logic['base'].update(request.data, ticketID)
+        if status != 200:
+            return {},status
         logic['pub'].updated(ticketID)
-        return {'status' :200}
+        return {}, status
 
 @api.route("/callback/")
 class Callback(Resource):
@@ -92,6 +97,6 @@ class Placeholder(Resource):
     @jwt_required
     @api.expect(content_model)
     def get(self):
-        return {'status': 404, 'message': "How about NO!!!"}
+        return {}, 404
 
 

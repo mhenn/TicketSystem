@@ -3,17 +3,13 @@ from bson import ObjectId
 
 class MongoDatabase():
 
-    def setup(self):
-        client = MongoClient('mongodb://localhost:27017/')
-        self.db = client.ticketdb
 
 
-    def __init__(self):
-        self.setup()
+    def __init__(self, url):
+        self.db =  MongoClient(url).ticketdb
 
 
     def update(self, ticket, id):
-        print(type(ticket))
         return self.db.ticket.update_one({'_id': ObjectId(id)}, { '$set' : ticket})
 
     def delete(self, ticketID):
@@ -22,7 +18,7 @@ class MongoDatabase():
     def create(self, ticket):
         if 'id' in ticket:
             del ticket['id']
-        return self.db.ticket.insert(ticket)
+        return self.db.ticket.insert_one(ticket).inserted_id
 
     def get(self, criteria):
         cursor = self.db.ticket.find(criteria)
