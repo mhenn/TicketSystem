@@ -1,6 +1,7 @@
 const state = () => ({
 	dialog: false,
 	failed: []
+	
 })
 
 const mutations = {
@@ -8,7 +9,7 @@ const mutations = {
 		state.dialog = state.dialog ? false : true
 	},
 	updateFail(state, type){
-		if(!state.failed.includes)	
+		if(!state.failed.includes(type))	
 			state.failed.push(type)
 	},
 	clearFailType(state, type){

@@ -1,4 +1,6 @@
 <template>
+
+
 	<v-app :dark="this.$vuetify.theme.dark = false">
 		<v-navigation-drawer dark
 			v-model="drawer"
@@ -42,8 +44,21 @@
 				<v-icon>mdi-logout-variant</v-icon>
 			</v-btn>
 		</v-app-bar>
-
 		<v-container class="content" fluid>
+
+		<v-alert
+			v-if='show'
+			prominent
+			dismissible
+			type='error'
+			@click='clear()'
+			>
+			Your client is experiencing issues due to the failure of the following function(s): {{ failed }}
+		</v-alert>
+
+
+
+
 			<v-row  dense>
 				<v-col
 					v-for="card in cards"
@@ -74,6 +89,12 @@
 		computed:{
 			roles() {
 				return store.state.config.userRoles
+			},
+			failed(){
+				return store.state.misc.failed
+			},
+			show(){
+				return this.failed.length != 0 
 			}
 		},
 		data: () =>({
@@ -92,6 +113,9 @@
 			},
 			logout(){
 				store.dispatch('config/logout')
+			},
+			clear(){
+				store.commit('misc/clearFail')
 			}
 		}
 	}

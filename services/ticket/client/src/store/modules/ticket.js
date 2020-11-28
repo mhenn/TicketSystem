@@ -86,7 +86,7 @@ const actions = {
 		axios(options).then(r => {
 			commit('downloadedFile', r.data)
 		}).catch(e =>{
-			commit('misc/updateFail', 'downloadFile')
+			commit('misc/updateFail', 'downloadFile',{root:true})
 		})
 	},
 	postSelected({rootState, dispatch, commit}){
@@ -127,14 +127,14 @@ const actions = {
 				axios(options_files).then(() =>{
 					dispatch('getTickets')
 				}).catch(e =>{
-					commit('misc/updateFail', 'postSelected/uploadFiles')
+					commit('misc/updateFail', 'postSelected/uploadFiles',{root:true})
 				})
 
 			} else {
 				dispatch('getTickets')
 			}
 		}).catch(e =>{
-			commit('misc/updateFail', 'postSelected')
+			commit('misc/updateFail', 'postSelected',{root:true})
 		})
 
 
@@ -153,7 +153,7 @@ const actions = {
 		axios(options).then(response =>{
 			commit('update', response.data.tickets)	
 		}).catch(e =>{
-			commit('misc/updateFail', 'getTickets')
+			commit('misc/updateFail', 'getTickets',{root:true})
 		})
 
 	},
@@ -166,7 +166,7 @@ const actions = {
 		.then(() =>{
 			dispatch('getTickets')
 		}).catch(e =>{
-			commit('misc/updateFail', 'deleteTickets')
+			commit('misc/updateFail', 'deleteTickets',{root:true})
 		})
 
 	},
@@ -209,14 +209,14 @@ const actions = {
 				axios(options_files).then(() =>{
 					dispatch('getTickets')
 				}).catch(e =>{
-					commit('misc/updateFail', 'putSelected/uploadFiles')
+					commit('misc/updateFail', 'putSelected/uploadFiles',{root:true})
 				})
 
 			} else {
 				dispatch('getTickets')
 			}
 		}).catch(e =>{
-			commit('misc/updateFail', 'putSelected')
+			commit('misc/updateFail', 'putSelected'),{root:true}
 		})
 	
 
@@ -243,7 +243,7 @@ const actions = {
 		axios(options).then(response =>{
 			commit('update', response.data.tickets)	
 		}).catch(e =>{
-			commit('misc/updateFail', 'getSupporterTickets')
+			commit('misc/updateFail', 'getSupporterTickets',{root:true})
 		})
 
 	},

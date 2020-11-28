@@ -50,7 +50,7 @@ const actions = {
 				throw 'getQueues failed'
 			commit('updateQueues', r.data.queues)
 		}).catch(e =>{
-			commit('misc/updateFail', 'getQueues')
+			commit('misc/updateFail', 'getQueues',{root:true})
 		})	
 	},
 	getMappings({state, commit}){
@@ -68,7 +68,7 @@ const actions = {
 				throw "getMappings failed"
 			commit('updateMapping', response.data.mapping)	
 		}).catch(e =>{
-			commit('misc/updateFail', 'getMappings')
+			commit('misc/updateFail', 'getMappings',{root:true})
 		})
 	},
 
