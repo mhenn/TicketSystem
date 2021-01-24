@@ -69,7 +69,7 @@ def checkAndCreatePub(service):
 
     res = requests.get(url, headers=header)
     pubs = res.json()['publishers']
-    if 'ticket' not in [ t['name'] for t in pubs]:
+    if 'ticket' not in [ t['publisher'] for t in pubs]:
         data = {'publisher': 'ticket'}
         requests.post(url, headers=header, data=json.dumps(data))
     

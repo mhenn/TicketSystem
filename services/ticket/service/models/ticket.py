@@ -4,7 +4,7 @@ from startup import api
 
 
 content_model =  api.model('Content', {
-	'timestamp': fields.DateTime(),
+	'timestamp': fields.String,
 	'message' : fields.String,
 	'appendices': fields.List(fields.Raw)
 	

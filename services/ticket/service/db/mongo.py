@@ -38,4 +38,6 @@ class MongoDatabase():
             del t['_id']
         return tickets
 
+    def append(self, content, id):
+        return self.db.ticket.update_one({'_id': ObjectId(id)}, {'$push': {'messages' : content}})
 

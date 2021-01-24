@@ -7,6 +7,7 @@ from flask_restx import  marshal
 def check_none(data):
     print(data)
     for k in data:
+        print(f'{k}  {data}')
         if data[k] is None:
             return True
         if type(data[k]) is dict:
@@ -22,7 +23,8 @@ def model_integrity(model):
                 data = marshal(json.loads(request.data), model)
                 if check_none(data):
                     raise
-            except:
+            except Exception as e:
+                print(e)
                 return {}, 400
             return f(*args, **kwargs)
         return wrapper

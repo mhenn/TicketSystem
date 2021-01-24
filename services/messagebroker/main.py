@@ -13,12 +13,6 @@ pub = api.model('Publisher', pub_model)
 
 
 @api.route("/")
-class Alive(Resource):
-    def get(self):
-        return {}, 200
-
-
-@api.route("/")
 class Base(Resource):
     @jwt_required
     @api.expect(pub)
@@ -31,7 +25,6 @@ class Base(Resource):
             return {}, 409
         return {}, 200
 
-    @jwt_required
     def get(self):
         pubs = base_logic.get_publishers()
         return {'publishers': pubs}, 200	

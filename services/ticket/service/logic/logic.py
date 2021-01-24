@@ -14,13 +14,13 @@ class Logic():
 
     def createFiles(self, files, uid, ticketId, messageId):
         path = f'./files/{uid}/{ticketId}/{messageId}/'
-			    
+
         if not os.path.isdir(path):
             os.makedirs(path)
 
         for f in files:
             files[f].save(path+ f)
-	    
+
 
     def update(self, ticket, ticketID):
         ticket = json.loads(ticket)
@@ -57,6 +57,11 @@ class Logic():
         for topic in content['topics']:
             tickets = tickets + self.db.get({'to' : topic})
         return tickets
+
+    def appendMessage(self, ticketId, data):
+        return self.db.append(data, ticketId) 
+
+
 
 class PubLogic():
 

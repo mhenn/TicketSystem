@@ -90,7 +90,6 @@ const actions = {
 		})
 	},
 	postSelected({rootState, dispatch, commit}){
-	
 		let form = new FormData()
 		let file_list = []		
 		rootState.ticket.files.forEach(file => file_list.push(file.file))
@@ -109,7 +108,6 @@ const actions = {
 			},
 			data: ticket
 		}
-		
 		axios(options_ticket).then(response =>{
 			if(response.status <= 205 && file_list.length > 0){
 					let id = response.data.id
@@ -123,7 +121,6 @@ const actions = {
 						},
 						data:form
 					}
-			
 				axios(options_files).then(() =>{
 					dispatch('getTickets')
 				}).catch(e =>{
@@ -136,7 +133,6 @@ const actions = {
 		}).catch(e =>{
 			commit('misc/updateFail', 'postSelected',{root:true})
 		})
-
 
 	}, 
 	getTickets({rootState,commit}){

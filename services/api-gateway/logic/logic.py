@@ -76,6 +76,7 @@ class Logic:
         headers = {
             "Authorization" : 'Bearer ' + token
         }
+        print(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}')
         r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}', headers=headers)
 #        return Response(r.content, content_type=r.headers['Content-Type']) 
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
