@@ -13,7 +13,7 @@ def test_message_put(app,client, insert_ticket):
    
     ticket = insert_ticket[0]
     responses.add(responses.PUT,url  , status=200)
-    content = {'timestamp':"time", 'message':'Message', 'appendices': {}}
+    content = {'timestamp':"time", 'message':'Message', 'appendices': [{}] }
 
     res = client.put(get_url( ticket['id']), data=json.dumps(content))
     d = insert_ticket[1]
@@ -26,8 +26,10 @@ def test_message_put(app,client, insert_ticket):
 
 
 def test_message_put_wrong_id(app,client, insert_ticket):
+
+    content = {'timestamp':"time", 'message':'Message', 'appendices': [{}]}
     ticket = insert_ticket[0]
-    res = client.put(get_url('123'), data=json.dumps(ticket))
+    res = client.put(get_url('123'), data=json.dumps(content))
     d = insert_ticket[1] 
     count = d.ticket.count_documents({})
     assert res.status_code == 409

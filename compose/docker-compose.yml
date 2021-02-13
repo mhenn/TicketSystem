@@ -1,0 +1,105 @@
+version: '3'
+
+volumes:
+  postgres_data:
+      driver: local
+
+services:
+  postgres:
+      image: postgres
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_DB: keycloak
+        POSTGRES_USER: keycloak
+        POSTGRES_PASSWORD: password
+
+  keycloak:
+      image: quay.io/keycloak/keycloak:latest
+      volumes:
+         - ./imports:/opt/jboss/keycloak/imports
+      command: 
+         - "-b 0.0.0.0"
+         - "-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: postgres
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_SCHEMA: public
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin 
+      restart: always
+      ports:
+        - 8080:8080
+      depends_on:
+        - postgres
+
+  mongo_ticket: 
+      image: mongo
+      volumes:
+         -  /home/mhenn/Projects/BA/dbdata:/data/db
+      ports:
+         - 27017:27017
+
+  mongo_config: 
+      image: mongo
+      volumes:
+         - /home/mhenn/Projects/BA/configdbdata:/data/db
+      ports:
+         - 27000:27017
+
+  mongo_message: 
+      image: mongo
+      ports:
+         - 27070:27017
+
+  message_service:
+      image: test:latest
+      ports:
+         - 5050:5050
+      volumes: 
+         - ../services/messagebroker:/home/
+      
+  gateway_service:
+      image: test:latest
+      ports:
+         - 5070:5070
+      volumes: 
+         - ../services/api-gateway:/home/
+
+  config_service:
+      image: test:latest
+      ports:
+         - 5555:5555
+      volumes: 
+         - ../services/config/service:/home/
+
+  ticket_service:
+      image: test:latest
+      ports:
+         - 5000:5000
+      volumes: 
+         - ../services/ticket/service:/home/
+
+  mail_service:
+      image: test:latest
+      ports:
+         - 5025:5025
+      volumes: 
+         - ../services/mail/service:/home/
+  
+  ticket_client:
+      image: client:latest
+      ports:
+         - 8081:8081
+      volumes: 
+         - ../services/ticket/client:/home/
+ 
+  config_client:
+      image: client:latest
+      ports:
+         - 4000:4000
+      volumes: 
+         - ../services/config/client:/home/

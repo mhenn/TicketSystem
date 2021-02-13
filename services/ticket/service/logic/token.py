@@ -18,7 +18,7 @@ class ServiceToken:
         current_time = time.time() -self.time_received 	
         
         j_response = ''
-        url = 'http://localhost:8000/auth/realms/Odonata/protocol/openid-connect/token'
+        url = 'http://localhost:8080/auth/realms/Odonata/protocol/openid-connect/token'
 
         if not self._access_token: 
             data= {'grant_type': 'password', 'client_id':'ticket-client', 'username':'mhenn', 'password':'mhenn'}

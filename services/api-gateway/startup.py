@@ -2,7 +2,6 @@ from flask import Flask
 #from flask_restplus import Api
 from flask_restx import Api 
 from flask_cors import CORS
-from flask_jwt_oidc import AuthError, JwtManager
 from flask_jwt_extended import JWTManager
 from logic.token import  ServiceToken
 #from flask_oidc import OpenIDConnect
@@ -27,7 +26,7 @@ flask_app = Flask(__name__)
 
 flask_app.config['JWT_ALGORITHM'] = 'RS256'
 flask_app.config['JWT_IDENTITY_CLAIM'] = 'sub'
-flask_app.config['JWT_PUBLIC_KEY'] =  """-----BEGIN PUBLIC KEY-----
+flask_app.config['JWT_PUBLIC_KEY'] =   """-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAslHDNkPEF4Xmjz8yd16l
 UG15Bhr2YLkh8v6D9OCEvCNRsDq2JFqbAcxCfRnXIKjs/7n2Dv6jaU0X8FP6noEf
 GHPyhlLJb/mIk/rTSEatZy0Mf/cbBkF90sJX5dilh/yCn5ygICqJ0egyQJhnrF7w

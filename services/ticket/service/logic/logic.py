@@ -59,8 +59,12 @@ class Logic():
         return tickets
 
     def appendMessage(self, ticketId, data):
-        return self.db.append(data, ticketId) 
-
+        try:
+            self.db.append(data, ticketId) 
+        except Exception as e:
+            print(e)
+            return 409
+        return 200
 
 
 class PubLogic():

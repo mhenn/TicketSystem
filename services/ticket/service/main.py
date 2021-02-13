@@ -46,7 +46,7 @@ class TicketById(Resource):
     @api.expect(content_model) 
     def put(self, ticketId):
         status = logic['base'].appendMessage(ticketId, json.loads(request.data))
-        return {}, 200
+        return {}, status
 
 
 @api.route('/user/<string:uid>/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
