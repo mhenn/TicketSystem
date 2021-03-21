@@ -6,7 +6,7 @@ import * as Keycloak from 'keycloak-js'
 import store from './store'
 
 let initOptions = {
-  url: 'http://127.0.0.1:8080/auth', realm: 'Odonata', clientId: 'ticket-client', onLoad:'login-required'
+  url: 'http://localhost:8080/auth', realm: 'Odonata', clientId: 'ticket-client', onLoad:'login-required'
 }
 
 Vue.config.productionTip = false

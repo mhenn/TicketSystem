@@ -28,6 +28,7 @@ class TicketClass(Resource):
         print(f'req: {request} data: {json.loads(request.data)} header: {request.headers}')
         id, status = logic['base'].post_ticket(json.loads(request.data), uid)
         return { 'id': id }, status
+
     @jwt_required
     def get(self):
         uid = get_jwt_identity()

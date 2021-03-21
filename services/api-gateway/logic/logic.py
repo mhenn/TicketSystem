@@ -4,6 +4,8 @@ from flask import stream_with_context
 import requests
 import json
 
+tickethost = 'odonata.ticket'
+confighost = 'odonata.config'
 
 bad_gateway = 502 
 
@@ -16,7 +18,8 @@ class Logic:
         token = self.service_token.get()
         header = {'Authorization': 'Bearer ' + token }
         try:
-            r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}' , headers=header)		
+            r = requests.get(f'http://{tickethost}:5000/ticket-service/user/{uid}' , headers=header)		
+            raise Exception(r)
             if not r.ok:
                 return [], bad_gateway
         except requests.exceptions.RequestException as e:
@@ -34,7 +37,7 @@ class Logic:
         }
         print(ticket)
         try:
-            r = requests.post(f'http://localhost:5000/ticket-service/user/{uid}', headers=header, data=json.dumps(ticket))	
+            r = requests.post(f'http://{tickethost}:5000/ticket-service/user/{uid}', headers=header, data=json.dumps(ticket))	
             if not r.ok:
                 return [], bad_gateway
         except requests.exceptions.RequestException as e:
@@ -51,7 +54,7 @@ class Logic:
             'content-type' : 'application/json'
         }
         try:
-            r = requests.put(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
+            r = requests.put(f'http://{tickethost}:5000/ticket-service/user/{uid}/ticket/{ticketId}', headers=header, data=json.dumps(ticket))	
             if not r.ok:
                 return  bad_gateway
         except requests.exceptions.RequestException as e:
@@ -67,7 +70,7 @@ class Logic:
         headers = {
             'Authorization': 'Bearer ' + token,
         }	
-        r = requests.post(f'http://localhost:5000/ticket-service/ticket/{ticketId}/message/{messageId}', headers=headers,data=data, files=files)
+        r = requests.post(f'http://{tickethost}:5000/ticket-service/ticket/{ticketId}/message/{messageId}', headers=headers,data=data, files=files)
         print(r)
         return r.status_code	
 
@@ -76,8 +79,8 @@ class Logic:
         headers = {
             "Authorization" : 'Bearer ' + token
         }
-        print(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}')
-        r = requests.get(f'http://localhost:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}', headers=headers)
+        print(f'http://{tickethost}:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}')
+        r = requests.get(f'http://{tickethost}:5000/ticket-service/user/{uid}/ticket/{ticketId}/message/{messageId}/file/{filename}', headers=headers)
 #        return Response(r.content, content_type=r.headers['Content-Type']) 
         excluded_headers = ['content-encoding', 'content-length', 'transfer-encoding', 'connection']
         headers = [(name, value) for (name, value) in r.raw.headers.items()
@@ -93,7 +96,7 @@ class Logic:
         headers = {
             "Authorization" : 'Bearer ' + token
         }   
-        r = requests.get('http://localhost:5555/config/queues/', headers=headers)
+        r = requests.get('http://{confighost}:5555/config/queues/', headers=headers)
         return r.json()['queues']
     
     def ticket_topic(self, data):
@@ -102,7 +105,7 @@ class Logic:
         header = {
             "Authorization" : 'Bearer ' + token,
         }
-        r = requests.post('http://localhost:5000/ticket-service/ticket/topics/', headers=header,data=data)
+        r = requests.post('http://{tickethost}:5000/ticket-service/ticket/topics/', headers=header,data=data)
         print(r)
         return json.loads(r.content)
 
@@ -116,7 +119,7 @@ class ConfigLogic():
         token = self.service_token.get()
         header = {'Authorization': 'Bearer ' + token }
         try:    
-            r = requests.get('http://localhost:5555/config/role-mapping', headers=header)
+            r = requests.get('http://{confighost}:5555/config/role-mapping', headers=header)
         
             if not r.ok:
                 return  [], bad_gateway
