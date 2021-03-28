@@ -19,6 +19,12 @@ services:
       volumes:
          - ./imports:/opt/jboss/keycloak/imports
       hostname: odonata.keycloak
+      links:
+         - "ticket_service"
+         - "config_service"
+         - "mail_service"
+         - "gateway_service"
+         - "message_service"
       command: 
          - "-b 0.0.0.0"
          - "-Dkeycloak.import=/opt/jboss/keycloak/imports/realm-export.json"
@@ -39,6 +45,7 @@ services:
 
   mongo_ticket: 
       image: mongo
+      hostname: mongo.ticket
       volumes:
          -  /home/mhenn/Projects/BA/dbdata:/data/db
       ports:
@@ -46,6 +53,7 @@ services:
 
   mongo_config: 
       image: mongo
+      hostname: mongo.config
       volumes:
          - /home/mhenn/Projects/BA/configdbdata:/data/db
       ports:
@@ -53,11 +61,17 @@ services:
 
   mongo_message: 
       image: mongo
+      hostname: mongo.message
       ports:
          - 27070:27017
 
   message_service:
       image: test:latest
+      hostname: odonata.message
+      links:
+         - "ticket_service"
+         - "mail_service"
+         - "mongo_message"
       ports:
          - 5050:5050
       volumes: 
@@ -65,6 +79,11 @@ services:
       
   gateway_service:
       image: test:latest
+      hostname: odonata.gatway  
+      links:
+         - "ticket_service"
+         - "ticket_client"
+         - "config_service"
       ports:
          - 5070:5070
       volumes: 
@@ -72,6 +91,9 @@ services:
 
   config_service:
       image: test:latest
+      hostname: odonata.config
+      links:
+         - "mongo_config"
       ports:
          - 5555:5555
       volumes: 
@@ -80,6 +102,10 @@ services:
   ticket_service:
       image: test:latest
       hostname: odonata.ticket
+      depends_on:
+         - "mongo_message"
+      links:
+         - "mongo_ticket"
       ports:
          - 5000:5000
       volumes: 
@@ -87,6 +113,7 @@ services:
 
   mail_service:
       image: test:latest
+      hostname: odonata.mail
       ports:
          - 5025:5025
       volumes: 
@@ -94,6 +121,7 @@ services:
   
   ticket_client:
       image: client:latest
+      hostname: odonata.ticket.client
       ports:
          - 8081:8081
       volumes: 
@@ -101,6 +129,7 @@ services:
  
   config_client:
       image: client:latest
+      hostname: odonata.config.client
       ports:
          - 4000:4000
       volumes: 

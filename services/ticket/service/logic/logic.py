@@ -48,7 +48,7 @@ class Logic():
             return self.db.get({'_id': ObjectId(tId)}), 200
         except Exception as e:
             #TODO LOG
-            print(e)
+            raise(e)
             return {}, 409
 
     def getTicketByTopic(self, content):

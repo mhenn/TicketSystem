@@ -145,7 +145,8 @@ const actions = {
 				'Authorization' : 'Bearer ' + token
 			}
 		}
-
+		console.log(token)
+		console.log(options)
 		axios(options).then(response =>{
 			commit('update', response.data.tickets)	
 		}).catch(e =>{

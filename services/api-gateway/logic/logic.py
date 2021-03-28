@@ -17,6 +17,7 @@ class Logic:
     def get_ticket(self, uid):         
         token = self.service_token.get()
         header = {'Authorization': 'Bearer ' + token }
+        raise Exception(token + ' ' + uid)
         try:
             r = requests.get(f'http://{tickethost}:5000/ticket-service/user/{uid}' , headers=header)		
             raise Exception(r)
@@ -35,7 +36,7 @@ class Logic:
             'Authorization': 'Bearer ' + token,
             'content-type' : 'application/json'
         }
-        print(ticket)
+        
         try:
             r = requests.post(f'http://{tickethost}:5000/ticket-service/user/{uid}', headers=header, data=json.dumps(ticket))	
             if not r.ok:

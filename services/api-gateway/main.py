@@ -12,7 +12,7 @@ import json
 @api.route("/queues/")
 class Queues(Resource):
 
-    @jwt_required
+    @jwt_required()
     def get(self):
         queues = logic['base'].get_queues()
         return {'status' : 200, 'queues': queues}
@@ -20,7 +20,7 @@ class Queues(Resource):
 @api.route("/ticket/")
 class TicketClass(Resource):
 
-    @jwt_required
+    @jwt_required()
     @api.expect(ticket_model)
     @model_integrity(ticket_model)
     def post(self):
@@ -29,7 +29,7 @@ class TicketClass(Resource):
         id, status = logic['base'].post_ticket(json.loads(request.data), uid)
         return { 'id': id }, status
 
-    @jwt_required
+    @jwt_required()
     def get(self):
         uid = get_jwt_identity()
         tickets, status = logic['base'].get_ticket(uid)
@@ -38,7 +38,7 @@ class TicketClass(Resource):
 
 @api.route('/ticket/<string:ticketId>/message/<string:messageId>/file/<string:filename>')
 class SpecificFile(Resource):
-    @jwt_required
+    @jwt_required()
     def get(self, ticketId, messageId, filename):
         uid = get_jwt_identity()
         return logic['base'].get_file(ticketId, messageId, filename, uid)
@@ -46,7 +46,7 @@ class SpecificFile(Resource):
 @api.route('/ticket/<string:ticketId>')
 class SpecificTicket(Resource):
 
-    @jwt_required
+    @jwt_required()
     @model_integrity(put_ticket_model)
     def put(self, ticketId):
         print(f'req: {request} data: {request.data} header: {request.headers}')
@@ -58,7 +58,7 @@ class SpecificTicket(Resource):
 @api.route('/supporter/ticket/')
 class TicketByTopic(Resource):
 #TODO change to Get with query params
-    @jwt_required
+    @jwt_required()
     def post(self):
         response = logic['base'].ticket_topic(request.data)
         return response, 200
@@ -66,7 +66,7 @@ class TicketByTopic(Resource):
 @api.route('/ticket/<string:ticketId>/message/<string:messageId>/files/')
 class SpecificTicket(Resource):
 
-    @jwt_required
+    @jwt_required()
     def post(self, ticketId, messageId):
         print(f'req: {request} data: {request.data} header: {request.headers}')
         files = request.files.to_dict()	
@@ -77,7 +77,7 @@ class SpecificTicket(Resource):
 @api.route('/config/role-mapping/')
 class RoleMapping(Resource):
 
-    @jwt_required
+    @jwt_required()
     def get(self):
         mapping, status = logic['config'].get_mapping()
         return mapping, status

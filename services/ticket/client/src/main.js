@@ -14,7 +14,6 @@ Vue.config.productionTip = false
 let keycloak = Keycloak(initOptions);
 
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
-
 	if(!auth) {
       window.location.reload();
     }

@@ -4,7 +4,7 @@ from bson import ObjectId
 class MongoDatabase():
 
     def __init__(self):	
-        client = MongoClient('mongodb://localhost:27070/')
+        client = MongoClient('mongodb://mongo.message:27017/')
         self.db = client.pubsub
 
     def create(self, publisher):
