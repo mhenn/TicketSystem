@@ -17,10 +17,8 @@ class Logic:
     def get_ticket(self, uid):         
         token = self.service_token.get()
         header = {'Authorization': 'Bearer ' + token }
-        raise Exception(token + ' ' + uid)
         try:
             r = requests.get(f'http://{tickethost}:5000/ticket-service/user/{uid}' , headers=header)		
-            raise Exception(r)
             if not r.ok:
                 return [], bad_gateway
         except requests.exceptions.RequestException as e:
@@ -97,7 +95,7 @@ class Logic:
         headers = {
             "Authorization" : 'Bearer ' + token
         }   
-        r = requests.get('http://{confighost}:5555/config/queues/', headers=headers)
+        r = requests.get(f'http://{confighost}:5555/config/queues/', headers=headers)
         return r.json()['queues']
     
     def ticket_topic(self, data):
@@ -106,7 +104,7 @@ class Logic:
         header = {
             "Authorization" : 'Bearer ' + token,
         }
-        r = requests.post('http://{tickethost}:5000/ticket-service/ticket/topics/', headers=header,data=data)
+        r = requests.post(f'http://{tickethost}:5000/ticket-service/ticket/topics/', headers=header,data=data)
         print(r)
         return json.loads(r.content)
 
@@ -120,7 +118,7 @@ class ConfigLogic():
         token = self.service_token.get()
         header = {'Authorization': 'Bearer ' + token }
         try:    
-            r = requests.get('http://{confighost}:5555/config/role-mapping', headers=header)
+            r = requests.get(f'http://{confighost}:5555/config/role-mapping', headers=header)
         
             if not r.ok:
                 return  [], bad_gateway

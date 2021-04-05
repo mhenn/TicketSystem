@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from logic.token import  ServiceToken
 #from flask_oidc import OpenIDConnect
+import requests
 
 from logic.logic import *
 
@@ -21,22 +22,27 @@ authorizations = {
 }
 
 
+
+def get_pubkey():
+    r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
+    r = r.json()
+    return f"""-----BEGIN PUBLIC KEY-----
+{r['public_key']}
+-----END PUBLIC KEY-----""" 
+
 flask_app = Flask(__name__)
 
-
 flask_app.config['JWT_ALGORITHM'] = 'RS256'
-flask_app.config['JWT_IDENTITY_CLAIM'] = 'sub'
-flask_app.config['JWT_PUBLIC_KEY'] =   """-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAslHDNkPEF4Xmjz8yd16l
-UG15Bhr2YLkh8v6D9OCEvCNRsDq2JFqbAcxCfRnXIKjs/7n2Dv6jaU0X8FP6noEf
-GHPyhlLJb/mIk/rTSEatZy0Mf/cbBkF90sJX5dilh/yCn5ygICqJ0egyQJhnrF7w
-lp4JnJ2sCXySUaPmX0DyJPfhPuDMT17HktGD+F8e5SbDK8yGeoxqfkdhw5GnSzvI
-poCMoSX4h8JUWUevZvKikFI377uuBDkjsuI4D6Mj5BKU7Up6cW/fsKHAWt71s1c0
-B2U9tf7FIlN4r5xXSRlk0IKZ9NIvEAr3k3JIFrZQeThu9ITM66Rne9Ndh1HoIOEY
-6QIDAQAB
------END PUBLIC KEY-----"""
+#flask_app.config['JWT_IDENTITY_CLAIM'] = 'sub'
+flask_app.config['JWT_PUBLIC_KEY'] = get_pubkey()
+#
+#"""
+#MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk5fiYnAuVDbHIM/MZ91Ws6x7ffGBIlsmKW3y9wKpnmpYR64iOG3X/wYknkC8NLsRzCluQXDKWDFQPiRpUyYQRjZxes1sDy/zOQ4gEMIasrdBLpPEqLSHTipForvCASN4NwncpFW2l2+wi8slsTTrszvA2ZM5oZXy9tI5DaklN5jI1l/1bZM6x3VcMTkvQ1+GR9ObrB7PxVMElXqYZ5h83GybVs7AdJA0QLfxcpgFr114KizuS09xWOMGgm6xPDN+8cHIBB1G1nN5K7v+jZ1Y6Ya3cjR7gXgVXxkd3cia83J//nL92grFVDAP/IBu3Ahq3vTPrT8CiosOCSLsJmSGRQIDAQAB
+#"""
+#
+#flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
-flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
+
 
 
 CORS(flask_app)
