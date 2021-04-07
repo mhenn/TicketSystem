@@ -10,6 +10,7 @@ from logic.logic import *
 from logic.token import ServiceToken
 import json
 import requests
+import time 
 
 name = 'mail-service'
 description = 'Mail API'
@@ -22,23 +23,26 @@ authorizations = {
     },
 }
 
+def get_pubkey():
+    for _ in range(20):
+        try:
+            r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
+            break
+        except Exception:
+            time.sleep(5)
+
+    r = r.json()
+    return f"""-----BEGIN PUBLIC KEY-----
+{r['public_key']}
+-----END PUBLIC KEY-----""" 
+
 
 flask_app = Flask(__name__)
 
 
 flask_app.config['JWT_ALGORITHM'] = 'RS256'
-flask_app.config['JWT_IDENTITY_CLAIM'] = 'sub'
-flask_app.config['JWT_PUBLIC_KEY'] =  """-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAslHDNkPEF4Xmjz8yd16l
-UG15Bhr2YLkh8v6D9OCEvCNRsDq2JFqbAcxCfRnXIKjs/7n2Dv6jaU0X8FP6noEf
-GHPyhlLJb/mIk/rTSEatZy0Mf/cbBkF90sJX5dilh/yCn5ygICqJ0egyQJhnrF7w
-lp4JnJ2sCXySUaPmX0DyJPfhPuDMT17HktGD+F8e5SbDK8yGeoxqfkdhw5GnSzvI
-poCMoSX4h8JUWUevZvKikFI377uuBDkjsuI4D6Mj5BKU7Up6cW/fsKHAWt71s1c0
-B2U9tf7FIlN4r5xXSRlk0IKZ9NIvEAr3k3JIFrZQeThu9ITM66Rne9Ndh1HoIOEY
-6QIDAQAB
------END PUBLIC KEY-----"""
+flask_app.config['JWT_PUBLIC_KEY'] = get_pubkey() 
 
-flask_app.config['JWT_DECODE_AUDIENCE'] = 'account'
 
 CORS(flask_app)
 

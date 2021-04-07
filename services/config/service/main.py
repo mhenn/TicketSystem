@@ -29,14 +29,14 @@ class User(Resource):
 @api.route("/queues/")
 class Queue(Resource):
    
-    @jwt_required
+    @jwt_required()
     @model_integrity(queue_model)
     def post(self):
         queue = json.loads(request.data)
         logic['queue'].create(queue)
         return {}, 200
 
-    @jwt_required
+    @jwt_required()
     def get(self):
         queues = logic['queue'].get()
         return {'status': 200, 'queues': queues}	
@@ -53,7 +53,7 @@ class SpecificQueue(Resource):
 @api.route("/mail-mapping/<string:mailMappingId>")
 class Mail(Resource):
 
-    @jwt_required
+    @jwt_required()
     def delete(self, mailMappingId):
         logic['mail'].delete(mailMappingId)
         return
@@ -62,14 +62,14 @@ class Mail(Resource):
 @api.route("/mail-mapping/")
 class Mail(Resource):
     
-    @jwt_required
+    @jwt_required()
     @model_integrity(mail_model)
     def post(self):
         mapping = json.loads(request.data)
         logic['mail'].create(mapping)
         return
 
-    @jwt_required
+    @jwt_required()
     def get(self):
         mapping = logic['mail'].get()
         return { "mapping": mapping}
@@ -78,14 +78,14 @@ class Mail(Resource):
 @api.route("/role-mapping/")
 class Mappings(Resource):
 
-    @jwt_required
+    @jwt_required()
     @model_integrity(role_model)
     def post(self):
         mapping = json.loads(request.data)
         logic['mapping'].create(mapping)
         return {'status': 200 }
 
-    @jwt_required
+    @jwt_required()
     def get(self):
         mapping = logic['mapping'].get()
         return {'status': 200, 'mapping': mapping}

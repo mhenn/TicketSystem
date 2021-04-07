@@ -69,7 +69,6 @@ services:
       image: test:latest
       hostname: odonata.message
       links:
-         - "ticket_service"
          - "mail_service"
          - "mongo_message"
       ports:
@@ -103,8 +102,9 @@ services:
       image: test:latest
       hostname: odonata.ticket
       depends_on:
-         - "mongo_message"
+         - "message_service"
       links:
+         - "message_service"
          - "mongo_ticket"
       ports:
          - 5000:5000

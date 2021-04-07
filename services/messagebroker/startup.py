@@ -6,7 +6,8 @@ from flask_jwt_extended import JWTManager
 
 from db.mongo import MongoDatabase
 from logic.logic import *
-
+import time
+import requests
 
 name = 'pubsub'
 description = 'Messaging API'
@@ -20,7 +21,13 @@ authorizations = {
 }
 
 def get_pubkey():
-    r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
+    for _ in range(20):
+        try:
+            r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
+            break
+        except Exception:
+            time.sleep(5)
+
     r = r.json()
     return f"""-----BEGIN PUBLIC KEY-----
 {r['public_key']}

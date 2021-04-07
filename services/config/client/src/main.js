@@ -11,18 +11,17 @@ import KcAdminClient from 'keycloak-admin'
 const config_role = 'config_admin'
 
 let initOptions = {
-	url: 'http://127.0.0.1:8000/auth', realm: 'Odonata', clientId: 'config-service', onLoad:'login-required'
+	url: 'http://0.0.0.0:8080/auth', realm: 'Odonata', clientId: 'config-service', onLoad:'login-required'
 }
 
 Vue.config.productionTip = false
 
 const admin = new KcAdminClient()
-admin.baseUrl = 'http://localhost:8000/auth'
+admin.baseUrl = 'http://localhost:8080/auth'
 admin.realmName = 'Odonata'
 async function blyn(admin){
 
 		
-
 	await admin.auth(
 		{
 			username: 'oadmin',
@@ -33,7 +32,6 @@ async function blyn(admin){
 	)
 	store.commit('misc/updateRoles', await admin.roles.find())
 }
-
 
 
 
