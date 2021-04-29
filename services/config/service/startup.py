@@ -7,6 +7,10 @@ from db.mongo import MongoDatabase
 from logic.logic import *
 import requests 
 import time
+from keycloak_token_service import ServiceToken
+setup = FlaskSetup('configuration-service', __name__)
+jwt, api, flask_app, app = setup.get_mandatory()
+
 
 
 
@@ -18,51 +22,8 @@ def getAdmin():
                                verify=True)
 
 
-
-def get_pubkey():
-    for _ in range(20):
-        try:
-            r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
-            break
-        except Exception:
-            time.sleep(5)
-
-    r = r.json()
-    return f"""-----BEGIN PUBLIC KEY-----
-{r['public_key']}
------END PUBLIC KEY-----""" 
-
 #admin = getAdmin()
 admin = 0
-
-name = 'config'
-description = 'Configuration API'
-
-authorizations = {
-    'Bearer Auth': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'Authorization'
-    },
-}
-
-
-flask_app = Flask(__name__)
-
-flask_app.config['JWT_ALGORITHM'] = 'RS256'
-flask_app.config['JWT_PUBLIC_KEY'] = get_pubkey() 
-
-
-
-CORS(flask_app)
-
-app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
-api = app.namespace(name, description=description)
-
-
-
-jwt = JWTManager(flask_app)
-
 db = MongoDatabase('mongodb://mongo.config:27017/')
 
 def getLogic(admin, db):

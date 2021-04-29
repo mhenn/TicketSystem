@@ -7,49 +7,19 @@ from config import Config
 from db.mongo import MongoDatabase
 from logic.logic import *
 
+from keycloak_token_service import ServiceToken
 from logic.token import ServiceToken
 import json
 import requests
 import time
-
-name = 'ticket-service'
-description = 'Ticket API'
-
-authorizations = {
-    'Bearer Auth': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'Authorization'
-    },
-}
-
-def get_pubkey():
-    for _ in range(20):
-        try:
-            r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
-            break
-        except Exception:
-            time.sleep(5)
-
-    r = r.json()
-    return f"""-----BEGIN PUBLIC KEY-----
-{r['public_key']}
------END PUBLIC KEY-----""" 
-
-flask_app = Flask(__name__)
+import logging
 
 
-flask_app.config['JWT_ALGORITHM'] = 'RS256'
-flask_app.config['JWT_PUBLIC_KEY'] = get_pubkey()
+from keycloak_token_service import ServiceToken
+setup = FlaskSetup('ticket-service', __name__)
+jwt, api, flask_app, app = setup.get_mandatory()
 
-
-
-CORS(flask_app)
-
-app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
-api = app.namespace(name, description=description)
-
-jwt = JWTManager(flask_app)
+logging.basicConfig(level=logging.DEBUG, filename=f'{name}.log', format='%(asctime)s %(levelname)s:%(message)s')
 
 service = ServiceToken()
 db = MongoDatabase('mongodb://mongo.ticket:27017/')
@@ -61,7 +31,6 @@ def setup(service, db):
 
 def pubsubAlive():
     res = request.get(url + '/alive/')
-    print(res)
     return res.ok
 
 def checkAndCreatePub(service):
@@ -78,5 +47,5 @@ try:
     if pubsubAlive: 
         checkAndCreatePub(service)
 except Exception as e:
-    print(e)
+    logging.error(e)
 logic = setup(service,db)
