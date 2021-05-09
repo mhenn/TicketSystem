@@ -1,6 +1,9 @@
 from logic.token import ServiceToken
 from flask import Response, jsonify
 from flask import stream_with_context
+from logic.token import ServiceToken
+
+import logging
 import requests
 import json
 
@@ -11,7 +14,8 @@ bad_gateway = 502
 
 class Logic:
 
-    def __init__(self, service):
+
+    def __init__(self,service):
         self.service_token = service
 
     def get_ticket(self, uid):         
@@ -92,9 +96,12 @@ class Logic:
 
     def get_queues(self):
         token = self.service_token.get()
+        logging.error("########################################") 
+        logging.error(token) 
+        logging.error("########################################") 
         headers = {
             "Authorization" : 'Bearer ' + token
-        }   
+        } 
         r = requests.get(f'http://{confighost}:5555/config/queues/', headers=headers)
         return r.json()['queues']
     
@@ -110,6 +117,7 @@ class Logic:
 
 
 class ConfigLogic():
+
 
     def __init__(self, service):
         self.service_token = service

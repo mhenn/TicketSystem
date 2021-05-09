@@ -7,51 +7,16 @@ from config import Config
 from db.mongo import MongoDatabase
 from logic.logic import *
 
-from logic.token import ServiceToken
 import json
 import requests
 import time 
-
-name = 'mail-service'
-description = 'Mail API'
-
-authorizations = {
-    'Bearer Auth': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'Authorization'
-    },
-}
-
-def get_pubkey():
-    for _ in range(20):
-        try:
-            r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
-            break
-        except Exception:
-            time.sleep(5)
-
-    r = r.json()
-    return f"""-----BEGIN PUBLIC KEY-----
-{r['public_key']}
------END PUBLIC KEY-----""" 
+from keycloak_token_service import ServiceToken
+from flask_setup import FlaskSetup
 
 
-flask_app = Flask(__name__)
-
-
-flask_app.config['JWT_ALGORITHM'] = 'RS256'
-flask_app.config['JWT_PUBLIC_KEY'] = get_pubkey() 
-
-
-CORS(flask_app)
-
-app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
-api = app.namespace(name, description=description)
-
-jwt = JWTManager(flask_app)
-
-service = ServiceToken()
+setup = FlaskSetup('gateway', __name__)
+jwt, api, flask_app, app = setup.get_mandatory()
+service = ServiceToken.instance()
 
 def setup(service):
     db = MongoDatabase()

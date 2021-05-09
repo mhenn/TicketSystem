@@ -14,11 +14,11 @@ pub = api.model('Publisher', pub_model)
 
 @api.route("/")
 class Base(Resource):
-    @jwt_required
+    @jwt_required()
     @api.expect(pub)
     @model_integrity(pub_model)
     def post(self):
-        print(f'req: {request} data: {request.data} header: {request.headers}')
+        logging.info(f'req: {request} data: {request.data} header: {request.headers}')
         try:
             base_logic.create_publisher(json.loads(request.data))
         except:
@@ -32,18 +32,18 @@ class Base(Resource):
 @api.route("/<string:publisher>")
 class Publisher(Resource):
 
-    @jwt_required
+    @jwt_required()
     def get(self, publisher):
         pub = publisher_logic.get_publisher(publisher)
         return {'publishers': pub}, 200
 
-    @jwt_required
+    @jwt_required()
     @api.expect(msg)
     @model_integrity(msg_model)
     def post(self, publisher):
         publisher_logic.send_msg(publisher, json.loads(request.data))
 
-    @jwt_required
+    @jwt_required()
     @api.expect(sub)
     @model_integrity(sub_model)
     def put(self, publisher):
@@ -54,7 +54,7 @@ class Publisher(Resource):
 @api.route("/<string:publisher>/<string:subscriber>")
 class PubSubscriber(Resource):
 
-    @jwt_required
+    @jwt_required()
     def get(self, publisher, subscriber):
         try:
             sub = pubsub_logic.get_subscriber(publisher,subscriber)
@@ -62,7 +62,7 @@ class PubSubscriber(Resource):
             return {}, 404
         return {'publishers': sub}, 200	
 
-    @jwt_required
+    @jwt_required()
     def delete(self, publisher, subscriber):
         pubsub_logic.delete_subscriber(publisher, subscriber)
         return {}, 200

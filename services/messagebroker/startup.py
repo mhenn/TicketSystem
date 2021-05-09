@@ -3,51 +3,18 @@ from flask import Flask
 from flask_restx import Api
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-
+from flask_setup import FlaskSetup
 from db.mongo import MongoDatabase
 from logic.logic import *
-import time
+
 import requests
-
-name = 'pubsub'
-description = 'Messaging API'
-
-authorizations = {
-    'Bearer Auth': {
-        'type': 'apiKey',
-        'in': 'header',
-        'name': 'Authorization'
-    },
-}
-
-def get_pubkey():
-    for _ in range(20):
-        try:
-            r = requests.get('http://odonata.keycloak:8080/auth/realms/Odonata')
-            break
-        except Exception:
-            time.sleep(5)
-
-    r = r.json()
-    return f"""-----BEGIN PUBLIC KEY-----
-{r['public_key']}
------END PUBLIC KEY-----""" 
+import logging
 
 
-flask_app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG, filename=f'base.log', format='%(asctime)s %(levelname)s:%(message)s')
 
-
-flask_app.config['JWT_ALGORITHM'] = 'RS256'
-flask_app.config['JWT_PUBLIC_KEY'] = get_pubkey() 
-
-
-CORS(flask_app)
-
-app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
-api = app.namespace(name, description=description)
-
-jwt = JWTManager(flask_app)
-
+setup = FlaskSetup('pubsub', __name__)
+jwt, api, flask_app, app = setup.get_mandatory()
 
 db = MongoDatabase()	
 base_logic = BaseLogic(db)

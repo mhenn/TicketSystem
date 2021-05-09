@@ -5,10 +5,14 @@ from flask_jwt_extended import JWTManager
 from keycloak import KeycloakAdmin
 from db.mongo import MongoDatabase
 from logic.logic import *
+from keycloak_token_service import ServiceToken
+from flask_setup import FlaskSetup
 import requests 
 import time
-from keycloak_token_service import ServiceToken
-setup = FlaskSetup('configuration-service', __name__)
+import logging
+
+logging.basicConfig(level=logging.DEBUG, filename=f'base.log', format='%(asctime)s %(levelname)s:%(message)s')
+setup = FlaskSetup('config', __name__)
 jwt, api, flask_app, app = setup.get_mandatory()
 
 

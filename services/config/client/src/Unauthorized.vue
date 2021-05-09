@@ -19,7 +19,7 @@ export default{
 	components: {
 	},
 	created(){
-		setTimeout(() =>{ store.dispatch('logout') }, 5000)
+		setTimeout(() =>{ store.dispatch('misc/logout') }, 5000)
 	}
 }
 

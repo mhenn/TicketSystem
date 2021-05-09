@@ -33,7 +33,7 @@ const actions = {
 				throw 'Failed postMapping'
 			dispatch('getMappings')	
       }).catch(e =>{
-			commit('misc/updateFail', 'postMapping')
+			commit('misc/updateFail', 'postMapping', {root:true})
 		})
 	},
 	getMappings({rootState, commit}){
@@ -50,7 +50,7 @@ const actions = {
 				throw 'Failed getMappings'
          commit('updateMapping', response.data.mapping)
       }).catch(e =>{
-			commit('misc/updateFail', 'getMappings')
+			commit('misc/updateFail', 'getMappings', {root:true})
 		})
    },
    deleteMapping({rootState, dispatch, commit}, id){
@@ -66,7 +66,7 @@ const actions = {
 				throw 'Failed deleteMapping'
          dispatch('getMappings')
       }).catch(e =>{
-			commit('misc/updateFail', 'deleteMapping')
+			commit('misc/updateFail', 'deleteMapping', {root:true})
 		})
    },
 }

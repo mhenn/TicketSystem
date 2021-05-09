@@ -6,17 +6,16 @@ import requests
 import threading
 from keycloak_token_service.decorators.singleton import Singleton
 
-@Singleton
 class ServiceToken:
 
-#    def __init__(self, uname, pw, client_id):
-    def __init__(self):
+    def __init__(self, uname, pw, client_id):
+#    def __init__(self):
         self.duration = 250
         self.time_received = 0
         self._access_token = ''	
         self._updating = False
-        self._uname = 'mhenn' 
-        self._pw = 'mhenn'
+        self._uname = uname
+        self._pw = uname
         self._client_id = 'ticket_client'
 
     def update_token(self):
@@ -24,7 +23,6 @@ class ServiceToken:
         
         j_response = ''
         url = 'http://odonata.keycloak:8080/auth/realms/Odonata/protocol/openid-connect/token'
-
         if not self._access_token: 
             data= {'grant_type': 'password', 'client_id': self._client_id, 'username': self._uname, 'password':self._pw}
             response = requests.post(url, data=data)

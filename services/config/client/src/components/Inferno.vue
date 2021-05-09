@@ -64,7 +64,7 @@
 		}),
 		methods:{
 			logout(){
-				store.dispatch('logout')
+				store.dispatch('misc/logout')
 			}
 		},
 		created() {

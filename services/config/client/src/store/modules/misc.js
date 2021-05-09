@@ -42,7 +42,8 @@ const mutations = {
 
 const actions = {	
 	logout({state}){
-		rootState.cloak.logout()
+		console.log(state)
+		state.cloak.logout()
 	}
 }
 

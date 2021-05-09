@@ -32,7 +32,7 @@ const actions = {
 		axios(options).then(() => {
 			dispatch('getQueues')
 		}).catch(e =>{
-			commit('misc/updateFail', 'postQueue')
+			commit('misc/updateFail', 'postQueue', {root:true})
 		})
 	},
 	getQueues({rootState ,commit}){
@@ -50,7 +50,7 @@ const actions = {
 			commit('updateQueues', response.data.queues)
       }).catch(e =>{
 			
-			commit('misc/updateFail', 'getQueue')
+			commit('misc/updateFail', 'getQueue', {root:true})
 		})
    },
    deleteQueue({rootState, dispatch, commit}, id){
@@ -65,7 +65,7 @@ const actions = {
 				throw "Failed Delete"
          dispatch('getQueues')
       }).catch(e =>{
-			commit('misc/updateFail', 'deleteQueue')
+			commit('misc/updateFail', 'deleteQueue', {root:true})
 		})
 	}
 }

@@ -41,10 +41,7 @@ let keycloak = Keycloak(initOptions);
 keycloak.init({ onLoad: initOptions.onLoad }).success((auth) =>{
 	store.commit('misc/setCloak', keycloak)
 	store.commit('misc/selfUpdateUserRoles')
-	console.log(store)	
 	let roles = store.state.misc.userRoles
-	console.log(roles)
-
 	if(!auth) {
 		window.location.reload();
 	}
