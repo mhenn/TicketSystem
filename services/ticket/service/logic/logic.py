@@ -78,7 +78,7 @@ class PubLogic():
             token = self.token_service.get()
             header = {'Authorization' : 'Bearer ' + token}
             data = {'message': {'actions': u_type, 'ticketId': oid}}
-            requests.post('http://localhost:5050/pubsub/ticket', headers=header, data=json.dumps(data))
+            requests.post('http://odonata.message:5050/pubsub/ticket', headers=header, data=json.dumps(data))
         except Exception as e:
             print(e)
 

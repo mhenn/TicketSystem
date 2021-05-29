@@ -1,7 +1,7 @@
 /* eslint-disable*/
 import axios from 'axios'
 
-const base_url = 'http://localhost:5070/gateway/ticket/'
+const base_url = 'https://localhost:5070/gateway/ticket/'
 
 function defineContent( file_list ,state){
 			var ticket = state.selectedTicket 
@@ -75,7 +75,7 @@ const actions = {
 		messageId = messageId.replace(/\s/g,'')
 
 		let options = {
-			url: 'http://localhost:5070/gateway/ticket/' + id +'/message/'+messageId +'/file/'+filename,
+			url: base_url + id +'/message/'+messageId +'/file/'+filename,
 			method: 'GET',
 			responseType: 'blob',
 			headers: {
@@ -100,7 +100,7 @@ const actions = {
 		ticket.sender = rootState.config.userName
 		messageId = messageId.replace(/\s/g, '')
 		let options_ticket = {
-			url: 'http://localhost:5070/gateway/ticket/',
+			url:base_url, 
 			method: 'post',
 			headers: {
 				'Authorization': 'Bearer ' + token,
@@ -229,7 +229,7 @@ const actions = {
 		})
 		let data = {'topics': [... new Set(topics)]}
 		let options = {
-			url :'http://localhost:5070/gateway/supporter/ticket/',
+			url :'https://localhost:5070/gateway/supporter/ticket/',
 			method: 'POST',
 			headers: {
 				'Authorization' : 'Bearer ' + token

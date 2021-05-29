@@ -1,6 +1,7 @@
 from db.mongo import *
 import requests
 import json 
+import logging
 
 class PublisherLogic():
 
@@ -11,8 +12,7 @@ class PublisherLogic():
         try:
             return self.db.get_publisher(publisher)
         except ValueError as e:
-            #Log
-            print(e)
+            logging.error(e)
             return []
 
     def add_subscriber(self, publisher, sub):
@@ -25,14 +25,14 @@ class PublisherLogic():
         try:
             pub = self.db.get_publisher(publisher)
         except ValueError as e:
+            logging.error(e)
             return {'message': e}, 409
         print(pub)
         for sub in pub['subscribers']:
             try:
                 requests.post(sub['callback'], data=json.dumps(content))	
             except Exception as e:
-                #TODO LOG
-                print(e)
+                logging.error(e)
 
 
 
@@ -72,6 +72,5 @@ class BaseLogic():
         try:
             return self.db.get_publishers()
         except ValueError as e:
-            #Log
-            print(e)
+            logging.error(e)
             return []

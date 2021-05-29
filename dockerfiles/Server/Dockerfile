@@ -2,8 +2,9 @@ FROM ubuntu:20.04
 
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install python3 python3-pip -y
-
-RUN pip3 install python-keycloak requests flask_restx Flask Flask-Cors flask-jwt-extended cryptography mock mongomock mockupdb pymongo pytest pytest-dependency 
+RUN apt-get update
+RUN apt-get install libcppunit-dev -y
+RUN pip3 install python-keycloak requests  Flask flask-restx Flask-Cors flask-jwt-extended cryptography mock mongomock mockupdb pymongo pytest pytest-dependency pyOpenSSL 
 
 COPY packages /packages
 

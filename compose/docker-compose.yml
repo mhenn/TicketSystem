@@ -114,8 +114,11 @@ services:
   dialog_service:
      image: server:latest
      hostname: odonata.dialog
+     ports:
+        - 5250:5250
      volumes: 
          - ../services/dialog:/home/
+         - ../CPPUnit/:/home/CPPUnit/
 
   mail_service:
       image: server:latest
