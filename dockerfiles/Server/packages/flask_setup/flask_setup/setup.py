@@ -38,12 +38,12 @@ class FlaskSetup:
         
         flask_app.config['JWT_ALGORITHM'] = 'RS256'
         flask_app.config['JWT_PUBLIC_KEY'] = get_pubkey()
-        CORS(flask_app)
 
         self.app = Api(flask_app, security='Bearer Auth', authorizations=authorizations)
         self.api = self.app.namespace(name, description=description)
 
         self.jwt = JWTManager(flask_app)
+        CORS(flask_app)
         self.flask_app = flask_app
 
     def get_mandatory(self):

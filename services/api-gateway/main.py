@@ -1,6 +1,5 @@
 from startup import *
 from flask_restx import  Resource
-from flask_cors import CORS, cross_origin
 from models.ticket import ticket_model, put_ticket_model, callback_model
 from flask import request
 from flask_jwt_extended import (jwt_required, get_jwt_identity)
@@ -33,6 +32,7 @@ class TicketClass(Resource):
     def get(self):
         uid = get_jwt_identity()
         tickets, status = logic['base'].get_ticket(uid)
+
         return { "tickets": tickets }, status
 
 

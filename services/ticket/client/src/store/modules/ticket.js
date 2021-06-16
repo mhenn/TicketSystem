@@ -141,6 +141,7 @@ const actions = {
 		let options = {
 			url : base_url,
 			method: 'GET',
+			crossDomain: true,
 			headers: {
 				'Authorization' : 'Bearer ' + token
 			}
